@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+port_access,port Access,model_port,base.group_user,1,1,1,1
+final_dest_access,final_dest_access,model_final_dest,base.group_user,1,1,1,1
+container_size_access,container_size_access,model_container_size,base.group_user,1,1,1,1
+agreement_method_access,agreement_method_access,model_agreement_method,base.group_user,1,1,1,1
+customer_class_access,customer_class_access,model_customer_class,base.group_user,1,1,1,1
+sale_order_line_shipment_access,sale_order_line_shipmentaccess,model_sale_order_line_shipment,base.group_user,1,1,1,1

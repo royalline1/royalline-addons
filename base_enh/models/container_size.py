@@ -1,0 +1,11 @@
+# -*- coding: utf-8 -*-
+
+from odoo import models, fields, api
+
+
+class ContainerSize(models.Model):
+    _name = 'container.size'
+    
+    size = fields.Char('Size',required=True)
+    note = fields.Char('Note')
+    

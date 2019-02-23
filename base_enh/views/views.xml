@@ -1,0 +1,120 @@
+<odoo>
+	<data>
+
+		<record model="ir.ui.view" id="port_list_view">
+			<field name="name">Port list</field>
+			<field name="model">port</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name" />
+					<field name="code" />
+					<field name="country_id" />
+					<field name="type" />
+				</tree>
+			</field>
+		</record>
+
+
+		<record model="ir.ui.view" id="port_form_view">
+			<field name="name">port list</field>
+			<field name="model">port</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<group>
+							<group>
+								<field name="name" />
+								<field name="code" />
+							</group>
+							<group>
+								<field name="country_id"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="type" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="port_action">
+			<field name="name">Port</field>
+			<field name="res_model">port</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem name="Locations" id="location_menu"
+			parent="contacts.menu_contacts" />
+
+
+		<menuitem name="Port" id="port_menu" parent="location_menu"
+			action="port_action" />
+
+
+
+
+		<record model="ir.ui.view" id="res_partner_form_view">
+			<field name="name">res.partner</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//notebook//page[3]//group[@name='purchase']"
+					position="inside">
+					<field name="is_shipper" />
+					<field name="is_consignee" />
+					<field name="is_notify" />
+					<field name="is_agent" />
+				</xpath>
+
+				<xpath expr="//notebook//page[3]//group[@name='sale']"
+					position="inside">
+					<field name="customer_class_id" />
+				</xpath>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="res_city_form_view">
+			<field name="name">res.city</field>
+			<field name="model">res.city</field>
+			<field name="inherit_id" ref="base_address_city.view_city_tree" />
+			<field name="arch" type="xml">
+
+				<field name="zipcode" position="replace" />
+				<field name="state_id" position="replace" />
+			</field>
+		</record>
+
+
+		<record model="ir.ui.view" id="view_order_form">
+			<field name="name">sale.order</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_form" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//notebook//page[1]//field[@name='order_line']"
+					position="after">
+
+					<field name="order_line_shipment_ids"
+						attrs="{'readonly': [('state', 'in', ('done','cancel'))]}">
+						<tree editable="botton">
+							<field name="product_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+						</tree>
+						<form>
+							<group>
+								<group>
+									<field name="product_id" readonly="0" />
+								</group>
+							</group>
+
+						</form>
+
+					</field>
+
+				</xpath>
+
+			</field>
+		</record>
+
+
+	</data>
+</odoo>

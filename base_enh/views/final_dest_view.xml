@@ -1,0 +1,54 @@
+<odoo>
+	<data>
+
+		<record model="ir.ui.view" id="final_dest_list_view">
+			<field name="name">final_dest</field>
+			<field name="model">final.dest</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="zip" />
+					<field name="counrty_id" />
+					<field name="city_id" />
+					<field name="state_id"/>
+				</tree>
+			</field>
+		</record>
+
+
+		<record model="ir.ui.view" id="final_dest_form_view">
+			<field name="name">final_dest</field>
+			<field name="model">final.dest</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<group>
+							<group>
+								<field name="zip" />
+							<field name="counrty_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+							</group>
+							<group>
+								<field name="city_id" domain="[('country_id','=',counrty_id)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+								<field name="state_id" domain="[('country_id','=',counrty_id)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+							</group>
+							
+							<group>
+								<field name="address"/>
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="final_dest_action">
+			<field name="name">Final Destination</field>
+			<field name="res_model">final.dest</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+
+		<menuitem name="Final Destination" id="final_dest_menu"
+			parent="location_menu" action="final_dest_action" />
+
+	</data>
+</odoo>
