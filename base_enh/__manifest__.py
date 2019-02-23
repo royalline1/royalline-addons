@@ -13,7 +13,7 @@
 
     'category': 'Uncategorized',
     'version': '12.0.1.0',
-    'depends': ['base','contacts','sale'],
+    'depends': ['base','contacts','sale','base_address_city'],
 
     'data': [
        'security/ir.model.access.csv',
@@ -22,6 +22,10 @@
        'views/container_size_view.xml',
        'views/agreement_method_view.xml',
        'views/custoemr_class_view.xml',
-       'report/sale_report.xml'
+       'report/sale_report.xml',
+       'views/customs_declaration_view.xml',
+       'views/insurance_type_view.xml',
+       'views/track_type_view.xml',
+       'views/weight_type_view.xml'
     ],
 }

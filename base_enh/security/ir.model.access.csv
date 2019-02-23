@@ -5,3 +5,7 @@ container_size_access,container_size_access,model_container_size,base.group_user
 agreement_method_access,agreement_method_access,model_agreement_method,base.group_user,1,1,1,1
 customer_class_access,customer_class_access,model_customer_class,base.group_user,1,1,1,1
 sale_order_line_shipment_access,sale_order_line_shipmentaccess,model_sale_order_line_shipment,base.group_user,1,1,1,1
+customs_declaration_access,customs_declaration_access,model_customs_declaration,base.group_user,1,1,1,1
+insurance_type_access,insurance_type_access,model_insurance_type,base.group_user,1,1,1,1
+track_type_type_access,track_type_access,model_track_type,base.group_user,1,1,1,1
+weight_type_access,weight_type_access,model_weight_type,base.group_user,1,1,1,1
