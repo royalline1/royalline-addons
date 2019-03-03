@@ -8,3 +8,4 @@ from . import customs_declaration
 from . import insurance_type
 from . import track_type
 from . import weight_type
+from . import vesel

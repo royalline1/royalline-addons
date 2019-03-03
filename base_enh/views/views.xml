@@ -58,17 +58,88 @@
 			<field name="model">res.partner</field>
 			<field name="inherit_id" ref="base.view_partner_form" />
 			<field name="arch" type="xml">
+			
+			<button name="toggle_active" position="before">
+                  <button type="object" string="Vesels" class="oe_stat_button" icon="fa-ship" name="open_vesels">
+                  </button>
+           </button>
 				<xpath expr="//notebook//page[3]//group[@name='purchase']"
 					position="inside">
 					<field name="is_shipper" />
 					<field name="is_consignee" />
 					<field name="is_notify" />
 					<field name="is_agent" />
+					<field name="is_diver" />
+					<field name="is_customs_point" />
+					<field name="is_competitor" />
+					<field name="is_sea_line" />
+					<field name="is_air_line" />
+				</xpath>
+				
+				<xpath expr="//group[1]/group[2]" position="inside">
+					<field name="cheek_name" />
+				</xpath>
+
+
+				<xpath expr="//notebook" position="inside">
+					<page string="Phone Numbers">
+						<field name="phone_ids">
+							<tree editable="botton">
+								<field name="name" />
+								<field name="note" />
+							</tree>
+						</field>
+					</page>
+					<page string="Driver">
+						<group>
+							<group>
+								<field name="plate_code" />
+								<field name="plate_number" />
+								<field name="country_nati_id" />
+								<field name="country_truck_id" />
+								<field name="country_truck_id" />
+
+							</group>
+						</group>
+					</page>
+
+					<page string="Air And Sea">
+						<field name="air_sea_ids">
+							<tree editable="botton">
+								<field name="container_size_id" />
+								<field name="free_days" />
+								<field name="first_storage_from" />
+								<field name="first_storage_to" />
+								<field name="first_demurrage_from" />
+								<field name="first_demurrage_to" />
+								<field name="second_storage_from" />
+								<field name="second_storage_to" />
+								<field name="second_demurrage_from" />
+								<field name="second_demurrage_to" />
+								<field name="third_storage_from" />
+								<field name="third_storage_to" />
+								<field name="third_demurrage_from" />
+								<field name="third_demurrage_to" />
+								<field name="agency" />
+							</tree>
+						</field>
+						
+						<group>
+							<group>
+								<field name="bill_fees" />
+								<field name="release_to_bill" />
+								<field name="amendment_fees" />
+								<field name="late_payment" />
+
+							</group>
+						</group>
+					</page>
 				</xpath>
 
 				<xpath expr="//notebook//page[3]//group[@name='sale']"
 					position="inside">
 					<field name="customer_class_id" />
+					<field name="custome_id" />
 				</xpath>
 			</field>
 		</record>
@@ -81,6 +152,38 @@
 
 				<field name="zipcode" position="replace" />
 				<field name="state_id" position="replace" />
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="product_normal_form_view">
+			<field name="name">product.product</field>
+			<field name="model">product.product</field>
+			<field name="inherit_id" ref="product.product_normal_form_view" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//notebook" position="inside">
+					<page string="Commodity">
+
+						<group>
+							<group>
+								<field name="temperature" />
+								<field name="warehouse_condition" />
+								<field name="warehouse_condition_att" />
+								<field name="transport_condition" />
+								<field name="transport_condition_att" />
+								<field name="port_condition" />
+								<field name="port_condition_att" />
+								<field name="other_condition" />
+								<field name="other_condition_att" />
+
+							</group>
+						</group>
+
+
+					</page>
+
+
+				</xpath>
 			</field>
 		</record>
 
@@ -97,7 +200,8 @@
 					<field name="order_line_shipment_ids"
 						attrs="{'readonly': [('state', 'in', ('done','cancel'))]}">
 						<tree editable="botton">
-							<field name="product_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+							<field name="product_id"
+								options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 						</tree>
 						<form>
 							<group>

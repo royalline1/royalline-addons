@@ -1,0 +1,70 @@
+<odoo>
+	<data>
+
+		<record model="ir.ui.view" id="vesel_list_view">
+			<field name="name">vesel</field>
+			<field name="model">vesel</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name" />
+					<field name="sea_line_id" />
+					<field name="country_id" />
+					<field name="Home_port_id" />
+					<field name="build" />
+					<field name="code" />
+					<field name="note" />
+					<field name="imo_number" />
+					<field name="imo_number" />
+				</tree>
+			</field>
+		</record>
+
+
+		<record model="ir.ui.view" id="vesel_form_view">
+			<field name="name">vesel</field>
+			<field name="model">vesel</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<group>
+							<group>
+								<field name="name" />
+								<field name="sea_line_id" />
+								<field name="country_id" />
+								<field name="Home_port_id" />
+								<field name="build" />
+							</group>
+							<group>
+								<field name="code" />
+								<field name="note" />
+								<field name="imo_number" />
+								<field name="imo_number" />
+							</group>
+							<field name="voyages_ids">
+							<tree editable="botton">
+							<field name="sea_line_id" />
+								<field name="voyage_number" />
+								<field name="etd_date" />
+								<field name="eta_date" />
+							</tree>
+							
+							</field>
+
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="vesel_action">
+			<field name="name">Vesel</field>
+			<field name="res_model">vesel</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+
+		<menuitem id="vesel_menu" parent="location_menu"
+			action="vesel_action" />
+
+	</data>
+</odoo>
