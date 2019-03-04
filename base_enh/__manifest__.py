@@ -18,7 +18,7 @@
     'data': [
        'security/ir.model.access.csv',
        'views/views.xml',
-       'views/final_dest_view.xml',
+       'views/delivery_place_view.xml',
        'views/container_size_view.xml',
        'views/agreement_method_view.xml',
        'views/custoemr_class_view.xml',
@@ -27,6 +27,9 @@
        'views/insurance_type_view.xml',
        'views/track_type_view.xml',
        'views/weight_type_view.xml',
-       'views/vesel_views.xml'
+       'views/vesel_views.xml',
+       'views/place_view.xml',
+       'views/transport_type_view.xml',
+       'views/line_cost_views.xml'
     ],
 }

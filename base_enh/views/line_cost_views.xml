@@ -1,0 +1,109 @@
+<odoo>
+	<data>
+
+		<record model="ir.ui.view" id="line_cost_list_view">
+			<field name="name">line_cost</field>
+			<field name="model">line.cost</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="line_id" />
+					<field name="quot_number" />
+					<field name="date" />
+					<field name="country_loding_id" />
+					<field name="state_loding_id" />
+					<field name="city_loding_id" />
+					<field name="place_loding_id" />
+					<field name="transport_loading_id" />
+					<field name="port_loafing_id" />
+					<field name="country_dest_id" />
+					<field name="state_dest_id" />
+					<field name="city_dest_id" />
+					<field name="place_dest_id" />
+					<field name="port_dest_id" />
+					<field name="transport_dest_id" />
+					<field name="delivery_place_id" />
+					<field name="start_date" />
+					<field name="expiry_date" />
+					<field name="expired_price" />
+					<field name="newxt_price" />
+				</tree>
+			</field>
+		</record>
+
+
+		<record model="ir.ui.view" id="line_cost_form_view">
+			<field name="name">line_cost</field>
+			<field name="model">line.cost</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<group>
+							<group>
+								<field name="line_id" />
+								<field name="quot_number" />
+								<field name="date" />
+								<field name="country_loding_id" />
+								<field name="state_loding_id" />
+								<field name="city_loding_id" />
+								<field name="place_loding_id" />
+								<field name="transport_loading_id" />
+								<field name="port_loafing_id" />
+								<field name="total_rate" />
+								<field name="transt_time" />
+								<field name="start_date" />
+								<field name="expiry_date" />
+								<field name="expired_price" />
+								<field name="newxt_price" />
+							</group>
+							<group>
+								<field name="country_dest_id" />
+								<field name="state_dest_id" />
+								<field name="city_dest_id" />
+								<field name="place_dest_id" />
+								<field name="port_dest_id" />
+								<field name="transport_dest_id" />
+								<field name="delivery_place_id" />
+								<field name="bill_fees" />
+								<field name="costumer_id" />
+								<field name="ak" />
+								<field name="product_id" context="{'com_costumer_id':costumer_id}" attrs="{'invisible':[('ak','=',True)]}"/>
+							</group>
+						</group>
+						<group>
+							<field name="line_cost_ids">
+								<tree editable="botton">
+									<field name="container_id" />
+									<field name="min_qty" />
+									<field name="agency" />
+									<field name="transport_price" />
+									<field name="product_id" />
+									<field name="value" />
+								</tree>
+							</field>
+						</group>
+						<group>
+							<field name="additional_cost_ids">
+								<tree editable="botton">
+									<field name="product_id" />
+									<field name="cost" />
+								</tree>
+							</field>
+						</group>
+						<field name="note" />
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="line_cost_action">
+			<field name="name">Line Cost</field>
+			<field name="res_model">line.cost</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+
+		<menuitem id="line_cost_menu" parent="location_menu"
+			action="line_cost_action" />
+
+	</data>
+</odoo>

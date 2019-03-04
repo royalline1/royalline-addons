@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
+from odoo.osv import expression
 
-class FinalDest(models.Model):
-    _name = 'final.dest'
+
+class PlaceOfDelivery(models.Model):
+    _name = 'delivery.place'
     _rec_name = 'zip'
     
     zip = fields.Integer('ZIP Code',required=True)
@@ -11,6 +13,16 @@ class FinalDest(models.Model):
     city_id = fields.Many2one('res.city',required=True)
     state_id = fields.Many2one('res.country.state',required=True)
     address = fields.Text('Address',required=True)
+
+class ResPlace(models.Model):
+    _name = 'res.place'
+    _rec_name = 'address'
+    
+    counrty_id = fields.Many2one('res.country',required=True)
+    city_id = fields.Many2one('res.city',required=True)
+    state_id = fields.Many2one('res.country.state')
+    address = fields.Text('Address',required=True)
+    
     
 class Port(models.Model):
     _name = 'port'
@@ -33,13 +45,17 @@ class ResPartner(models.Model):
     is_competitor = fields.Boolean('Is Competitor')
     is_sea_line = fields.Boolean('Is Sea Line')
     is_air_line = fields.Boolean('Is Air Line')
+    is_clearance_company= fields.Boolean('Is Clearance Company')
+    is_transporter_company= fields.Boolean('Is Transporter Company')
+    is_insurance_company= fields.Boolean('Is Insurance Company')
+
     phone_ids = fields.One2many('res.phone','partner_id', string='Phones Number')
     
-    air_sea_ids = fields.One2many('air.sea.lines','partner_id')
+    sea_ids = fields.One2many('sea.lines','partner_id')
     bill_fees = fields.Float('Bill Fees')
     release_to_bill = fields.Float('Release To Bill')
     amendment_fees = fields.Float('Amendment Fees')
-    late_payment = fields.Float('Pate Payment')
+    late_payment = fields.Float('Late Payment')
     
     custome_id = fields.Many2one('res.partner',string="Customs point",domain=[('is_customs_point','=',True)])
     customer_class_id = fields.Many2one('customer.class')
@@ -54,6 +70,8 @@ class ResPartner(models.Model):
     
     cheek_name = fields.Char('Cheek Name')
     
+    product_ids = fields.Many2many('product.product')
+    
     
     @api.onchange('city_id')
     def _onchange_city_id(self):
@@ -61,6 +79,7 @@ class ResPartner(models.Model):
     def open_vesels(self):
         action = self.env.ref('base_enh.vesel_action').read()[0]
         action['domain'] = [('sea_line_id','=',self.id)]
+        action['context'] = {'default_sea_line_id':self.id}
         return action
     
 class ResPhone(models.Model):
@@ -71,29 +90,34 @@ class ResPhone(models.Model):
     partner_id = fields.Many2one('res.partner')
     
     
-class AirSeaLines(models.Model):
-    _name="air.sea.lines"
+class SeaLines(models.Model):
+    _name="sea.lines"
     
     container_size_id = fields.Many2one('container.size',string="Container Size")
+    type = fields.Selection([('import','Import'),('export','Export'),('cross','Cross')])
     free_days = fields.Integer('Free Days')
-    first_storage_from = fields.Integer('First Way Storage From')
-    first_storage_to = fields.Integer('First Way Storage To')
     first_demurrage_from = fields.Integer('First Way Demurrage From')
     first_demurrage_to = fields.Integer('First Way Demurrage To')
-    second_storage_from = fields.Integer('Second Way Storage From')
-    second_storage_to = fields.Integer('Second Way Storage To')
+    first_rate =  fields.Float('First Way Demurrage Rate') 
     second_demurrage_from = fields.Integer('Second Way Demurrage From')
     second_demurrage_to = fields.Integer('Second Way Demurrage To')
-    third_storage_from = fields.Integer('Third Way Storage From')
-    third_storage_to = fields.Integer('Third Way Storage To')
+    second_rate =  fields.Float('Second Way Demurrage Rate')
     third_demurrage_from = fields.Integer('Third Way Demurrage From')
     third_demurrage_to = fields.Integer('Third Way Demurrage To')
+    third_rate =  fields.Float('Third Way Demurrage Rate')
+    delivery_order = fields.Float('Delivery Order')
     agency = fields.Float('Agency')
     partner_id = fields.Many2one('res.partner')
     
     
     
+     
     
+class ProductProduct(models.Model):
+    _inherit = "product.template"   
+    
+    is_discount = fields.Boolean('Is Discount')
+
     
 class ProductProduct(models.Model):
     _inherit = "product.product"
@@ -107,4 +131,17 @@ class ProductProduct(models.Model):
     port_condition_att = fields.Binary(attachment=True,string="Attachment")
     other_condition = fields.Integer('Other condition')
     other_condition_att = fields.Binary(attachment=True,string="Attachment")
+    
+    @api.model
+    def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
+        print(self._context)
+        if self._context.get('com_costumer_id' ):
+            partner_id = self.env['res.partner'].browse(self._context.get('com_costumer_id' ))
+            args = expression.AND([args] + [[('id','in',partner_id.product_ids.ids)]])
+            
+            
+        
+        return super(ProductProduct, self)._search(args, offset, limit, order, count, access_rights_uid)
+    
+    
       

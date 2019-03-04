@@ -9,3 +9,5 @@ from . import insurance_type
 from . import track_type
 from . import weight_type
 from . import vesel
+from . import transport_type
+from . import line_cost

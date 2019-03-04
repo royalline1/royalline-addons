@@ -5,6 +5,7 @@ from odoo import models, fields, api
 
 class ContainerSize(models.Model):
     _name = 'container.size'
+    _rec_name = "size"
     
     size = fields.Char('Size',required=True)
     note = fields.Char('Note')

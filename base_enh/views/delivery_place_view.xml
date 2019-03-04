@@ -1,9 +1,9 @@
 <odoo>
 	<data>
 
-		<record model="ir.ui.view" id="final_dest_list_view">
-			<field name="name">final_dest</field>
-			<field name="model">final.dest</field>
+		<record model="ir.ui.view" id="delivery_place_list_view">
+			<field name="name">delivery_place</field>
+			<field name="model">delivery.place</field>
 			<field name="arch" type="xml">
 				<tree>
 					<field name="zip" />
@@ -15,9 +15,9 @@
 		</record>
 
 
-		<record model="ir.ui.view" id="final_dest_form_view">
-			<field name="name">final_dest</field>
-			<field name="model">final.dest</field>
+		<record model="ir.ui.view" id="delivery_place_form_view">
+			<field name="name">delivery_place</field>
+			<field name="model">delivery.place</field>
 			<field name="arch" type="xml">
 				<form>
 					<sheet>
@@ -40,15 +40,15 @@
 			</field>
 		</record>
 
-		<record model="ir.actions.act_window" id="final_dest_action">
-			<field name="name">Final Destination</field>
-			<field name="res_model">final.dest</field>
+		<record model="ir.actions.act_window" id="delivery_place_action">
+			<field name="name">Place Of Delivery</field>
+			<field name="res_model">delivery.place</field>
 			<field name="view_mode">tree,form</field>
 		</record>
 
 
-		<menuitem name="Final Destination" id="final_dest_menu"
-			parent="location_menu" action="final_dest_action" />
+		<menuitem  id="delivery_place_menu"
+			parent="location_menu" action="delivery_place_action" />
 
 	</data>
 </odoo>
