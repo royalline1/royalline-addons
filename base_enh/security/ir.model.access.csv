@@ -18,3 +18,7 @@ transport_type,transport_type,model_transport_type,base.group_user,1,1,1,1
 additional_cost,additional_cost,model_additional_cost,base.group_user,1,1,1,1
 line_cost_line,line_cost_line,model_line_cost_line,base.group_user,1,1,1,1
 line_cost,line_cost,model_line_cost,base.group_user,1,1,1,1
+loading_place,loading_place,model_loading_place,base.group_user,1,1,1,1
+insurance_cost,insurance_cost,model_insurance_cost,base.group_user,1,1,1,1
+insurance_cost_line,insurance_cost_line,model_insurance_cost_line,base.group_user,1,1,1,1
+insurance_condition,insurance_condition,model_insurance_condition,base.group_user,1,1,1,1

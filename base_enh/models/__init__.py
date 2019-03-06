@@ -11,3 +11,5 @@ from . import weight_type
 from . import vesel
 from . import transport_type
 from . import line_cost
+from . import places
+from . import insurance_cost

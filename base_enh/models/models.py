@@ -4,21 +4,11 @@ from odoo import models, fields, api
 from odoo.osv import expression
 
 
-class PlaceOfDelivery(models.Model):
-    _name = 'delivery.place'
-    _rec_name = 'zip'
-    
-    zip = fields.Integer('ZIP Code',required=True)
-    counrty_id = fields.Many2one('res.country',required=True)
-    city_id = fields.Many2one('res.city',required=True)
-    state_id = fields.Many2one('res.country.state',required=True)
-    address = fields.Text('Address',required=True)
-
 class ResPlace(models.Model):
     _name = 'res.place'
     _rec_name = 'address'
     
-    counrty_id = fields.Many2one('res.country',required=True)
+    country_id = fields.Many2one('res.country',required=True)
     city_id = fields.Many2one('res.city',required=True)
     state_id = fields.Many2one('res.country.state')
     address = fields.Text('Address',required=True)
@@ -82,6 +72,7 @@ class ResPartner(models.Model):
         action['context'] = {'default_sea_line_id':self.id}
         return action
     
+    
 class ResPhone(models.Model):
     _name = 'res.phone'
     
@@ -134,9 +125,8 @@ class ProductProduct(models.Model):
     
     @api.model
     def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
-        print(self._context)
-        if self._context.get('com_costumer_id' ):
-            partner_id = self.env['res.partner'].browse(self._context.get('com_costumer_id' ))
+        if self._context.get('com_customer_id' ):
+            partner_id = self.env['res.partner'].browse(self._context.get('com_customer_id' ))
             args = expression.AND([args] + [[('id','in',partner_id.product_ids.ids)]])
             
             

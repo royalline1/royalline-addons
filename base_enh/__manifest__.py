@@ -30,6 +30,8 @@
        'views/vesel_views.xml',
        'views/place_view.xml',
        'views/transport_type_view.xml',
-       'views/line_cost_views.xml'
+       'views/line_cost_views.xml',
+       'views/loading_place_view.xml',
+       'views/insurance_cost_view.xml'
     ],
 }

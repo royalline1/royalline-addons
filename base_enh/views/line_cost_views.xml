@@ -39,45 +39,84 @@
 					<sheet>
 						<group>
 							<group>
-								<field name="line_id" />
+								<field name="line_id"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="quot_number" />
 								<field name="date" />
-								<field name="country_loding_id" />
-								<field name="state_loding_id" />
-								<field name="city_loding_id" />
-								<field name="place_loding_id" />
-								<field name="transport_loading_id" />
-								<field name="port_loafing_id" />
+								<field name="country_loding_id"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="state_loding_id"
+									domain="[('country_id','=',country_loding_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="city_loding_id"
+									domain="[('country_id','=',country_loding_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="place_loding_id"
+									domain="[('country_id','=',country_loding_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="transport_loading_id"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="port_loafing_id"
+									domain="[('country_id','=',country_loding_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="total_rate" />
 								<field name="transt_time" />
 								<field name="start_date" />
 								<field name="expiry_date" />
 								<field name="expired_price" />
 								<field name="newxt_price" />
+								<field name="product_discount_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+								<field name="discount" />
+								
 							</group>
 							<group>
-								<field name="country_dest_id" />
-								<field name="state_dest_id" />
-								<field name="city_dest_id" />
-								<field name="place_dest_id" />
-								<field name="port_dest_id" />
-								<field name="transport_dest_id" />
-								<field name="delivery_place_id" />
-								<field name="bill_fees" />
-								<field name="costumer_id" />
+								<field name="country_dest_id"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="state_dest_id"
+									domain="[('country_id','=',country_dest_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="city_dest_id"
+									domain="[('country_id','=',country_dest_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="place_dest_id"
+									domain="[('country_id','=',country_dest_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="port_dest_id"
+									domain="[('country_id','=',country_dest_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="transport_dest_id"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="delivery_place_id"
+									domain="[('country_id','=',country_dest_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="bill_fees"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="customer_id"
+									domain="[('customer','=',True),('is_company','=',True)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="ak" />
-								<field name="product_id" context="{'com_costumer_id':costumer_id}" attrs="{'invisible':[('ak','=',True)]}"/>
+								<field name="product_id"
+									context="{'com_customer_id':customer_id}"
+									attrs="{'invisible':[('ak','=',True)]}"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 							</group>
 						</group>
 						<group>
 							<field name="line_cost_ids">
 								<tree editable="botton">
-									<field name="container_id" />
+									<field name="line_cost_id" invisible="1" />
+									<field name="container_ids" invisible="1" />
+									<field name="container_id"
+										domain="[('id','in',container_ids)]"
+										options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 									<field name="min_qty" />
 									<field name="agency" />
 									<field name="transport_price" />
-									<field name="product_id" />
+									<field name="product_id"
+										options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 									<field name="value" />
+									<field name="total" />
+
 								</tree>
 							</field>
 						</group>
@@ -89,7 +128,16 @@
 								</tree>
 							</field>
 						</group>
-						<field name="note" />
+
+						<group>
+							<group>
+								<field name="total_cost" />
+							</group>
+						</group>
+
+						<group>
+							<field name="note" />
+						</group>
 					</sheet>
 				</form>
 			</field>
