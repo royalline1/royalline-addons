@@ -47,7 +47,7 @@ class ResPartner(models.Model):
     amendment_fees = fields.Float('Amendment Fees')
     late_payment = fields.Float('Late Payment')
     
-    custome_id = fields.Many2one('res.partner',string="Customs point",domain=[('is_customs_point','=',True)])
+    customs_id = fields.Many2one('res.partner',string="Customs point",domain=[('is_customs_point','=',True)])
     customer_class_id = fields.Many2one('customer.class')
 
     plate_code = fields.Char('Plate Code')
@@ -63,11 +63,33 @@ class ResPartner(models.Model):
     product_ids = fields.Many2many('product.product')
     
     
+    @api.multi
+    def name_get(self):
+        print(self._context)
+        if 'custom_point' in self._context:
+            lines = []
+            for record in self:
+                name = (record.name + ' | ' + record.parent_id.name) if record.parent_id else record.name
+                lines.append((record.id,name))
+            return lines
+        return super(ResPartner, self).name_get()
+    
+    @api.model
+    def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
+        if 'customs_filter' in self._context and self._context.get('from_customs_filter',True):
+            print(33333333333333333333)
+            if not self._context.get('customs_filter'):
+                args = expression.AND([args] + [[('id','in',[])]])
+            else:
+                partner_id = self.env['res.partner'].browse(self._context.get('customs_filter' ))
+                args = expression.AND([args] + [[('id','in',partner_id.with_context(from_customs_filter=False).child_ids.mapped('customs_id').ids)]])
+        print(args)
+        return super(ResPartner, self)._search( args, offset=offset, limit=limit, order=order, count=count, access_rights_uid=access_rights_uid)
     @api.onchange('city_id')
     def _onchange_city_id(self):
         pass
-    def open_vesels(self):
-        action = self.env.ref('base_enh.vesel_action').read()[0]
+    def open_vessels(self):
+        action = self.env.ref('base_enh.vessel_action').read()[0]
         action['domain'] = [('sea_line_id','=',self.id)]
         action['context'] = {'default_sea_line_id':self.id}
         return action

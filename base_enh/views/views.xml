@@ -60,14 +60,14 @@
 			<field name="arch" type="xml">
 
 				<button name="toggle_active" position="before">
-					<button type="object" string="Vesels" class="oe_stat_button"
-						icon="fa-ship" name="open_vesels">
+					<button type="object" string="vessels" class="oe_stat_button"
+						icon="fa-ship" name="open_vessels">
 					</button>
 				</button>
 				<xpath
 					expr="//notebook//page[1]//field[@name='child_ids']//form//field[@name='comment']"
 					position="after">
-					<field name="custome_id" />
+					<field name="customs_id" />
 
 				</xpath>
 				<xpath expr="//notebook//page[3]//group[@name='purchase']"
@@ -156,7 +156,7 @@
 				<xpath expr="//notebook//page[3]//group[@name='sale']"
 					position="inside">
 					<field name="customer_class_id" />
-					<field name="custome_id" />
+					<field name="customs_id" />
 				</xpath>
 			</field>
 		</record>

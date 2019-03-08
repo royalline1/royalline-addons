@@ -25,13 +25,15 @@
        'report/sale_report.xml',
        'views/customs_declaration_view.xml',
        'views/insurance_type_view.xml',
-       'views/track_type_view.xml',
+       'views/truck_type_view.xml',
        'views/weight_type_view.xml',
-       'views/vesel_views.xml',
+       'views/vessel_views.xml',
        'views/place_view.xml',
        'views/transport_type_view.xml',
        'views/line_cost_views.xml',
        'views/loading_place_view.xml',
-       'views/insurance_cost_view.xml'
+       'views/insurance_cost_view.xml',
+       'views/transport_cost_view.xml',
+       'views/clearance_cost_view.xml'
     ],
 }

@@ -3,8 +3,8 @@
 from odoo import models, fields, api
 
 
-class Vesel(models.Model):
-    _name = 'vesel'
+class vessel(models.Model):
+    _name = 'vessel'
     _inherit = [ 'mail.thread']
     
     sea_line_id = fields.Many2one('res.partner',string="Shipping",domain=[('is_sea_line','=',True)],required=True)
@@ -16,12 +16,12 @@ class Vesel(models.Model):
     code = fields.Char('Code')
     note = fields.Char('Notes')
     imo_number  = fields.Char('Imo Number')
-    voyages_ids = fields.One2many("voyages.detail",'vesel_id')
+    voyages_ids = fields.One2many("voyages.detail",'vessel_id')
     
 class VoyagesDetail(models.Model):
     _name = "voyages.detail"
     
-    vesel_id = fields.Many2one('vesel')
+    vessel_id = fields.Many2one('vessel')
     voyage_number  = fields.Char('Voyage Number')
     etd_date = fields.Date('ETD Ddate')
     eta_date = fields.Date('ETA Ddate')

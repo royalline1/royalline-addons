@@ -3,8 +3,8 @@
 from odoo import models, fields, api
 
 
-class TrackType(models.Model):
-    _name = 'track.type'
+class truckType(models.Model):
+    _name = 'truck.type'
     
     name = fields.Char('Size',required=True)
     note = fields.Char('Note')

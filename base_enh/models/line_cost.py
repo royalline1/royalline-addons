@@ -10,7 +10,7 @@ class AdditionalCost(models.Model):
     
     product_id = fields.Many2one('product.product', string='Additional Name', required=True ,domain=[('is_discount', '=', True)])
     cost = fields.Float()
-    line_cost_id = fields.Many2one('line.cost')
+    line_cost_id = fields.Many2one('line.cost' ,required=True)
     
     
 class LineCostLine(models.Model):
@@ -22,7 +22,7 @@ class LineCostLine(models.Model):
     transport_price = fields.Float('Transport Price', required=True)
     product_id = fields.Many2one('product.product', string='Name Of Discount', domain=[('is_discount', '=', True)])
     value = fields.Float('Discount Value', required=True)
-    line_cost_id = fields.Many2one('line.cost')
+    line_cost_id = fields.Many2one('line.cost', required=True)
     container_ids = fields.Many2many('container.size',compute ='_compute_container_ids')
     total = fields.Float('Total',compute='_compute_total')
     

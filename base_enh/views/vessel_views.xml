@@ -1,9 +1,9 @@
 <odoo>
 	<data>
 
-		<record model="ir.ui.view" id="vesel_list_view">
-			<field name="name">vesel</field>
-			<field name="model">vesel</field>
+		<record model="ir.ui.view" id="vessel_list_view">
+			<field name="name">vessel</field>
+			<field name="model">vessel</field>
 			<field name="arch" type="xml">
 				<tree>
 					<field name="name" />
@@ -19,9 +19,9 @@
 		</record>
 
 
-		<record model="ir.ui.view" id="vesel_form_view">
-			<field name="name">vesel</field>
-			<field name="model">vesel</field>
+		<record model="ir.ui.view" id="vessel_form_view">
+			<field name="name">vessel</field>
+			<field name="model">vessel</field>
 			<field name="arch" type="xml">
 				<form>
 					<sheet>
@@ -58,15 +58,15 @@
 			</field>
 		</record>
 
-		<record model="ir.actions.act_window" id="vesel_action">
-			<field name="name">Vesel</field>
-			<field name="res_model">vesel</field>
+		<record model="ir.actions.act_window" id="vessel_action">
+			<field name="name">vessel</field>
+			<field name="res_model">vessel</field>
 			<field name="view_mode">tree,form</field>
 		</record>
 
 
-		<!-- <menuitem id="vesel_menu" parent="location_menu"
-			action="vesel_action" /> -->
+		<!-- <menuitem id="vessel_menu" parent="location_menu"
+			action="vessel_action" /> -->
 
 	</data>
 </odoo>

@@ -7,7 +7,7 @@ class InsuranceCondition(models.Model):
     
     name = fields.Char(required=True)
     type = fields.Selection([('include','Include'),('exclude','Exclude')],required=True)
-    cost_id = fields.Many2one('line.cost', required=True)
+    cost_id = fields.Many2one('line.cost',ondelete='cascade')
     
     
 class AdditionalInsuCost(models.Model):
@@ -15,7 +15,7 @@ class AdditionalInsuCost(models.Model):
     
     product_id = fields.Many2one('product.product', string='Additional Name', required=True )
     cost = fields.Float()
-    cost_id = fields.Many2one('line.cost', required=True)
+    cost_id = fields.Many2one('line.cost',  required=True)
 
 class InsuranceCost(models.Model):
     _name = 'insurance.cost'
