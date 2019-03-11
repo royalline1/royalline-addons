@@ -81,6 +81,7 @@ class LineCost(models.Model):
     start_date = fields.Date('Start Date')
     expiry_date = fields.Date('Expiry Date')
     note = fields.Text('Notes')
+    note1 = fields.Text('Hammam2222')
     expired_price = fields.Boolean()
     newxt_price = fields.Boolean()
     line_cost_ids = fields.One2many('line.cost.line','line_cost_id',string="Price")
