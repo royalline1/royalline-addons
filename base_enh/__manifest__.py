@@ -34,6 +34,10 @@
        'views/loading_place_view.xml',
        'views/insurance_cost_view.xml',
        'views/transport_cost_view.xml',
-       'views/clearance_cost_view.xml'
+       'views/clearance_cost_view.xml',
+       'views/sale_views.xml',
+       'data/data.xml'
+       
+       
     ],
 }

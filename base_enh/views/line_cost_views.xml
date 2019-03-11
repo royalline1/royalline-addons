@@ -1,5 +1,5 @@
-<odoo>
-	<data>
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>	<data>
 
 		<record model="ir.ui.view" id="line_cost_list_view">
 			<field name="name">line_cost</field>
@@ -9,12 +9,12 @@
 					<field name="line_id" />
 					<field name="quot_number" />
 					<field name="date" />
-					<field name="country_loding_id" />
-					<field name="state_loding_id" />
-					<field name="city_loding_id" />
-					<field name="place_loding_id" />
+					<field name="country_loading_id" />
+					<field name="state_loading_id" />
+					<field name="city_loading_id" />
+					<field name="place_loading_id" />
 					<field name="transport_loading_id" />
-					<field name="port_loafing_id" />
+					<field name="port_loading_id" />
 					<field name="country_dest_id" />
 					<field name="state_dest_id" />
 					<field name="city_dest_id" />
@@ -43,21 +43,21 @@
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="quot_number" />
 								<field name="date" />
-								<field name="country_loding_id"
+								<field name="country_loading_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-								<field name="state_loding_id"
-									domain="[('country_id','=',country_loding_id)]"
+								<field name="state_loading_id"
+									domain="[('country_id','=',country_loading_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-								<field name="city_loding_id"
-									domain="[('country_id','=',country_loding_id)]"
+								<field name="city_loading_id"
+									domain="[('country_id','=',country_loading_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-								<field name="place_loding_id"
-									domain="[('country_id','=',country_loding_id)]"
+								<field name="place_loading_id"
+									domain="[('country_id','=',country_loading_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="transport_loading_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-								<field name="port_loafing_id"
-									domain="[('country_id','=',country_loding_id)]"
+								<field name="port_loading_id"
+									domain="[('country_id','=',country_loading_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="total_rate" />
 								<field name="transt_time" />
@@ -137,7 +137,6 @@
 
 						<group>
 							<field name="note" />
-            <field name="note1" />
 						</group>
 					</sheet>
 				</form>

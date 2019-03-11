@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record model="ir.ui.view" id="view_order_form">
+			<field name="name">sale.order</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='partner_id']" position="after">
+					<field name="customer_class_id"
+						options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+				</xpath>
+				<xpath expr="//field[@name='validity_date']" position="before">
+					<field name="from_validity_date"
+						attrs="{'invisible': [('state', 'in', ['sale', 'done'])]}" />
+				</xpath>
+				<xpath expr="//field[@name='validity_date']"
+					position="attributes">
+					<attribute name="string">To Validity Date</attribute>
+				</xpath>
+				<xpath expr="//field[@name='payment_term_id']"
+					position="attributes">
+					<attribute name="readonly">1</attribute>
+					<attribute name="force_save">1</attribute>
+					<attribute name="options">{'no_create_edit': True, 'no_create':
+						True, 'no_open': True}
+					</attribute>
+				</xpath>
+				<xpath expr="//notebook//page[1]//field[@name='order_line']"
+					position="after">
+
+					<field name="order_line_shipment_ids"
+						attrs="{'readonly': [('state', 'in', ('done','cancel'))]}">
+						<tree editable="botton">
+							<field name="product_id"
+								options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+						</tree>
+						<form>
+							<group>
+								<group>
+									<field name="product_id" readonly="0" />
+								</group>
+							</group>
+
+						</form>
+
+					</field>
+
+				</xpath>
+				<notebook position="inside">
+					<page string="Sale Inqury">
+						<group>
+							<group>
+								<field name="release" />
+								<field name="sale_state" />
+								<field name="shipment_type" />
+								<field name="user_operation_id"
+									context="{'operation_filter':partner_id}"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="country_loading_id"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="city_loading_id"
+									domain="[('country_id','=',country_loading_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="place_loading_id"
+									domain="[('country_id','=',country_loading_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="state_dest_id"
+									domain="[('country_id','=',country_dest_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="place_dest_id"
+									domain="[('country_id','=',country_dest_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="create_date" readonly="1"
+									string="Inquiry Datetime" />
+								<field name="delivery_place_id"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="customs_dec_id"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="free_days" />
+
+								<field name="voyage_id"
+									domain="[('vessel_id','=',vessel_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="truck_type_id"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+
+
+								<field name="c_year" />
+							</group>
+							<group>
+								<field name="inquiry_name" />
+								<field name="shipment_method" />
+								<field name="shipper_id"
+									domain="[('is_shipper','=',True)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+
+								<field name="container_qty" />
+								<field name="state_loading_id"
+									domain="[('country_id','=',country_loading_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="port_loading_id"
+									domain="[('country_id','=',country_loading_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="country_dest_id"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="city_dest_id"
+									domain="[('country_id','=',country_dest_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="port_dest_id"
+									domain="[('country_id','=',country_dest_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="weight_type_id"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="agreement_method_id"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="shipping_line_id"
+									domain="[('country_loading_id','=',country_loading_id),
+																		('city_loading_id','=',city_loading_id),
+																		('place_loading_id','=',place_loading_id),
+																		('port_loading_id','=',port_loading_id),
+																		('country_dest_id','=',country_dest_id),
+																		('city_dest_id','=',city_dest_id),
+																		('place_dest_id','=',place_dest_id),
+																		('port_dest_id','=',port_dest_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="partner_shipping_line_id" invisible="1" />
+								<field name="vessel_id"
+									domain="[('sea_line_id','=',partner_shipping_line_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+
+								<field name="voyage_date" />
+
+								<field name="c_month" />
+							</group>
+							<newline />
+							<label for="order_line_shipment_ids"
+								style="font-weight: bold" />
+							<field name="order_line_shipment_ids">
+								<tree editable="botton">
+									<field name="product_id"
+										options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+									<field name="temperature" />
+									<field name="warehouse_condition" />
+									<field name="transport_condition" />
+									<field name="port_condition" />
+									<field name="other_condition" />
+								</tree>
+								<form>
+									<group>
+										<group>
+											<field name="product_id"
+												options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+											<field name="temperature" />
+											<field name="warehouse_condition" />
+											<field name="warehouse_condition_att" />
+											<field name="transport_condition" />
+											<field name="transport_condition_att" />
+											<field name="port_condition" />
+											<field name="port_condition_att" />
+											<field name="other_condition" />
+											<field name="other_condition_att" />
+
+										</group>
+
+
+									</group>
+								</form>
+							</field>
+							<label for="condition_ids" style="font-weight: bold" />
+							<field name="condition_ids">
+								<tree editable="botton">
+									<field name="name" />
+								</tree>
+								<form></form>
+							</field>
+							<label for="container_size_ids" style="font-weight: bold" />
+							<field name="container_size_ids">
+								<tree editable="botton">
+									<field name="line_id" invisible="1" />
+									<field name="container_id"
+										context="{'shipping_filter':line_id}"
+										options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+									<field name="target_rate" />
+									<field name="sold" />
+								</tree>
+								<form></form>
+							</field>
+							<label for="container_size_mang_ids"
+								style="font-weight: bold" />
+							<field name="container_size_mang_ids">
+								<tree editable="botton">
+									<field name="line_mang_id" invisible="1" />
+									<field name="container_id"
+										context="{'shipping_filter':line_mang_id}"
+										options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+									<field name="first_rate" />
+									<field name="second_rate" />
+									<field name="third_rate" />
+								</tree>
+								<form></form>
+
+
+							</field>
+							<group>
+								<field name="admin_release" />
+								<field name="admin_sale_state" />
+								<field name="country_dest_t_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+								<field name="city_dest_t_id" domain="[('country_id','=',country_dest_t_id)]"  options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+								<field name="place_dest_t_id" domain="[('country_id','=',country_dest_t_id)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+								<field name="line_cost_id"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="sea_rate" />
+								<field name="insurance_cost_id"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="insurance_rate" />
+								<field name="transport_cost_id"
+									domain="[('country_dest_id','=',country_dest_t_id),
+								('place_dest_id','=',country_dest_t_id),
+								('city_dest_id','=',city_dest_t_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="transport_rate" />
+							</group>
+							<label for="clearance_cost_ids" style="font-weight: bold" />
+							<field name="clearance_cost_ids">
+								<tree editable="botton">
+									<field name="customs_point_id"
+										options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+									<field name="customs_dec_id"
+										options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+									<field name="clearance_id"
+										options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+									<field name="rate" />
+								</tree>
+								<form></form>
+							</field>
+							<label for="additional_cost_ids" style="font-weight: bold" />
+							<field name="additional_cost_ids">
+								<tree editable="botton">
+									<field name="product_id"
+										options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+									<field name="cost" />
+								</tree>
+								<form></form>
+							</field>
+						</group>
+
+					</page>
+
+				</notebook>
+
+			</field>
+		</record>
+
+
+
+
+	</data>
+</odoo>

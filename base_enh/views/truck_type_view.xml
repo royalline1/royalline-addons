@@ -1,5 +1,5 @@
-<odoo>
-	<data>
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>	<data>
 
 		<record model="ir.ui.view" id="truck_type_list_view">
 			<field name="name">truck_type</field>

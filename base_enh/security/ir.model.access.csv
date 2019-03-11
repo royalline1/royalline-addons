@@ -26,3 +26,9 @@ transport_cost,transport_cost,model_transport_cost,base.group_user,1,1,1,1
 transport_cost_line,transport_cost_line,model_transport_cost_line,base.group_user,1,1,1,1
 clearance_cost,clearance_cost,model_clearance_cost,base.group_user,1,1,1,1
 clearance_cost_line,clearance_cost_line,model_clearance_cost_line,base.group_user,1,1,1,1
+sale_inquiry_condition,sale_inquiry_condition,model_sale_inquiry_condition,base.group_user,1,1,1,1
+sale_inquiry_container,sale_inquiry_container,model_sale_inquiry_container,base.group_user,1,1,1,1
+clearance_cost_line,clearance_cost_line,model_clearance_cost_line,base.group_user,1,1,1,1
+inquiry_additional_cost,inquiry_additional_cost,model_inquiry_additional_cost,base.group_user,1,1,1,1
+inquiry_clearance_cost,inquiry_clearance_cost,model_inquiry_clearance_cost,base.group_user,1,1,1,1
+sale_person,sale_person,model_sale_person,base.group_user,1,1,1,1

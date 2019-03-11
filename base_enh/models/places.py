@@ -31,7 +31,7 @@ class PlaceOfLoading(models.Model):
     zip = fields.Integer('ZIP Code',required=True)
     country_id = fields.Many2one('res.country',required=True)
     city_id = fields.Many2one('res.city',required=True)
-    state_id = fields.Many2one('res.country.state',required=True)
+    state_id = fields.Many2one('res.country.state',required=False)
     address = fields.Text('Address',required=True)
     
     

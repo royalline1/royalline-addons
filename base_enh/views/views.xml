@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<data>
 
@@ -60,8 +61,8 @@
 			<field name="arch" type="xml">
 
 				<button name="toggle_active" position="before">
-					<button type="object" string="vessels" class="oe_stat_button"
-						icon="fa-ship" name="open_vessels">
+					<button type="object" string="vessels"
+						class="oe_stat_button" icon="fa-ship" name="open_vessels">
 					</button>
 				</button>
 				<xpath
@@ -69,6 +70,19 @@
 					position="after">
 					<field name="customs_id" />
 
+				</xpath>
+				<xpath
+					expr="//notebook//page[3]//group[@name='container_row_2']"
+					position="inside">
+					<group>
+					<field name="sale_person_ids">
+						<tree editable="botton">
+							<field name="user_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+							<field name="type" />
+						</tree>
+						<form></form>
+					</field>
+					</group>
 				</xpath>
 				<xpath expr="//notebook//page[3]//group[@name='purchase']"
 					position="inside">
@@ -92,15 +106,15 @@
 
 
 				<xpath expr="//notebook" position="inside">
-				
+
 					<page string="Products">
 						<field name="product_ids">
-							<tree >
+							<tree>
 								<field name="display_name" />
 							</tree>
 						</field>
 					</page>
-				
+
 					<page string="Phone Numbers">
 						<field name="phone_ids">
 							<tree editable="botton">
@@ -198,7 +212,6 @@
 
 				<xpath expr="//notebook" position="inside">
 					<page string="Commodity">
-
 						<group>
 							<group>
 								<field name="temperature" />
@@ -223,36 +236,6 @@
 		</record>
 
 
-		<record model="ir.ui.view" id="view_order_form">
-			<field name="name">sale.order</field>
-			<field name="model">sale.order</field>
-			<field name="inherit_id" ref="sale.view_order_form" />
-			<field name="arch" type="xml">
-
-				<xpath expr="//notebook//page[1]//field[@name='order_line']"
-					position="after">
-
-					<field name="order_line_shipment_ids"
-						attrs="{'readonly': [('state', 'in', ('done','cancel'))]}">
-						<tree editable="botton">
-							<field name="product_id"
-								options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-						</tree>
-						<form>
-							<group>
-								<group>
-									<field name="product_id" readonly="0" />
-								</group>
-							</group>
-
-						</form>
-
-					</field>
-
-				</xpath>
-
-			</field>
-		</record>
 
 
 	</data>

@@ -1,5 +1,5 @@
-<odoo>
-	<data>
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>	<data>
 
 		<record model="ir.ui.view" id="insurance_cost_list_view">
 			<field name="name">insurance_cost</field>

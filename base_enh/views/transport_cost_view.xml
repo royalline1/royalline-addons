@@ -1,5 +1,5 @@
-<odoo>
-	<data>
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>	<data>
 
 		<record model="ir.ui.view" id="transport_cost_list_view">
 			<field name="name">transport_cost</field>
@@ -13,9 +13,9 @@
 					<field name="free_days" />
 					<field name="weight_type_id" />
 					<field name="truck_type_id" />
-					<field name="country_loding_id" />
-					<field name="city_loding_id" />
-					<field name="place_loding_id" />
+					<field name="country_loading_id" />
+					<field name="city_loading_id" />
+					<field name="place_loading_id" />
 					<field name="country_dest_id" />
 					<field name="city_dest_id" />
 					<field name="place_dest_id" />
@@ -46,13 +46,13 @@
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="truck_type_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-								<field name="country_loding_id"
+								<field name="country_loading_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-								<field name="city_loding_id"
-									domain="[('country_id','=',country_loding_id)]"
+								<field name="city_loading_id"
+									domain="[('country_id','=',country_loading_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-								<field name="place_loding_id"
-									domain="[('country_id','=',country_loding_id)]"
+								<field name="place_loading_id"
+									domain="[('country_id','=',country_loading_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 							</group>
 							<group>

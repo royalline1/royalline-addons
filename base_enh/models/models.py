@@ -2,7 +2,17 @@
 
 from odoo import models, fields, api
 from odoo.osv import expression
+from odoo.exceptions import UserError
 
+class SalePerson(models.Model):
+    _name = "sale.person"
+    
+    user_id = fields.Many2one('res.users',required=True)
+    type = fields.Selection([('sale','Sale'),
+                             ('operation','Operation'),
+                             ('follow','Follow')],required=True)
+    partner_id = fields.Many2one('res.partner')
+    
 
 class ResPlace(models.Model):
     _name = 'res.place'
@@ -62,6 +72,9 @@ class ResPartner(models.Model):
     
     product_ids = fields.Many2many('product.product')
     
+    sale_person_ids= fields.One2many('sale.person','partner_id')
+    
+    
     
     @api.multi
     def name_get(self):
@@ -77,13 +90,11 @@ class ResPartner(models.Model):
     @api.model
     def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
         if 'customs_filter' in self._context and self._context.get('from_customs_filter',True):
-            print(33333333333333333333)
             if not self._context.get('customs_filter'):
                 args = expression.AND([args] + [[('id','in',[])]])
             else:
                 partner_id = self.env['res.partner'].browse(self._context.get('customs_filter' ))
                 args = expression.AND([args] + [[('id','in',partner_id.with_context(from_customs_filter=False).child_ids.mapped('customs_id').ids)]])
-        print(args)
         return super(ResPartner, self)._search( args, offset=offset, limit=limit, order=order, count=count, access_rights_uid=access_rights_uid)
     @api.onchange('city_id')
     def _onchange_city_id(self):
@@ -135,14 +146,14 @@ class ProductProduct(models.Model):
 class ProductProduct(models.Model):
     _inherit = "product.product"
     
-    temperature = fields.Integer('Temperature')
-    warehouse_condition = fields.Integer('Warehouse condition')
+    temperature = fields.Float('Temperature')
+    warehouse_condition = fields.Char('Warehouse condition')
     warehouse_condition_att = fields.Binary(attachment=True,string="Attachment")
-    transport_condition = fields.Integer('Transport condition')
+    transport_condition = fields.Char('Transport condition')
     transport_condition_att = fields.Binary(attachment=True,string="Attachment")
-    port_condition = fields.Integer('Port condition')
+    port_condition = fields.Char('Port condition')
     port_condition_att = fields.Binary(attachment=True,string="Attachment")
-    other_condition = fields.Integer('Other condition')
+    other_condition = fields.Char('Other condition')
     other_condition_att = fields.Binary(attachment=True,string="Attachment")
     
     @api.model
@@ -150,10 +161,20 @@ class ProductProduct(models.Model):
         if self._context.get('com_customer_id' ):
             partner_id = self.env['res.partner'].browse(self._context.get('com_customer_id' ))
             args = expression.AND([args] + [[('id','in',partner_id.product_ids.ids)]])
-            
-            
-        
         return super(ProductProduct, self)._search(args, offset, limit, order, count, access_rights_uid)
     
+class ResUsers(models.Model):
+    _inherit = 'res.users'
+    
+    
+    @api.model
+    def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
+        operation_filter = self._context.get('operation_filter',0)
+        if operation_filter is False:
+            raise UserError('Must select a customer first')
+        elif operation_filter:
+            ids =  self.env['sale.person'].search([('type','=','operation'),('partner_id','=',operation_filter)]).mapped('user_id').ids
+            args = expression.AND([args] + [[('id','in',ids)]])
+        return super(ResUsers, self)._search(args, offset, limit, order, count, access_rights_uid)
     
       
