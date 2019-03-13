@@ -20,6 +20,7 @@ class vessel(models.Model):
     
 class VoyagesDetail(models.Model):
     _name = "voyages.detail"
+    _rec_name = "voyage_number"
     
     vessel_id = fields.Many2one('vessel')
     voyage_number  = fields.Char('Voyage Number')

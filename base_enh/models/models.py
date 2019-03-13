@@ -117,7 +117,9 @@ class ResPhone(models.Model):
 class SeaLines(models.Model):
     _name="sea.lines"
     
+    
     container_size_id = fields.Many2one('container.size',string="Container Size")
+    name = fields.Char(related="container_size_id.size")
     type = fields.Selection([('import','Import'),('export','Export'),('cross','Cross')])
     free_days = fields.Integer('Free Days')
     first_demurrage_from = fields.Integer('First Way Demurrage From')
@@ -132,6 +134,15 @@ class SeaLines(models.Model):
     delivery_order = fields.Float('Delivery Order')
     agency = fields.Float('Agency')
     partner_id = fields.Many2one('res.partner')
+    
+    
+    @api.multi
+    def name_get(self):
+        lines = []
+        for record in self:
+            name = record.name + ' | ' + record.type
+            lines.append((record.id,name))
+        return lines
     
     
     

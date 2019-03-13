@@ -15,40 +15,34 @@ class AdditionalCost(models.Model):
     
 class LineCostLine(models.Model):
     _name = 'line.cost.line'
+    _rec_name = "sea_lines_id"
     
-    container_id = fields.Many2one('container.size', 'Container', required=True)
+    sea_lines_id = fields.Many2one('sea.lines', 'Container', required=True)
+    partner_id = fields.Many2one('res.partner',related="line_cost_id.line_id")
     min_qty = fields.Integer('Minimum Quantity', required=True)
-    agency = fields.Float('Agency', compute="_compute_agency",store=True)
-    transport_price = fields.Float('Transport Price', required=True)
+    agency = fields.Float('Agency', related="sea_lines_id.agency",store=True)
+    transport_loading_price = fields.Float()
+    transport_discharge_price = fields.Float()
+    is_loading = fields.Boolean()
+    is_discharge = fields.Boolean()
+    type = fields.Selection([('loading','Loading'),('discharg','Discharg')])
     product_id = fields.Many2one('product.product', string='Name Of Discount', domain=[('is_discount', '=', True)])
-    value = fields.Float('Discount Value', required=True)
+    value = fields.Float('Discount Value')
+    rate = fields.Float('Loading Rate')
+    rate = fields.Float('Rate')
     line_cost_id = fields.Many2one('line.cost', required=True)
-    container_ids = fields.Many2many('container.size',compute ='_compute_container_ids')
+    
     total = fields.Float('Total',compute='_compute_total')
     
-    @api.depends('agency','transport_price','value')
+    @api.depends('agency','transport_loading_price','value','rate','transport_discharge_price')
     def _compute_total(self):
         for rec in self:
-            rec.total = rec.agency + rec.transport_price - rec.value
+            rec.total = rec.agency + rec.rate+ rec.transport_discharge_price + rec.transport_loading_price - rec.value
             
-            
-    @api.depends('line_cost_id','line_cost_id.line_id')
-    def _compute_container_ids(self):
-        for rec in self:
-            rec.container_ids = [(6,0,rec.line_cost_id.line_id.mapped('sea_ids.container_size_id').ids)]
-    
-    @api.depends('container_id')
-    def _compute_agency(self):
-        for rec in self:
-            if rec.container_id:
-                sea_ids =rec.mapped('line_cost_id.line_id.sea_ids').filtered(lambda x:x.container_size_id.id == rec.container_id.id)
-                if sea_ids:
-                    rec.agency = sea_ids[0].agency
-                else :
-                    rec.agency = 0.0
-            
-            else :
-                rec.agency = 0.0
+    @api.model
+    def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
+        print(args)
+        return super(LineCostLine, self)._search( args, offset=offset, limit=limit, order=order, count=count, access_rights_uid=access_rights_uid)
 
 
 class LineCost(models.Model):
@@ -73,19 +67,17 @@ class LineCost(models.Model):
     delivery_place_id = fields.Many2one('delivery.place', 'Place Of Delivery')
     bill_fees = fields.Float('Bill fees',compute='_compute_bill_fees',store=True)
     free_demurrage_and_detention = fields.Integer()
-    total_rate = fields.Float('Total Rate')
     transt_time = fields.Integer()
     customer_id = fields.Many2one('res.partner',stirng='Named Account')
-    ak = fields.Boolean('FAK',default=True)
+    fak = fields.Boolean('FAK',default=True)
     product_id = fields.Many2one('product.product')
     start_date = fields.Date('Start Date')
     expiry_date = fields.Date('Expiry Date')
     note = fields.Text('Notes')
     expired_price = fields.Boolean()
-    newxt_price = fields.Boolean()
+    next_price = fields.Boolean()
     line_cost_ids = fields.One2many('line.cost.line','line_cost_id',string="Price")
     additional_cost_ids = fields.One2many('additional.cost','line_cost_id',string="Additional Cost")
-    total_cost = fields.Float('Total Cost',compute="_compute_total_cost")
     product_discount_id = fields.Many2one('product.product', string='Additional Discount' ,domain=[('is_discount', '=', True)])
     discount = fields.Float(default=0.0)
     
@@ -98,12 +90,6 @@ class LineCost(models.Model):
                 rec.bill_fees = 0.0
                 
                 
-    @api.depends('discount','bill_fees','total_rate','line_cost_ids','line_cost_ids.total','additional_cost_ids','additional_cost_ids.cost')
-    def _compute_total_cost(self):
-        for rec in self:
-            total_additional_cost = sum(rec.mapped('additional_cost_ids.cost')+[0])
-            total_price = sum(rec.mapped('line_cost_ids.total')+[0])
-            rec.total_cost = total_additional_cost + total_price + rec.total_rate + rec.bill_fees - rec.discount
             
     @api.onchange('line_id')     
     def onchange_line_id(self):

@@ -52,6 +52,7 @@
 					<page string="Sale Inqury">
 						<group>
 							<group>
+								<field name="is_loading" />
 								<field name="release" />
 								<field name="sale_state" />
 								<field name="shipment_type" />
@@ -90,6 +91,7 @@
 								<field name="c_year" />
 							</group>
 							<group>
+								<field name="is_discharge" />
 								<field name="inquiry_name" />
 								<field name="shipment_method" />
 								<field name="shipper_id"
@@ -115,23 +117,19 @@
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="agreement_method_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="shipping_line_ids" invisible="1" />
 								<field name="shipping_line_id"
-									domain="[('country_loading_id','=',country_loading_id),
-																		('city_loading_id','=',city_loading_id),
-																		('place_loading_id','=',place_loading_id),
-																		('port_loading_id','=',port_loading_id),
-																		('country_dest_id','=',country_dest_id),
-																		('city_dest_id','=',city_dest_id),
-																		('place_dest_id','=',place_dest_id),
-																		('port_dest_id','=',port_dest_id)]"
+										domain="[('id','in',shipping_line_ids)]"
+
+
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="partner_shipping_line_id" invisible="1" />
 								<field name="vessel_id"
 									domain="[('sea_line_id','=',partner_shipping_line_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 
-								<field name="voyage_date" />
-
+								<field name="etd_date" />
+								<field name="eta_date" />
 								<field name="c_month" />
 							</group>
 							<newline />
@@ -178,39 +176,34 @@
 							<label for="container_size_ids" style="font-weight: bold" />
 							<field name="container_size_ids">
 								<tree editable="botton">
+									<field name="sale_id" invisible="1" />
 									<field name="line_id" invisible="1" />
-									<field name="container_id"
-										context="{'shipping_filter':line_id}"
+									<field name="shipment_type" invisible="1" />
+									<field name="line_cost_line_id"
+										domain="[('line_cost_id.expiry','=',False),
+									
+									('line_cost_id','=',line_id),('sea_lines_id.type','=',shipment_type)]"
 										options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 									<field name="target_rate" />
 									<field name="sold" />
-								</tree>
-								<form></form>
-							</field>
-							<label for="container_size_mang_ids"
-								style="font-weight: bold" />
-							<field name="container_size_mang_ids">
-								<tree editable="botton">
-									<field name="line_mang_id" invisible="1" />
-									<field name="container_id"
-										context="{'shipping_filter':line_mang_id}"
-										options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 									<field name="first_rate" />
 									<field name="second_rate" />
 									<field name="third_rate" />
 								</tree>
 								<form></form>
-
-
 							</field>
 							<group>
 								<field name="admin_release" />
 								<field name="admin_sale_state" />
-								<field name="country_dest_t_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
-								<field name="city_dest_t_id" domain="[('country_id','=',country_dest_t_id)]"  options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
-								<field name="place_dest_t_id" domain="[('country_id','=',country_dest_t_id)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
-								<field name="line_cost_id"
+								<field name="country_dest_t_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="city_dest_t_id"
+									domain="[('country_id','=',country_dest_t_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="place_dest_t_id"
+									domain="[('country_id','=',country_dest_t_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+
 								<field name="sea_rate" />
 								<field name="insurance_cost_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
