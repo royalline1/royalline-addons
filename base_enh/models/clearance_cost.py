@@ -15,10 +15,13 @@ class ClearancelinsuCost(models.Model):
 class ClearanceCost(models.Model):
     _name = 'clearance.cost'
     _rec_name = 'qut_number'
+    
    
-    qut_number =fields.Char('Quotation Number')
+    qut_number =fields.Char('Quotation Number',required=True)
     is_next = fields.Boolean('Is Next Price')
     is_expired = fields.Boolean('Is Expired Price')
+    shipment_method = fields.Selection([('all_in', 'All In'), ('sea_freight', 'Sea freight'), ('land_freight', 'Land Freight'), ('air_freight', 'Air Freight'), ('clearance', 'Clearance')])
+    shipment_type = fields.Selection([ ('import', 'Import'), ('export', 'Export')])
     partner_id = fields.Many2one('res.partner',string="Clearance",domain=[('is_clearance_company', '=', True)])
     customs_id = fields.Many2one('res.partner',string="Customs point",domain=[('is_customs_point', '=', True)])
     partner_point_ids = fields.Many2many('res.partner',string="Point Contact",compute="_compute_partner_point_ids")
@@ -33,7 +36,6 @@ class ClearanceCost(models.Model):
     def _compute_partner_point_ids(self):
         for rec in self:
             if rec.customs_id:
-                print(self.env['res.partner'].search([('customs_id','=',rec.customs_id.id)]))
                 rec.partner_point_ids = self.env['res.partner'].with_context(from_customs_filter=False).search([('customs_id','=',rec.customs_id.id)])
             else:
                 rec.partner_point_ids = [(5,0,0)]

@@ -32,3 +32,5 @@ clearance_cost_line,clearance_cost_line,model_clearance_cost_line,base.group_use
 inquiry_additional_cost,inquiry_additional_cost,model_inquiry_additional_cost,base.group_user,1,1,1,1
 inquiry_clearance_cost,inquiry_clearance_cost,model_inquiry_clearance_cost,base.group_user,1,1,1,1
 sale_person,sale_person,model_sale_person,base.group_user,1,1,1,1
+sale_clearance_cost_line,sale_clearance_cost_line,model_sale_clearance_cost_line,base.group_user,1,1,1,1
+transport_price_line,transport_price_line,model_transport_price_line,base.group_user,1,1,1,1

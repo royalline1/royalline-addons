@@ -21,6 +21,8 @@ class ResPlace(models.Model):
     country_id = fields.Many2one('res.country',required=True)
     city_id = fields.Many2one('res.city',required=True)
     state_id = fields.Many2one('res.country.state')
+    is_port = fields.Boolean()
+    port_id = fields.Many2one('port')
     address = fields.Text('Address',required=True)
     
     
@@ -78,7 +80,6 @@ class ResPartner(models.Model):
     
     @api.multi
     def name_get(self):
-        print(self._context)
         if 'custom_point' in self._context:
             lines = []
             for record in self:

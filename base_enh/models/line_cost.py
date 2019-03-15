@@ -28,10 +28,8 @@ class LineCostLine(models.Model):
     type = fields.Selection([('loading','Loading'),('discharg','Discharg')])
     product_id = fields.Many2one('product.product', string='Name Of Discount', domain=[('is_discount', '=', True)])
     value = fields.Float('Discount Value')
-    rate = fields.Float('Loading Rate')
     rate = fields.Float('Rate')
     line_cost_id = fields.Many2one('line.cost', required=True)
-    
     total = fields.Float('Total',compute='_compute_total')
     
     @api.depends('agency','transport_loading_price','value','rate','transport_discharge_price')
@@ -41,6 +39,7 @@ class LineCostLine(models.Model):
             
     @api.model
     def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
+        print(self._context)
         print(args)
         return super(LineCostLine, self)._search( args, offset=offset, limit=limit, order=order, count=count, access_rights_uid=access_rights_uid)
 
@@ -81,6 +80,27 @@ class LineCost(models.Model):
     product_discount_id = fields.Many2one('product.product', string='Additional Discount' ,domain=[('is_discount', '=', True)])
     discount = fields.Float(default=0.0)
     
+    
+    @api.model_create_multi
+    @api.returns('self', lambda value:value.id)
+    def create(self, vals_list):
+        res = super(LineCost, self).create( vals_list)
+        for rec in res:
+            if not rec.place_dest_id:
+                rec.line_cost_ids.write({'is_discharge':False,'transport_discharge_price':0.0})
+            if not rec.place_loading_id:
+                rec.line_cost_ids.write({'is_loading':False,'transport_loading_price':0.0})
+        return res
+    
+    @api.multi
+    def write(self, vals):
+        res = super(LineCost, self).write(vals)
+        for rec in self:
+            if not rec.place_dest_id:
+                rec.line_cost_ids.write({'is_discharge':False,'transport_discharge_price':0.0})
+            if not rec.place_loading_id:
+                rec.line_cost_ids.write({'is_loading':False,'transport_loading_price':0.0})
+        return res
     @api.depends('line_id')
     def _compute_bill_fees(self):
         for rec in self:

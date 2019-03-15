@@ -9,10 +9,12 @@
 					<field name="partner_id" />
 					<field name="qut_number" />
 					<field name="date" />
-					<field name="from_country_id" />
-					<field name="from_city_id" />
-					<field name="to_country_id" />
-					<field name="to_city_id" />
+					<field name="country_loading_id" />
+					<field name="state_loading_id" />
+					<field name="city_loading_id" />
+					<field name="country_dest_id" />
+					<field name="state_loading_id" />
+					<field name="city_dest_id" />
 					<field name="from_date" />
 					<field name="to_date" />
 					<field name="insurance_type_id" />
@@ -33,18 +35,24 @@
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="qut_number" />
 								<field name="date" />
-								<field name="from_country_id"
+								<field name="country_loading_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-								<field name="from_city_id"
-									domain="[('country_id','=',from_country_id)]"
+								<field name="state_loading_id"
+									domain="[('country_id','=',country_loading_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="city_loading_id"
+									domain="[('country_id','=',country_loading_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 									<field name="rate" />
 							</group>
 							<group>
-								<field name="to_country_id"
+								<field name="country_dest_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-								<field name="to_city_id"
-									domain="[('country_id','=',to_country_id)]"
+								<field name="state_dest_id"
+									domain="[('country_id','=',country_dest_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="city_dest_id"
+									domain="[('country_id','=',country_dest_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="from_date" />
 								<field name="to_date" />

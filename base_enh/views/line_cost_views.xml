@@ -113,8 +113,8 @@
 									<field name="agency" />
 									<field name="is_loading" />
 									<field name="is_discharge" />
-									<field name="transport_discharge_price" attrs="{'readonly':[('is_loading','=',False)]}"/>
-									<field name="transport_loading_price" attrs="{'readonly':[('is_discharge','=',False)]}"/>
+									<field name="transport_loading_price" attrs="{'readonly':[('is_loading','=',False)]}"/>
+									<field name="transport_discharge_price" attrs="{'readonly':[('is_discharge','=',False)]}"/>
 									<field name="product_id"
 										options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 									<field name="value" attrs="{'readonly':[('product_id','=',False)]}" />
