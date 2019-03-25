@@ -2,56 +2,38 @@
 <odoo>
 	<data>
 
-		<record model="ir.ui.view" id="view_order_form">
-			<field name="name">sale.order</field>
-			<field name="model">sale.order</field>
-			<field name="inherit_id" ref="sale.view_order_form" />
+
+		<record model="ir.ui.view" id="view_inquiry_tree">
+			<field name="name">sale.inquiry</field>
+			<field name="model">sale.inquiry</field>
 			<field name="arch" type="xml">
-				<xpath expr="//field[@name='partner_id']" position="after">
-					<field name="customer_class_id"
-						options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-				</xpath>
-				<xpath expr="//field[@name='validity_date']" position="before">
-					<field name="from_validity_date"
-						attrs="{'invisible': [('state', 'in', ['sale', 'done'])]}" />
-				</xpath>
-				<xpath expr="//field[@name='validity_date']"
-					position="attributes">
-					<attribute name="string">To Validity Date</attribute>
-				</xpath>
-				<xpath expr="//field[@name='payment_term_id']"
-					position="attributes">
-					<attribute name="readonly">1</attribute>
-					<attribute name="force_save">1</attribute>
-					<attribute name="options">{'no_create_edit': True, 'no_create':
-						True, 'no_open': True}
-					</attribute>
-				</xpath>
-				<xpath expr="//notebook//page[1]//field[@name='order_line']"
-					position="after">
+				<tree>
+					<field name="name" />
+					<field name="partner_id" />
 
-					<field name="order_line_shipment_ids"
-						attrs="{'readonly': [('state', 'in', ('done','cancel'))]}">
-						<tree editable="botton">
-							<field name="product_id"
-								options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-						</tree>
-						<form>
-							<group>
-								<group>
-									<field name="product_id" readonly="0" />
-								</group>
-							</group>
 
-						</form>
+				</tree>
+			</field>
 
-					</field>
+		</record>
 
-				</xpath>
-				<notebook position="inside">
-					<page string="Sale Inqury">
+
+		<record model="ir.ui.view" id="view_inquiry_form">
+			<field name="name">sale.inquiry</field>
+			<field name="model">sale.inquiry</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+
 						<group>
 							<group>
+								<field name="name" />
+								<field name="partner_id" domain="[('customer','=',True)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="customer_class_id"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="from_validity_date" />
+								<field name="to_validity_date" />
 								<field name="is_loading" />
 								<field name="release" />
 								<field name="sale_state" />
@@ -84,14 +66,13 @@
 								<field name="voyage_id"
 									domain="[('vessel_id','=',vessel_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-								
+
 
 
 								<field name="c_year" />
 							</group>
 							<group>
 								<field name="is_discharge" />
-								<field name="inquiry_name" />
 								<field name="shipment_method" />
 								<field name="shipper_id"
 									domain="[('is_shipper','=',True)]"
@@ -174,7 +155,7 @@
 							<label for="container_size_ids" style="font-weight: bold" />
 							<field name="container_size_ids">
 								<tree editable="botton">
-									<field name="sale_id" invisible="1" />
+									<field name="inquiry_id" invisible="1" />
 									<field name="line_id" invisible="1" />
 									<field name="country_loading_id" invisible="1" />
 									<field name="port_loading_id" invisible="1" />
@@ -199,16 +180,16 @@
 										options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 									<field name="container_qty" />
 									<field name="transport_line_id"
-									domain="[('container_size_id','=',container_id),
+										domain="[('container_size_id','=',container_id),
 											('cost_id.place_dest_id','=',place_of_port_id),
 											('cost_id.place_loading_id','=',place_loading_id),
 											('cost_id.is_next','=',False),
 											('cost_id.is_expired','=',False)]"
-									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+										options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 									<field name="weight_type_id"
-									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+										options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 									<field name="truck_type_id"
-									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+										options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 									<field name="target_rate" />
 									<field name="sold" />
 									<field name="first_rate" />
@@ -227,11 +208,12 @@
 									domain="[('id','in',insurance_cost_ids)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="insurance_rate" />
-								<field name="container_ids" invisible="1"/>
+								<field name="container_ids" invisible="1" />
 								<field name="transport_rate" />
-								<field name="clearance_id" domain="[('shipment_type','=',shipment_type),
+								<field name="clearance_id"
+									domain="[('shipment_type','=',shipment_type),
 								('customs_declaration_id','=',customs_dec_id)]"
-									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 							</group>
 							<label for="clearance_cost_ids" style="font-weight: bold" />
 							<field name="clearance_cost_ids" force_save="1">
@@ -252,14 +234,19 @@
 							</field>
 						</group>
 
-					</page>
-
-				</notebook>
-
+					</sheet>
+				</form>
 			</field>
 		</record>
 
 
+		<record id="sale_inquiry_action" model="ir.actions.act_window">
+			<field name="name">Sale Inquiry</field>
+			<field name="res_model">sale.inquiry</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		<menuitem id="menu_sale_inquiry" action="sale_inquiry_action" />
 
 
 	</data>

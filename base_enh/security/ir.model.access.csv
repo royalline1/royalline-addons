@@ -4,7 +4,7 @@ delivery_place,delivery_place,model_delivery_place,base.group_user,1,1,1,1
 container_size_access,container_size_access,model_container_size,base.group_user,1,1,1,1
 agreement_method_access,agreement_method_access,model_agreement_method,base.group_user,1,1,1,1
 customer_class_access,customer_class_access,model_customer_class,base.group_user,1,1,1,1
-sale_order_line_shipment_access,sale_order_line_shipmentaccess,model_sale_order_line_shipment,base.group_user,1,1,1,1
+sale_inquiry_line_access,sale_inquiry_lineaccess,model_sale_inquiry_line,base.group_user,1,1,1,1
 customs_declaration_access,customs_declaration_access,model_customs_declaration,base.group_user,1,1,1,1
 insurance_type_access,insurance_type_access,model_insurance_type,base.group_user,1,1,1,1
 truck_type_type_access,truck_type_access,model_truck_type,base.group_user,1,1,1,1
@@ -34,3 +34,4 @@ inquiry_clearance_cost,inquiry_clearance_cost,model_inquiry_clearance_cost,base.
 sale_person,sale_person,model_sale_person,base.group_user,1,1,1,1
 sale_clearance_cost_line,sale_clearance_cost_line,model_sale_clearance_cost_line,base.group_user,1,1,1,1
 transport_price_line,transport_price_line,model_transport_price_line,base.group_user,1,1,1,1
+sale_inquiry,sale_inquiry,model_sale_inquiry,base.group_user,1,1,1,1

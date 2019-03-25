@@ -10,14 +10,14 @@ class InquiryAdditionalCost(models.Model):
     
     product_id = fields.Many2one('product.product', string='Name', required=True)
     cost = fields.Float(required=True)
-    sale_id = fields.Many2one('sale.order')
+    inquiry_id = fields.Many2one('sale.inquiry')
 
 
 class SaleInquiryCondition(models.Model):
     _name = 'sale.inquiry.condition'
     
     name = fields.Char(required=True)
-    sale_id = fields.Many2one('sale.order', ondelete='cascade')
+    inquiry_id = fields.Many2one('sale.inquiry', ondelete='cascade')
 
     
 class SaleInquiryContainer(models.Model):
@@ -34,17 +34,17 @@ class SaleInquiryContainer(models.Model):
     first_rate = fields.Float()
     second_rate = fields.Float()
     third_rate = fields.Float()
-    sale_id = fields.Many2one('sale.order')
-    shipment_type = fields.Selection([('cross', 'Cross'), ('import', 'Import'), ('export', 'Export')], related="sale_id.shipment_type")
-    line_id = fields.Many2one('line.cost', related="sale_id.shipping_line_id")
-    country_loading_id = fields.Many2one('res.country', related="sale_id.country_loading_id")
-    port_loading_id = fields.Many2one('port', related="sale_id.port_loading_id")
-    country_dest_id = fields.Many2one('res.country', related="sale_id.country_dest_id")
-    port_dest_id = fields.Many2one('port', related="sale_id.port_dest_id")
-    is_loading = fields.Boolean( related="sale_id.is_loading")
-    is_discharge = fields.Boolean(related="sale_id.is_discharge")
-    place_loading_id = fields.Many2one('loading.place', related="sale_id.place_loading_id")
-    place_of_port_id = fields.Many2one('res.place',related="sale_id.place_of_port_id")
+    inquiry_id = fields.Many2one('sale.inquiry')
+    shipment_type = fields.Selection([('cross', 'Cross'), ('import', 'Import'), ('export', 'Export')], related="inquiry_id.shipment_type")
+    line_id = fields.Many2one('line.cost', related="inquiry_id.shipping_line_id")
+    country_loading_id = fields.Many2one('res.country', related="inquiry_id.country_loading_id")
+    port_loading_id = fields.Many2one('port', related="inquiry_id.port_loading_id")
+    country_dest_id = fields.Many2one('res.country', related="inquiry_id.country_dest_id")
+    port_dest_id = fields.Many2one('port', related="inquiry_id.port_dest_id")
+    is_loading = fields.Boolean( related="inquiry_id.is_loading")
+    is_discharge = fields.Boolean(related="inquiry_id.is_discharge")
+    place_loading_id = fields.Many2one('loading.place', related="inquiry_id.place_loading_id")
+    place_of_port_id = fields.Many2one('res.place',related="inquiry_id.place_of_port_id")
     cost = fields.Float(compute="_compute_cost")
     
     
@@ -63,11 +63,11 @@ class ClearanceCostLine(models.Model):
     customs_dec_id = fields.Many2one('customs.declaration', string="Customs Declaration")
     clearance_id = fields.Many2one('res.partner', 'Clearance Company')
     rate = fields.Float()
-    sale_id = fields.Many2one('sale.order', ondelete='cascade')
+    inquiry_id = fields.Many2one('sale.inquiry', ondelete='cascade')
     
     
-class SaleOrderLineShipment(models.Model):
-    _name = 'sale.order.line.shipment'
+class SaleInquiryLineShipment(models.Model):
+    _name = 'sale.inquiry.line'
     
     product_id = fields.Many2one('product.product', required=True)
     temperature = fields.Float('Temperature', related="product_id.temperature")
@@ -79,18 +79,19 @@ class SaleOrderLineShipment(models.Model):
     port_condition_att = fields.Binary(attachment=True, string="Attachment", related="product_id.port_condition_att")
     other_condition = fields.Char('Other condition', related="product_id.other_condition")
     other_condition_att = fields.Binary(attachment=True, string="Attachment", related="product_id.other_condition_att")
-    order_shipment_id = fields.Many2one('sale.order')
+    inquiry_id = fields.Many2one('sale.inquiry')
     
 
 
-class SaleOrder(models.Model):
-    _inherit = 'sale.order'
+class SaleInquiry(models.Model):
+    _name = 'sale.inquiry'
     
+    name = fields.Char(readonly=True)
     from_validity_date = fields.Date()
-    
-    order_line_shipment_ids = fields.One2many('sale.order.line.shipment', 'order_shipment_id')
+    to_validity_date = fields.Date()
+    partner_id = fields.Many2one('res.partner',required=True)
+    order_line_shipment_ids = fields.One2many('sale.inquiry.line', 'inquiry_id')
     release = fields.Boolean('Release')
-    inquiry_name = fields.Char('Inquiry Number', readonly=True)
     admin_release = fields.Boolean('Admin Release')
     sale_state = fields.Selection([('progress', 'In Progress'), ('confirmed', 'Confirmed'), ('not_confirmed', 'Not Confirmed')], default="progress")
     shipment_method = fields.Selection([('all_in', 'All In'), ('sea_freight', 'Sea freight'), ('land_freight', 'Land Freight'), ('air_freight', 'Air Freight'), ('clearance', 'Clearance')])
@@ -130,8 +131,8 @@ class SaleOrder(models.Model):
     
     c_month = fields.Char('Month', default=datetime.date.today().month, readonly=True)
     c_year = fields.Char('Year', default=datetime.date.today().year, readonly=True)
-    condition_ids = fields.One2many('sale.inquiry.condition', 'sale_id', 'Conditions')
-    container_size_ids = fields.One2many('sale.inquiry.container', 'sale_id', 'Container Price')
+    condition_ids = fields.One2many('sale.inquiry.condition', 'inquiry_id', 'Conditions')
+    container_size_ids = fields.One2many('sale.inquiry.container', 'inquiry_id', 'Container Price')
     container_ids = fields.Many2many('container.size', compute="_compute_container_ids")
     
     
@@ -142,8 +143,8 @@ class SaleOrder(models.Model):
     insurance_rate = fields.Float(related="insurance_cost_id.total",readonly=True)
     transport_rate = fields.Float(compute='_compute_transport_rate')
     clearance_id = fields.Many2one('clearance.cost','Clearance')
-    clearance_cost_ids = fields.One2many('sale.clearance.cost.line', 'sale_id', 'Clearance Cost',readonly=True)
-    additional_cost_ids = fields.One2many('inquiry.additional.cost', 'sale_id', 'Additional Cost')
+    clearance_cost_ids = fields.One2many('sale.clearance.cost.line', 'inquiry_id', 'Clearance Cost',readonly=True)
+    additional_cost_ids = fields.One2many('inquiry.additional.cost', 'inquiry_id', 'Additional Cost')
     
     
     @api.depends('container_size_ids','container_size_ids.cost')
@@ -173,7 +174,7 @@ class SaleOrder(models.Model):
                         c_qty = c_qty if c_qty < qty else qty
                         qty -= c_qty
                         total += l.cost * c_qty
-                    rec.clearance_cost_ids = [(0,0,{'container_id':i.line_cost_line_id.sea_lines_id.container_size_id.id,'cost':total,'sale_id':rec.id})]
+                    rec.clearance_cost_ids = [(0,0,{'container_id':i.line_cost_line_id.sea_lines_id.container_size_id.id,'cost':total,'inquiry_id':rec.id})]
                         
     @api.depends('country_loading_id','country_dest_id',
                  'city_loading_id','state_loading_id',
@@ -235,18 +236,18 @@ class SaleOrder(models.Model):
             rec.shipping_line_ids = [(6,0,line_cost_ids.ids)]
            
           
-    @api.constrains('from_validity_date', 'validity_date')
+    @api.constrains('from_validity_date', 'to_validity_date')
     def validity_date_constraint(self):
         for rec in self:
-            if rec.from_validity_date and rec.from_validity_date and rec.from_validity_date > rec.from_validity_date:  
+            if rec.from_validity_date and rec.to_validity_date and rec.from_validity_date > rec.to_validity_date:  
                 raise UserError("""The 'From Validity Date' must be less than 'To Validity Date'.""")
     
     @api.model_create_multi
     @api.returns('self', lambda value:value.id)
     def create(self, vals_list):
         for val in vals_list:
-            val['inquiry_name'] = self.env['ir.sequence'].next_by_code('inquiry.seq')
-        return super(SaleOrder, self).create(vals_list)
+            val['name'] = self.env['ir.sequence'].next_by_code('inquiry.seq')
+        return super(SaleInquiry, self).create(vals_list)
     
     
     
@@ -255,7 +256,7 @@ class SaleClearanceCostLine(models.Model):
     
     container_id = fields.Many2one('container.size')
     cost = fields.Float()
-    sale_id = fields.Many2one('sale.order',ondelete="cascade")
+    inquiry_id = fields.Many2one('sale.inquiry',ondelete="cascade")
    
     
   

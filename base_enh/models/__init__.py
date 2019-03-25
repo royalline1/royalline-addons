@@ -3,7 +3,7 @@ from . import container_size
 from . import models
 from . import agreement_method
 from . import customer_class
-from . import sale_order
+from . import sale_inquiry
 from . import customs_declaration
 from . import insurance_type
 from . import truck_type
@@ -15,3 +15,4 @@ from . import places
 from . import insurance_cost
 from . import transport_cost
 from . import clearance_cost
+from . import product
