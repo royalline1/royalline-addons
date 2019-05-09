@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="commodity_list_view">
+            <field name="name">Commodity</field>
+            <field name="model">commodity</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" />
+                    <field name="temperature" />
+                    <field name="commodity_category" />
+                    <field name="warehouse_condition" />
+                    <field name="warehouse_condition_att" />
+                    <field name="transport_condition" />
+                    <field name="transport_condition_att" />
+                    <field name="port_condition" />
+                    <field name="port_condition_att" />
+                    <field name="other_condition" />
+                    <field name="other_condition_att" />
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="commodity_form_view">
+            <field name="name">Commodity</field>
+            <field name="model">commodity</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" />
+                            </group>
+                            <group>
+                                <field name="commodity_category" />
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="temperature" />
+                                <field name="warehouse_condition" />
+                                <field name="warehouse_condition_att" />
+                                <field name="transport_condition" />
+                                <field name="transport_condition_att" />
+                            </group>
+                            <group>
+                                <field name="port_condition" />
+                                <field name="port_condition_att" />
+                                <field name="other_condition" />
+                                <field name="other_condition_att" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window"
+            id="commodity_action">
+            <field name="name">Commodity</field>
+            <field name="res_model">commodity</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <menuitem id="commodity_menu" parent="location_menu"
+            action="commodity_action" />
+
+    </data>
+</odoo>
