@@ -36,7 +36,8 @@
        'views/transport_cost_view.xml',
        'views/clearance_cost_view.xml',
        'views/sale_inquiry.xml',
-       'data/data.xml',
+       'views/commodity.xml',
+        'data/data.xml',
        'views/invoice_charges.xml'
        
        
