@@ -46,7 +46,7 @@ class TransportCost(models.Model):
     country_loading_id = fields.Many2one('res.country', string="Country Of Loading", required=True)
     state_loading_id = fields.Many2one('res.country.state', string="State Of Loading")
     city_loading_id = fields.Many2one('res.city', string="City Of Loading")
-    place_loading_id = fields.Many2one('loading.place', string="Place Of Loading")
+    place_loading_id = fields.Many2one('res.place', string="Place Of Loading")
     country_dest_id = fields.Many2one('res.country', string="Country Of Destination")
     state_dest_id = fields.Many2one('res.country.state', string="State Of Destination")
     city_dest_id = fields.Many2one('res.city', string="City Of Destination")
@@ -60,11 +60,11 @@ class TransportCost(models.Model):
     note = fields.Text()
     
     
-    @api.constrains('is_port','place_dest_id')
-    def is_port_check(self):
-        for rec in self:
-            if not rec.is_port and rec.place_dest_id:
-                raise UserError('You cannot create transport cost with a not place port')
+#     @api.constrains('is_port','place_dest_id')
+#     def is_port_check(self):
+#         for rec in self:
+#             if not rec.is_port and rec.place_dest_id:
+#                 raise UserError('You cannot create transport cost with a not place port')
                 
                 
         

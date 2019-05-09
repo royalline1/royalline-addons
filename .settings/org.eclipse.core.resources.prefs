@@ -4,6 +4,7 @@ encoding//base_enh/__manifest__.py=utf-8
 encoding//base_enh/models/__init__.py=utf-8
 encoding//base_enh/models/agreement_method.py=utf-8
 encoding//base_enh/models/clearance_cost.py=utf-8
+encoding//base_enh/models/commodity.py=utf-8
 encoding//base_enh/models/container_size.py=utf-8
 encoding//base_enh/models/customs_declaration.py=utf-8
 encoding//base_enh/models/insurance_cost.py=utf-8

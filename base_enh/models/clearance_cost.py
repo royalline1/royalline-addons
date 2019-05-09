@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api
-
+from odoo import models, fields, api, _
+from odoo.exceptions import Warning
 
 class ClearancelinsuCost(models.Model):
     _name = 'clearance.cost.line'
@@ -11,7 +11,12 @@ class ClearancelinsuCost(models.Model):
     cost = fields.Float()
     cost_id = fields.Many2one('clearance.cost',ondelete='cascade')
 
-
+    @api.constrains('from_truck','to_truck')
+    def _check_additional_cost(self):
+        for rec in self:
+            if rec.from_truck > rec.to_truck:
+                raise Warning(_("From Value must be less or equal than To Value"))
+            
 class ClearanceCost(models.Model):
     _name = 'clearance.cost'
     _rec_name = 'qut_number'
@@ -43,6 +48,8 @@ class ClearanceCost(models.Model):
     def _compute_total(self):
         for rec in self:
             rec.total = rec.price + sum(rec.cost_line_ids.mapped('cost')+[0])
+    
+
             
     
     
