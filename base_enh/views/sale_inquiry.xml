@@ -202,7 +202,7 @@
 							<group>
 								<field name="admin_release" />
 								<field name="admin_sale_state" />
-								<field name="sea_rate" />
+								<!-- <field name="sea_rate" /> -->
 								<field name="insurance_cost_ids" invisible="1" />
 								<field name="insurance_cost_id"
 									domain="[('id','in',insurance_cost_ids)]"
@@ -214,6 +214,11 @@
 									domain="[('shipment_type','=',shipment_type),
 								('customs_declaration_id','=',customs_dec_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+							</group>
+							<group string="Transporter Details">
+								<field name="transporter_cost_id"/>
+								<field name="transporter_free_days"/>
+								<field name="transporter_total"/>
 							</group>
 							<label for="clearance_cost_ids" style="font-weight: bold" />
 							<field name="clearance_cost_ids" force_save="1">
