@@ -21,6 +21,7 @@
                     <field name="UN_No" />
                     <field name="IMCO_Class" />
                     <field name="HS_Code" />
+
                 </tree>
             </field>
         </record>
@@ -41,6 +42,7 @@
                             </group>
                         </group>
                         <group string="Conditions" style="font-weight: bold">
+
                             <group>
                                 <field name="temperature" />
                                 <field name="warehouse_condition" />
@@ -62,6 +64,7 @@
                                 <field name="HS_Code" />
                             </group>
                         </group>
+
                     </sheet>
                 </form>
             </field>
