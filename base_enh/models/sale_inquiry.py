@@ -25,7 +25,7 @@ class SaleInquiryContainer(models.Model):
     
     line_cost_line_id = fields.Many2one('line.cost.line', string="Container", required=True)
     container_id = fields.Many2one('container.size',related="line_cost_line_id.sea_lines_id.container_size_id")
-    transport_line_id = fields.Many2one('transport.price.line', required=True)
+    transport_line_id = fields.Many2one('transport.price.line')
     truck_type_id = fields.Many2one('truck.type',related="transport_line_id.truck_type_id",readonly=True)
     weight_type_id = fields.Many2one('weight.type',related="transport_line_id.weight_type_id",readonly=True)
     container_qty = fields.Integer(required=True)
@@ -43,7 +43,7 @@ class SaleInquiryContainer(models.Model):
     port_dest_id = fields.Many2one('port', related="inquiry_id.port_dest_id")
     is_loading = fields.Boolean( related="inquiry_id.is_loading")
     is_discharge = fields.Boolean(related="inquiry_id.is_discharge")
-    place_loading_id = fields.Many2one('loading.place', related="inquiry_id.place_loading_id")
+    place_loading_id = fields.Many2one('res.place', related="inquiry_id.place_loading_id")
     place_of_port_id = fields.Many2one('res.place',related="inquiry_id.place_of_port_id")
     cost = fields.Float(compute="_compute_cost")
     
@@ -102,7 +102,7 @@ class SaleInquiry(models.Model):
     
     country_loading_id = fields.Many2one('res.country', string="Country Of Loading")
     city_loading_id = fields.Many2one('res.city', string="City Of Loading")
-    place_loading_id = fields.Many2one('loading.place', string="Place Of Loading")
+    place_loading_id = fields.Many2one('res.place', string="Place Of Loading")
     port_loading_id = fields.Many2one('port', string="POL")
     state_loading_id = fields.Many2one('res.country.state', string="State Of Loading")
     country_dest_id = fields.Many2one('res.country', string="Country Of Destination")
@@ -114,7 +114,7 @@ class SaleInquiry(models.Model):
     is_loading = fields.Boolean()
     is_discharge = fields.Boolean()
     
-    delivery_place_id = fields.Many2one('delivery.place', string='Place Of Delivery')
+    delivery_place_id = fields.Many2one('res.place', string='Place Of Delivery')
 
     
     agreement_method_id = fields.Many2one('agreement.method')
@@ -145,7 +145,12 @@ class SaleInquiry(models.Model):
     clearance_id = fields.Many2one('clearance.cost','Clearance')
     clearance_cost_ids = fields.One2many('sale.clearance.cost.line', 'inquiry_id', 'Clearance Cost',readonly=True)
     additional_cost_ids = fields.One2many('inquiry.additional.cost', 'inquiry_id', 'Additional Cost')
-    
+
+#   Transport details  
+    transporter_cost_id = fields.Many2one('transport.cost', string='Transport')
+    transporter_free_days = fields.Integer(related='transporter_cost_id.free_days', string='Transport Free Days')
+#     transporter_name = fields.Char(related='transporter_cost_id.partner_id', string='Transporter name')
+    transporter_total = fields.Float(related='transporter_cost_id.total', string='Transport Total')
     
     @api.depends('container_size_ids','container_size_ids.cost')
     def _compute_transport_rate(self):

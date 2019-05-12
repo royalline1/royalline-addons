@@ -113,14 +113,19 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
+                    <field name="image" widget="image" class="oe_avatar"/>
                         <group>
                             <group>
                                 <field name="name" />
                                 <field name="code" />
+                                <field name="image_attachment"/>
                             </group>
                             <group>
                                 <field name="type" required="True"/>
-                                <field name="terminal_code" attrs="{'invisible':[('type','=','bonded')]}"/>
+                                <field name="terminal_code" 
+                                       attrs="{'invisible':['|',('type','=','bonded'),('type','=','others')]}"/>
+                                <field name='address' 
+                                       attrs="{'invisible':['|',('type','=','bonded'),('type','=','terminal')]}"/>
                                 <field name="active" />
                             </group>
                         </group>
@@ -417,6 +422,11 @@
 						class="oe_stat_button" icon="fa-ship" name="open_vessels">
 					</button>
 				</button>
+                <xpath
+                    expr="//field[@name='vat']"
+                    position="before">
+                    <field name="local_name" />
+                </xpath>
 				<xpath
 					expr="//notebook//page[1]//field[@name='child_ids']//form//field[@name='comment']"
 					position="after">
@@ -526,6 +536,18 @@
 				</xpath>
 			</field>
 		</record>
+		
+		<record model="ir.ui.view" id="hr_employee_form_view">
+            <field name="name">Employees</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//notebook//page[2]//group[1]//group[1]"
+                    position="inside">
+                    <field name="local_name" />
+                </xpath>
+            </field>
+        </record>
 
 		<record model="ir.ui.view" id="res_city_form_view">
 			<field name="name">res.city</field>

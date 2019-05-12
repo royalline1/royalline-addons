@@ -18,7 +18,7 @@
     'data': [
        'security/ir.model.access.csv',
        'views/views.xml',
-       'views/delivery_place_view.xml',
+#        'views/delivery_place_view.xml',
        'views/container_size_view.xml',
        'views/agreement_method_view.xml',
        'views/custoemr_class_view.xml',
@@ -31,15 +31,16 @@
        'views/place_view.xml',
        'views/transport_type_view.xml',
        'views/line_cost_views.xml',
-       'views/loading_place_view.xml',
+#        'views/loading_place_view.xml',
        'views/insurance_cost_view.xml',
        'views/transport_cost_view.xml',
        'views/clearance_cost_view.xml',
        'views/sale_inquiry.xml',
+       'data/data.xml',
+       'views/invoice_charges.xml',
        'views/commodity.xml',
-        'data/data.xml',
-       'views/invoice_charges.xml'
-       
+       'views/packaging_views.xml'
+
        
     ],
 }

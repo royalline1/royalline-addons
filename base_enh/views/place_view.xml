@@ -10,6 +10,8 @@
 					<field name="city_id" />
 					<field name="state_id"/>
 					<field name="address"/>
+					<field name="is_place_of_loading"/>
+					<field name="zip_code"/>
 				</tree>
 			</field>
 		</record>
@@ -29,10 +31,12 @@
 							<group>
 								<field name="state_id" domain="[('country_id','=',country_id)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
 								<field name="is_port" />
-								<field name="port_id" attrs="{'invisible':[('is_port','=',False)]}" domain="[('country_id','=',country_id)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+								<field name="port_id" domain="[('country_id','=',country_id)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
 							</group>
 							<group>
 								<field name="address"/>
+								<field name="is_place_of_loading"/>
+								<field name="zip_code"/>
 							</group>
 							
 						</group>

@@ -70,8 +70,8 @@
 									'&amp;',('city_id','=',city_dest_id),('city_id','!=',False),
 									'&amp;',('state_id','=',state_dest_id),('state_id','!=',False)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-									<field name="is_port" invisible="1"/>
-									<span class="badge badge-danger" attrs="{'invisible': ['|',('is_port', '=', True),('place_dest_id', '=', False)]}">Is Not a Port</span>
+									<!-- <field name="is_port" invisible="1"/>
+									<span class="badge badge-danger" attrs="{'invisible': ['|',('is_port', '=', True),('place_dest_id', '=', False)]}">Is Not a Port</span> -->
 								<field name="date" />
 								<field name="price" />
 							</group>

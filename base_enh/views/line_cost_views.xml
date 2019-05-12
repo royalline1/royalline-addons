@@ -52,7 +52,7 @@
 									domain="[('country_id','=',country_loading_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="place_loading_id"
-									domain="[('country_id','=',country_loading_id)]"
+									domain="[('country_id','=',country_loading_id),('city_id','=',city_loading_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="transport_loading_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
@@ -78,7 +78,7 @@
 									domain="[('country_id','=',country_dest_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="place_dest_id"
-									domain="[('country_id','=',country_dest_id)]"
+									domain="[('country_id','=',country_dest_id),('city_id','=',city_dest_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="port_dest_id"
 									domain="[('country_id','=',country_dest_id)]"
@@ -86,7 +86,7 @@
 								<field name="transport_dest_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="delivery_place_id"
-									domain="[('country_id','=',country_dest_id)]"
+									domain="[('country_id','=',country_dest_id),('city_id','=',city_dest_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="bill_fees"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
