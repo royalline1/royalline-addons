@@ -2,7 +2,7 @@
 <odoo>	<data>
 
 		<record model="ir.ui.view" id="truck_type_list_view">
-			<field name="name">truck_type</field>
+			<field name="name">Truck Type</field>
 			<field name="model">truck.type</field>
 			<field name="arch" type="xml">
 				<tree>
@@ -14,11 +14,12 @@
 
 
 		<record model="ir.ui.view" id="truck_type_form_view">
-			<field name="name">truck_type</field>
+			<field name="name">Truck Type</field>
 			<field name="model">truck.type</field>
 			<field name="arch" type="xml">
 				<form>
 					<sheet>
+	                    <field name="image" widget="image" class="oe_avatar"/>
 						<group>
 							<group>
 								<field name="name" />
@@ -34,7 +35,7 @@
 		</record>
 
 		<record model="ir.actions.act_window" id="truck_type_action">
-			<field name="name">truck Type</field>
+			<field name="name">Truck Type</field>
 			<field name="res_model">truck.type</field>
 			<field name="view_mode">tree,form</field>
 		</record>

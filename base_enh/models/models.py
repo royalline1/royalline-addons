@@ -184,9 +184,12 @@ class WareHouse (models.Model):
     name = fields.Char('Name')
     code = fields.Char('Code')
     note = fields.Text('Note')
-    type = fields.Selection([('terminal','Terminal'),('bonded','bonded')],  default='terminal', string='Type')
+    type = fields.Selection([('terminal','Terminal'),('bonded','Bonded'),('others','Others')],  default='terminal', string='Type')
     terminal_code = fields.Char('Terminal Code')
+    address = fields.Text('Address')
+    image = fields.Binary(attachment=True)
     active = fields.Boolean('Active',default=True)
+    image_attachment = fields.Binary(attachment=True,string="Image Attachment")
     
 class MITCompanies (models.Model):
     _name = 'mit.companies'

@@ -11,6 +11,7 @@ encoding//base_enh/models/insurance_cost.py=utf-8
 encoding//base_enh/models/insurance_type.py=utf-8
 encoding//base_enh/models/line_cost.py=utf-8
 encoding//base_enh/models/models.py=utf-8
+encoding//base_enh/models/packaging.py=utf-8
 encoding//base_enh/models/places.py=utf-8
 encoding//base_enh/models/product.py=utf-8
 encoding//base_enh/models/sale_inquiry.py=utf-8

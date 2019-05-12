@@ -38,7 +38,8 @@
        'views/sale_inquiry.xml',
        'data/data.xml',
        'views/invoice_charges.xml',
-       'views/commodity.xml'
+       'views/commodity.xml',
+       'views/packaging_views.xml'
        
     ],
 }

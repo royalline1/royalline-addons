@@ -113,14 +113,19 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
+                    <field name="image" widget="image" class="oe_avatar"/>
                         <group>
                             <group>
                                 <field name="name" />
                                 <field name="code" />
+                                <field name="image_attachment"/>
                             </group>
                             <group>
                                 <field name="type" required="True"/>
-                                <field name="terminal_code" attrs="{'invisible':[('type','=','bonded')]}"/>
+                                <field name="terminal_code" 
+                                       attrs="{'invisible':['|',('type','=','bonded'),('type','=','others')]}"/>
+                                <field name='address' 
+                                       attrs="{'invisible':['|',('type','=','bonded'),('type','=','terminal')]}"/>
                                 <field name="active" />
                             </group>
                         </group>

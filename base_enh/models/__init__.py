@@ -17,3 +17,4 @@ from . import transport_cost
 from . import clearance_cost
 from . import product
 from . import commodity
+from . import packaging

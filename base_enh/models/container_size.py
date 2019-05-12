@@ -11,4 +11,5 @@ class ContainerSize(models.Model):
     size = fields.Char('Size',required=True)
     note = fields.Char('Note')
     TEU = fields.Char('TEU')
+    image = fields.Binary(attachment=True)
     

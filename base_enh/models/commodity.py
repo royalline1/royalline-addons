@@ -16,4 +16,6 @@ class Commodity(models.Model):
     other_condition = fields.Char('Other condition')
     other_condition_att = fields.Binary(attachment=True,string="Attachment")
     commodity_category = fields.Many2one('commodity', string='Commodity Category')
-    
+    UN_No = fields.Char("UN No")
+    IMCO_Class = fields.Char("IMCO Class")
+    HS_Code = fields.Char("HS Code")
