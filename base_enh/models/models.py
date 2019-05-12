@@ -21,10 +21,11 @@ class ResPlace(models.Model):
     country_id = fields.Many2one('res.country',required=True)
     city_id = fields.Many2one('res.city',required=True)
     state_id = fields.Many2one('res.country.state')
-    is_port = fields.Boolean()
+    is_port = fields.Boolean('Is Port')
     port_id = fields.Many2one('port')
     address = fields.Text('Address',required=True)
-    
+    is_place_of_loading = fields.Boolean('Is Loading Place') 
+    zip_code = fields.Integer('ZIP Code')
     
 class Port(models.Model):
     _name = 'port'
@@ -40,6 +41,11 @@ class PortType(models.Model):
     _name = 'port.type'
      
     name = fields.Char('Name')
+    
+class HrEmployee(models.Model):
+    _inherit = 'hr.employee'
+    
+    local_name = fields.Char("Local Name")
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
@@ -81,7 +87,7 @@ class ResPartner(models.Model):
     product_ids = fields.Many2many('product.product')
     
     sale_person_ids= fields.One2many('sale.person','partner_id')
-    
+    local_name = fields.Char("Local Name")
     
     
     @api.multi
