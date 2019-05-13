@@ -24,7 +24,7 @@ class ResPlace(models.Model):
     is_port = fields.Boolean('Is Port')
     port_id = fields.Many2one('port')
     address = fields.Text('Address',required=True)
-    is_place_of_loading = fields.Boolean('Is Loading Place') 
+    is_delivery_place = fields.Boolean('Is Delivery Place') 
     zip_code = fields.Integer('ZIP Code')
     
 class Port(models.Model):

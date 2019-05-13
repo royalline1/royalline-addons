@@ -10,7 +10,7 @@
 					<field name="city_id" />
 					<field name="state_id"/>
 					<field name="address"/>
-					<field name="is_place_of_loading"/>
+					<field name="is_delivery_place"/>
 					<field name="zip_code"/>
 				</tree>
 			</field>
@@ -35,7 +35,7 @@
 							</group>
 							<group>
 								<field name="address"/>
-								<field name="is_place_of_loading"/>
+								<field name="is_delivery_place"/>
 								<field name="zip_code"/>
 							</group>
 							
