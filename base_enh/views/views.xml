@@ -422,6 +422,12 @@
 						class="oe_stat_button" icon="fa-ship" name="open_vessels">
 					</button>
 				</button>
+				
+				<xpath expr="//field[@name='country_id']"
+				    position="after">
+				    <field name="city_id" placeholder="City" domain="[('country_id','=',country_id)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+				</xpath>
+				
                 <xpath
                     expr="//field[@name='vat']"
                     position="before">
@@ -465,8 +471,12 @@
 				<xpath expr="//group[1]/group[2]" position="inside">
 					<field name="cheek_name" />
 				</xpath>
-
-
+                <!-- google map -->
+                <xpath expr="//notebook" position="inside">
+                    <page string="Map" name="partner_geo_map">
+                        <field name="google_map_partner" widget="map"  nolabel="1"/>
+                    </page>
+                </xpath>
 				<xpath expr="//notebook" position="inside">
 
 					<page string="Products">

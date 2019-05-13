@@ -47,6 +47,11 @@ class HrEmployee(models.Model):
     
     local_name = fields.Char("Local Name")
 
+class ResCity(models.Model):
+    _inherit="res.city"
+    code = fields.Char("Code")
+    local_name = fields.Char("Local Name")
+    
 class ResPartner(models.Model):
     _inherit = 'res.partner'
     
@@ -87,9 +92,16 @@ class ResPartner(models.Model):
     product_ids = fields.Many2many('product.product')
     
     sale_person_ids= fields.One2many('sale.person','partner_id')
+    
+    city_id = fields.Many2one('res.city' , string="City")
+
+#   City local name   
     local_name = fields.Char("Local Name")
     
+#   gogle map field display at contact form.   
+    google_map_partner = fields.Char(string="Map")
     
+        
     @api.multi
     def name_get(self):
         if 'custom_point' in self._context:
