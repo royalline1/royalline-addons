@@ -114,9 +114,16 @@
         							     </group>
         							 </group>
         						</page>
-        						<page string="Order Line Shipment">
-        							<!-- <label for="order_line_shipment_ids"
-        								style="font-weight: bold" /> -->
+        						<page string="Commodity">
+        						  <field name="commodity_ids">
+        						      <tree >
+                                            <field name="name" />
+                                        </tree>
+                                    </field>
+        						</page>
+        						<!-- <page string="Order Line Shipment">
+        							<label for="order_line_shipment_ids"
+        								style="font-weight: bold" />
         							<field name="order_line_shipment_ids">
         								<tree editable="botton">
         									<field name="product_id"
@@ -145,7 +152,7 @@
         									</group>
         								</form>
     							     </field>
-    						     </page>
+    						     </page> -->
     						     <page string="Conditions">
         					<!-- 		<label for="condition_ids" style="font-weight: bold" /> -->
         							<field name="condition_ids">
@@ -239,7 +246,7 @@
     							</page>
     							<page string="Transporter Details">
         							<group>
-                                            <field name="transporter_cost_id"/>
+                                            <field name="transporter_cost_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                             <field name="transporter_free_days"/>
                                             <field name="transporter_total"/>
                                     </group>

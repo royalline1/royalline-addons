@@ -70,6 +70,7 @@ class LineCost(models.Model):
     customer_id = fields.Many2one('res.partner',stirng='Named Account')
     fak = fields.Boolean('FAK',default=True)
     product_id = fields.Many2one('product.product')
+    commodity_id = fields.Many2one('commodity')
     start_date = fields.Date('Start Date')
     expiry_date = fields.Date('Expiry Date')
     note = fields.Text('Notes')

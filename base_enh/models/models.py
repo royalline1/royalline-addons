@@ -93,14 +93,16 @@ class ResPartner(models.Model):
     
     sale_person_ids= fields.One2many('sale.person','partner_id')
     
-    city_id = fields.Many2one('res.city' , string="City")
+    city_drop_id = fields.Many2one('res.city' , string="City")
 
 #   City local name   
     local_name = fields.Char("Local Name")
     
 #   gogle map field display at contact form.   
     google_map_partner = fields.Char(string="Map")
-    
+
+#   commodity ids
+    commodity_ids = fields.Many2many('commodity')  
         
     @api.multi
     def name_get(self):

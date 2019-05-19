@@ -151,6 +151,8 @@ class SaleInquiry(models.Model):
     transporter_free_days = fields.Integer(related='transporter_cost_id.free_days', string='Transport Free Days')
 #     transporter_name = fields.Char(related='transporter_cost_id.partner_id', string='Transporter name')
     transporter_total = fields.Float(related='transporter_cost_id.total', string='Transport Total')
+#   Commodity key
+    commodity_ids = fields.Many2many('commodity')  
     
     @api.depends('container_size_ids','container_size_ids.cost')
     def _compute_transport_rate(self):

@@ -419,13 +419,13 @@
 
 				<button name="toggle_active" position="before">
 					<button type="object" string="vessels"
-						class="oe_stat_button" icon="fa-ship" name="open_vessels">
+						class="oe_stat_button" icon="fa-ship" name="open_vessels" attrs="{'invisible':[('customer','=',True)]}">
 					</button>
 				</button>
 				
 				<xpath expr="//field[@name='country_id']"
 				    position="after">
-				    <field name="city_id" placeholder="City" domain="[('country_id','=',country_id)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+				    <field name="city_drop_id" placeholder="City" domain="[('country_id','=',country_id)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
 				</xpath>
 				
                 <xpath
@@ -454,18 +454,18 @@
 				</xpath>
 				<xpath expr="//notebook//page[3]//group[@name='purchase']"
 					position="inside">
-					<field name="is_shipper" />
-					<field name="is_consignee" />
-					<field name="is_notify" />
-					<field name="is_agent" />
+					<field name="is_shipper" attrs="{'invisible':[('customer','=',False)]}"/>
+					<field name="is_consignee" attrs="{'invisible':[('customer','=',False)]}"/>
+					<field name="is_notify" attrs="{'invisible':[('customer','=',False)]}"/>
+					<field name="is_agent" attrs="{'invisible':['|',('customer','=',False),('supplier','=',False)]}"/>
 					<field name="is_diver" />
-					<field name="is_customs_point" />
+					<field name="is_customs_point" attrs="{'invisible':[('customer','=',True)]}"/>
 					<field name="is_competitor" />
-					<field name="is_sea_line" />
-					<field name="is_air_line" />
-					<field name="is_clearance_company" />
-					<field name="is_transporter_company" />
-					<field name="is_insurance_company" />
+					<field name="is_sea_line" attrs="{'invisible':[('supplier','=',False)]}"/>
+					<field name="is_air_line" attrs="{'invisible':[('supplier','=',False)]}"/>
+					<field name="is_clearance_company" attrs="{'invisible':[('supplier','=',False)]}"/>
+					<field name="is_transporter_company" attrs="{'invisible':[('supplier','=',False)]}"/>
+					<field name="is_insurance_company" attrs="{'invisible':[('supplier','=',False)]}"/>
 				</xpath>
 
 				<xpath expr="//group[1]/group[2]" position="inside">
@@ -479,14 +479,20 @@
                 </xpath>
 				<xpath expr="//notebook" position="inside">
 
-					<page string="Products">
+					<!-- <page string="Products">
 						<field name="product_ids">
 							<tree>
 								<field name="display_name" />
 							</tree>
 						</field>
-					</page>
-
+					</page> -->
+                    <page string="Commodity">
+                        <field name="commodity_ids">
+                            <tree>
+                                <field name="name" />
+                            </tree>
+                        </field>
+                    </page>
 					<page string="Phone Numbers">
 						<field name="phone_ids">
 							<tree editable="botton">
@@ -507,7 +513,7 @@
 						</group>
 					</page>
 
-					<page string="Sea Line">
+					<page string="Sea Line" attrs="{'invisible':[('customer','=',True)]}">
 						<field name="sea_ids">
 							<tree editable="botton">
 								<field name="container_size_id" />
@@ -547,17 +553,17 @@
 			</field>
 		</record>
 		
-		<record model="ir.ui.view" id="hr_employee_form_view">
+		<!-- <record model="ir.ui.view" id="hr_employee_form_view">
             <field name="name">Employees</field>
             <field name="model">hr.employee</field>
             <field name="inherit_id" ref="hr.view_employee_form" />
             <field name="arch" type="xml">
-                <xpath expr="//notebook//page[2]//group[1]//group[1]"
-                    position="inside">
+                <xpath expr="//notebook//page[2]//group[1]//group[2]//field[@name='bank_account_id'"
+                    position="after">
                     <field name="local_name" />
                 </xpath>
             </field>
-        </record>
+        </record> -->
 
 		<record model="ir.ui.view" id="res_city_form_view">
 			<field name="name">res.city</field>
