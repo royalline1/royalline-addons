@@ -75,8 +75,7 @@
         </record>
 
 
-        <menuitem id="commodity_menu" parent="location_menu"
-            action="commodity_action" />
+
 
     </data>
 </odoo>

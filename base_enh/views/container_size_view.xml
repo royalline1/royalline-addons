@@ -44,8 +44,7 @@
 		</record>
 
 
-		<menuitem  id="container_size_menu"
-			parent="location_menu" action="container_size_action" />
+		
 
 	</data>
 </odoo>

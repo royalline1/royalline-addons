@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Base Enhancement",
+    'name': "Logistics Management",
     'summary': """
         Summary""",
 
@@ -8,8 +8,8 @@
         description
     """,
 
-    'author': "author",
-    'website': "website",
+    'author': "Codesk Company",
+    'website': "http:www.codesk.systems",
 
     'category': 'Uncategorized',
     'version': '12.0.1.0',
@@ -39,7 +39,8 @@
        'data/data.xml',
        'views/invoice_charges.xml',
        'views/commodity.xml',
-       'views/packaging_views.xml'
+       'views/packaging_views.xml',
+       'views/menus_views.xml'
        
     ],
 }

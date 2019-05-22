@@ -94,8 +94,59 @@ class SaleInquiry(models.Model):
     release = fields.Boolean('Release')
     admin_release = fields.Boolean('Admin Release')
     sale_state = fields.Selection([('progress', 'In Progress'), ('confirmed', 'Confirmed'), ('not_confirmed', 'Not Confirmed')], default="progress")
-    shipment_method = fields.Selection([('all_in', 'All In'), ('sea_freight', 'Sea freight'), ('land_freight', 'Land Freight'), ('air_freight', 'Air Freight'), ('clearance', 'Clearance')])
-    shipment_type = fields.Selection([('cross', 'Cross'), ('import', 'Import'), ('export', 'Export')])
+#     shipment_method = fields.Selection([('clearance', 'Clearance'), 
+#                                         ('sea_freight', 'Sea freight'), 
+#                                         ('land_freight', 'Land Freight'), 
+#                                         ('air_freight', 'Air Freight'), 
+#                                         ('other_services', 'Other Services')])
+#     shipment_type = fields.Selection([('import', 'Import'), 
+#                                         ('export', 'Export'), 
+#                                         ('cross', 'Cross'), 
+#                                         ('internal', 'internal')])
+#   sales inquiry filters
+    shipment_method = fields.Selection([('clearance', 'Clearance'), 
+                                        ('sea_freight', 'Sea freight'), 
+                                        ('land_freight', 'Land Freight'), 
+                                        ('air_freight', 'Air Freight'), 
+                                        ('other_services', 'Other Services')],string="Shipment Method",store=True)
+    shipment_type = fields.Selection([('import', 'Import'), 
+                                        ('export', 'Export'), 
+                                        ('cross', 'Cross'), 
+                                        ('internal', 'internal')],string="Shipment Type",store=True)  
+    shipment_logic = fields.Selection([('fcl', 'FCL'), 
+                                        ('lcl', 'LCL'), 
+                                        ('roro', 'RORO')],string="Shipment logic",store=True)
+    customer_ref = fields.Char('Customer Reference')
+    shipper_ref = fields.Char('Shipper Reference')
+    consignee_ref = fields.Char('Consignee Reference') 
+    notify_party_ref = fields.Char('Notify Party Ref') 
+    add_notify_ref = fields.Char('Additional Notify Ref') 
+    consignee_id = fields.Many2one('res.partner', string='Consignee')
+    first_notify_id = fields.Many2one('res.partner', string='First Notify Party')
+    add_notify_id = fields.Many2one('res.partner', string='Additional Notify')
+#   the condition of shipment delivery
+    shiping_terms = fields.Selection([('exw', 'EXW'), 
+                                        ('fca', 'FCA'), 
+                                        ('cpt', 'CPT'),
+                                        ('cip', 'CIP'), 
+                                        ('dat', 'DAT'), 
+                                        ('dap', 'DAP'),
+                                        ('ddp', 'DDP'), 
+                                        ('dore_to_dore', 'Door to Door'), 
+                                        ('fas', 'FAS'),
+                                        ('fob', 'FOB'), 
+                                        ('cfr', 'CFR'), 
+                                        ('cif', 'CIF'),
+                                        ('c_and_f', 'C & F')],string="Shipment Terms",store=True)
+#   shipment details fields added 22-05-2019
+    volume_ship = fields.Float('Volume')
+    dimensions = fields.Float('Dimensions')
+    weight = fields.Float('Weight')
+    charge_weight = fields.Float('Chargeable Weight')
+    type_package_no = fields.Float('No. & Type of Packages')
+    
+#     shipment_type = fields.Selection([('cross', 'Cross'), ('import', 'Import'), ('export', 'Export')])
+    sales_person = fields.Many2one('res.users', default=lambda self: self.env.user)
     user_operation_id = fields.Many2one('res.users')
     customer_class_id = fields.Many2one('customer.class', related="partner_id.customer_class_id", store=True)
     shipper_id = fields.Many2one('res.partner', string='Shipper')
@@ -126,8 +177,8 @@ class SaleInquiry(models.Model):
     free_days = fields.Integer()
     vessel_id = fields.Many2one('vessel')
     voyage_id = fields.Many2one('voyages.detail')
-    etd_date = fields.Date('ETD Ddate', related="voyage_id.etd_date", readonly=True)
-    eta_date = fields.Date('ETA Ddate', related="voyage_id.eta_date", readonly=True)
+    etd_date = fields.Date('ETD Date', related="voyage_id.etd_date", readonly=True)
+    eta_date = fields.Date('ETA Date', related="voyage_id.eta_date", readonly=True)
     
     c_month = fields.Char('Month', default=datetime.date.today().month, readonly=True)
     c_year = fields.Char('Year', default=datetime.date.today().year, readonly=True)
@@ -153,7 +204,9 @@ class SaleInquiry(models.Model):
     transporter_total = fields.Float(related='transporter_cost_id.total', string='Transport Total')
 #   Commodity key
     commodity_ids = fields.Many2many('commodity')  
-    
+
+
+
     @api.depends('container_size_ids','container_size_ids.cost')
     def _compute_transport_rate(self):
         for rec in self:

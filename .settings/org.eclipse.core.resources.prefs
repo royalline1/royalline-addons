@@ -20,3 +20,4 @@ encoding//base_enh/models/transport_cost.py=utf-8
 encoding//base_enh/models/truck_type.py=utf-8
 encoding//base_enh/models/vessel.py=utf-8
 encoding//base_enh/models/weight_type.py=utf-8
+encoding//web_map/__manifest__.py=utf-8

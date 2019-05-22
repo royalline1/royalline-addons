@@ -383,17 +383,14 @@
         
         <!-- Individual Establishment views end here -->
         
-		<menuitem name="Locations" id="location_menu"
-			parent="contacts.menu_contacts" />
+		<!-- <menuitem name="Locations" id="location_menu"
+			parent="contacts.menu_contacts" /> -->
 
-		<menuitem name="Port" id="port_menu" parent="location_menu"
-			action="port_action" />
+		
 			
-        <menuitem name="Extra Services" id="extra_services_menu" parent="location_menu"
-            action="extra_services_action" />
+        
             
-         <menuitem name="Warehouse" id="warehouse_menu" parent="location_menu"
-            action="warehouse_action" />
+         
             
         <!-- MIT Companies Menu Top Menu -->
         <menuitem name="MIT Info" id="mitInfo_menu"

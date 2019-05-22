@@ -41,8 +41,7 @@
 		</record>
 
 
-		<menuitem  id="customs_declaration_menu"
-			parent="location_menu" action="customs_declaration_action" />
+		
 
 	</data>
 </odoo>
