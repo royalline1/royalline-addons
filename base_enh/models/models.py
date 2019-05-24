@@ -24,7 +24,7 @@ class ResPlace(models.Model):
     is_port = fields.Boolean('Is Port')
     port_id = fields.Many2one('port')
     address = fields.Text('Address',required=True)
-    is_place_of_loading = fields.Boolean('Is Loading Place') 
+    is_delivery_place = fields.Boolean('Is Delivery Place') 
     zip_code = fields.Integer('ZIP Code')
     
 class Port(models.Model):
@@ -47,6 +47,11 @@ class HrEmployee(models.Model):
     
     local_name = fields.Char("Local Name")
 
+class ResCity(models.Model):
+    _inherit="res.city"
+    code = fields.Char("Code")
+    local_name = fields.Char("Local Name")
+    
 class ResPartner(models.Model):
     _inherit = 'res.partner'
     
@@ -87,9 +92,18 @@ class ResPartner(models.Model):
     product_ids = fields.Many2many('product.product')
     
     sale_person_ids= fields.One2many('sale.person','partner_id')
+    
+    city_drop_id = fields.Many2one('res.city' , string="City")
+
+#   City local name   
     local_name = fields.Char("Local Name")
     
-    
+#   gogle map field display at contact form.   
+    google_map_partner = fields.Char(string="Map")
+
+#   commodity ids
+    commodity_ids = fields.Many2many('commodity')  
+        
     @api.multi
     def name_get(self):
         if 'custom_point' in self._context:

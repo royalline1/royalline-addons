@@ -37,12 +37,18 @@
 			<field name="arch" type="xml">
 				<form>
 					<sheet>
+					<group>
+					   <group>
+					       <field name="line_id"
+                                    options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+                            <field name="quot_number" />
+                            <field name="date" />
+					   </group>
+					</group>
+					<notebook>
+					   <page string="General Info">
 						<group>
 							<group>
-								<field name="line_id"
-									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-								<field name="quot_number" />
-								<field name="date" />
 								<field name="country_loading_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="state_loading_id"
@@ -86,7 +92,7 @@
 								<field name="transport_dest_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="delivery_place_id"
-									domain="[('country_id','=',country_dest_id),('city_id','=',city_dest_id)]"
+									domain="[('country_id','=',country_dest_id),('city_id','=',city_dest_id),('is_delivery_place','=',True)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="bill_fees"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
@@ -94,12 +100,14 @@
 									domain="[('customer','=',True),('is_company','=',True)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="fak" />
-								<field name="product_id"
-									context="{'com_customer_id':customer_id}"
+								<field name="commodity_id"
+									
 									attrs="{'invisible':[('fak','=',True)]}"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 							</group>
 						</group>
+						</page>
+						<page string="Line Cost">
 						<group>
 							<field nolabel="1" name="line_cost_ids">
 								<tree editable="botton">
@@ -123,19 +131,23 @@
 								</tree>
 							</field>
 						</group>
+						</page>
+						<page string="Additional Cost">
 						<group>
-							<field name="additional_cost_ids">
+							<field name="additional_cost_ids" nolabel="1">
 								<tree editable="botton">
 									<field name="product_id" />
 									<field name="cost" />
 								</tree>
 							</field>
 						</group>
-
-
+                        </page>
+                        <page string="Notes">
 						<group>
 							<field name="note" />
 						</group>
+						</page>
+					</notebook>
 					</sheet>
 				</form>
 			</field>
@@ -148,8 +160,7 @@
 		</record>
 
 
-		<menuitem id="line_cost_menu" parent="location_menu"
-			action="line_cost_action" />
+
 
 	</data>
 </odoo>

@@ -124,8 +124,7 @@
 		</record>
 
 
-		<menuitem id="transport_cost_menu" parent="location_menu"
-			action="transport_cost_action" />
+
 
 	</data>
 </odoo>

@@ -40,8 +40,7 @@
 		</record>
 
 
-		<menuitem  id="customer_class_menu"
-			parent="location_menu" action="customer_class_action" />
+		
 
 	</data>
 </odoo>

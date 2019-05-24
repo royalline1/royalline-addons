@@ -40,8 +40,7 @@
 		</record>
 
 
-		<menuitem  id="transport_type_menu"
-			parent="location_menu" action="transport_type_action" />
+		
 
 	</data>
 </odoo>

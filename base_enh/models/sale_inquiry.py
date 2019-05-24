@@ -94,8 +94,59 @@ class SaleInquiry(models.Model):
     release = fields.Boolean('Release')
     admin_release = fields.Boolean('Admin Release')
     sale_state = fields.Selection([('progress', 'In Progress'), ('confirmed', 'Confirmed'), ('not_confirmed', 'Not Confirmed')], default="progress")
-    shipment_method = fields.Selection([('all_in', 'All In'), ('sea_freight', 'Sea freight'), ('land_freight', 'Land Freight'), ('air_freight', 'Air Freight'), ('clearance', 'Clearance')])
-    shipment_type = fields.Selection([('cross', 'Cross'), ('import', 'Import'), ('export', 'Export')])
+#     shipment_method = fields.Selection([('clearance', 'Clearance'), 
+#                                         ('sea_freight', 'Sea freight'), 
+#                                         ('land_freight', 'Land Freight'), 
+#                                         ('air_freight', 'Air Freight'), 
+#                                         ('other_services', 'Other Services')])
+#     shipment_type = fields.Selection([('import', 'Import'), 
+#                                         ('export', 'Export'), 
+#                                         ('cross', 'Cross'), 
+#                                         ('internal', 'internal')])
+#   sales inquiry filters
+    shipment_method = fields.Selection([('clearance', 'Clearance'), 
+                                        ('sea_freight', 'Sea freight'), 
+                                        ('land_freight', 'Land Freight'), 
+                                        ('air_freight', 'Air Freight'), 
+                                        ('other_services', 'Other Services')],string="Shipment Method",store=True)
+    shipment_type = fields.Selection([('import', 'Import'), 
+                                        ('export', 'Export'), 
+                                        ('cross', 'Cross'), 
+                                        ('internal', 'internal')],string="Shipment Type",store=True)  
+    shipment_logic = fields.Selection([('fcl', 'FCL'), 
+                                        ('lcl', 'LCL'), 
+                                        ('roro', 'RORO')],string="Shipment logic",store=True)
+    customer_ref = fields.Char('Customer Reference')
+    shipper_ref = fields.Char('Shipper Reference')
+    consignee_ref = fields.Char('Consignee Reference') 
+    notify_party_ref = fields.Char('Notify Party Ref') 
+    add_notify_ref = fields.Char('Additional Notify Ref') 
+    consignee_id = fields.Many2one('res.partner', string='Consignee')
+    first_notify_id = fields.Many2one('res.partner', string='First Notify Party')
+    add_notify_id = fields.Many2one('res.partner', string='Additional Notify')
+#   the condition of shipment delivery
+    shiping_terms = fields.Selection([('exw', 'EXW'), 
+                                        ('fca', 'FCA'), 
+                                        ('cpt', 'CPT'),
+                                        ('cip', 'CIP'), 
+                                        ('dat', 'DAT'), 
+                                        ('dap', 'DAP'),
+                                        ('ddp', 'DDP'), 
+                                        ('dore_to_dore', 'Door to Door'), 
+                                        ('fas', 'FAS'),
+                                        ('fob', 'FOB'), 
+                                        ('cfr', 'CFR'), 
+                                        ('cif', 'CIF'),
+                                        ('c_and_f', 'C & F')],string="Shipment Terms",store=True)
+#   shipment details fields added 22-05-2019
+    volume_ship = fields.Float('Volume')
+    dimensions = fields.Float('Dimensions')
+    weight = fields.Float('Weight')
+    charge_weight = fields.Float('Chargeable Weight')
+    type_package_no = fields.Float('No. & Type of Packages')
+    
+#     shipment_type = fields.Selection([('cross', 'Cross'), ('import', 'Import'), ('export', 'Export')])
+    sales_person = fields.Many2one('res.users', default=lambda self: self.env.user)
     user_operation_id = fields.Many2one('res.users')
     customer_class_id = fields.Many2one('customer.class', related="partner_id.customer_class_id", store=True)
     shipper_id = fields.Many2one('res.partner', string='Shipper')
@@ -126,8 +177,8 @@ class SaleInquiry(models.Model):
     free_days = fields.Integer()
     vessel_id = fields.Many2one('vessel')
     voyage_id = fields.Many2one('voyages.detail')
-    etd_date = fields.Date('ETD Ddate', related="voyage_id.etd_date", readonly=True)
-    eta_date = fields.Date('ETA Ddate', related="voyage_id.eta_date", readonly=True)
+    etd_date = fields.Date('ETD Date', related="voyage_id.etd_date", readonly=True)
+    eta_date = fields.Date('ETA Date', related="voyage_id.eta_date", readonly=True)
     
     c_month = fields.Char('Month', default=datetime.date.today().month, readonly=True)
     c_year = fields.Char('Year', default=datetime.date.today().year, readonly=True)
@@ -151,7 +202,11 @@ class SaleInquiry(models.Model):
     transporter_free_days = fields.Integer(related='transporter_cost_id.free_days', string='Transport Free Days')
 #     transporter_name = fields.Char(related='transporter_cost_id.partner_id', string='Transporter name')
     transporter_total = fields.Float(related='transporter_cost_id.total', string='Transport Total')
-    
+#   Commodity key
+    commodity_ids = fields.Many2many('commodity')  
+
+
+
     @api.depends('container_size_ids','container_size_ids.cost')
     def _compute_transport_rate(self):
         for rec in self:
@@ -254,8 +309,88 @@ class SaleInquiry(models.Model):
             val['name'] = self.env['ir.sequence'].next_by_code('inquiry.seq')
         return super(SaleInquiry, self).create(vals_list)
     
+    @api.multi  
+    def call_job(self):  
+        mod_obj = self.env['ir.model.data']
+        try:
+            tree_res = mod_obj.get_object_reference('job', 'view_job_tree')[1]
+            form_res = mod_obj.get_object_reference('job', 'view_job_form')[1]
+#             search_res = mod_obj.get_object_reference('trade_name', 'view_trade_tran_search1')[1]
+        except ValueError:
+            form_res = tree_res = search_res = False
+        return {  
+            'name': ('job'),  
+            'type': 'ir.actions.act_window',  
+            'view_type': 'form',  
+            'view_mode': "[tree,form]",  
+            'res_model': 'job',  
+            'view_id': False,  
+            'views': [(tree_res, 'tree'), (form_res, 'form')], 
+            'domain': [('partner_id.id','=',self.partner_id.id),('type', '=', self.type)], 
+            'target': 'current',  
+               } 
     
-    
+    @api.multi  
+    def call_sale(self):  
+        mod_obj = self.env['ir.model.data']
+        try:
+            tree_res = mod_obj.get_object_reference('sale_order', 'view_order_tree')[1]
+            form_res = mod_obj.get_object_reference('sale_order', 'view_order_form')[1]
+#             search_res = mod_obj.get_object_reference('trade_name', 'view_trade_tran_search1')[1]
+        except ValueError:
+            form_res = tree_res = search_res = False
+        return {  
+            'name': ('sale.order.form'),  
+            'type': 'ir.actions.act_window',  
+            'view_type': 'form',  
+            'view_mode': "[tree,form]",  
+            'res_model': 'sale.order',  
+            'view_id': False,  
+            'views': [(tree_res, 'tree'), (form_res, 'form')], 
+            'domain': [('partner_id.id','=',self.partner_id.id),('state','=',"sale")], 
+            'target': 'current',  
+               } 
+    @api.multi  
+    def call_purchase(self):  
+        mod_obj = self.env['ir.model.data']
+        try:
+            tree_res = mod_obj.get_object_reference('purchase_order', 'purchase_order_tree')[1]
+            form_res = mod_obj.get_object_reference('purchase_order', 'purchase_order_tree')[1]
+#             search_res = mod_obj.get_object_reference('trade_name', 'view_trade_tran_search1')[1]
+        except ValueError:
+            form_res = tree_res = search_res = False
+        return {  
+            'name': ('purchase.order.form'),  
+            'type': 'ir.actions.act_window',  
+            'view_type': 'form',  
+            'view_mode': "[tree,form]",  
+            'res_model': 'purchase.order',  
+            'view_id': False,  
+            'views': [(tree_res, 'tree'), (form_res, 'form')], 
+            'domain': [('partner_id.id','=',self.partner_id.id),('state','=',"purchase")], 
+            'target': 'current',  
+               } 
+    @api.multi  
+    def call_invoice(self):  
+        mod_obj = self.env['ir.model.data']
+        try:
+            tree_res = mod_obj.get_object_reference('account_invoice', 'invoice_tree')[1]
+            form_res = mod_obj.get_object_reference('account_invoice', 'invoice_form')[1]
+#             search_res = mod_obj.get_object_reference('trade_name', 'view_trade_tran_search1')[1]
+        except ValueError:
+            form_res = tree_res = search_res = False
+        return {  
+            'name': ('account.invoice.form'),  
+            'type': 'ir.actions.act_window',  
+            'view_type': 'form',  
+            'view_mode': "[tree,form]",  
+            'res_model': 'account.invoice',  
+            'view_id': False,  
+            'views': [(tree_res, 'tree'), (form_res, 'form')], 
+            'domain': [('partner_id.id','=',self.partner_id.id)], 
+            'target': 'current',  
+               }
+        
 class SaleClearanceCostLine(models.Model):
     _name = 'sale.clearance.cost.line'
     
