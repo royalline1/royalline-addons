@@ -41,7 +41,6 @@
        'views/commodity.xml',
        'views/packaging_views.xml',
        'views/job_views.xml',
-       'views/menus_views.xml'
-       
+       'views/menus_views.xml',      
     ],
 }

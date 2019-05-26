@@ -187,9 +187,15 @@ class SaleInquiry(models.Model):
     container_ids = fields.Many2many('container.size', compute="_compute_container_ids")
     
     
-    admin_sale_state = fields.Selection([('progress', 'In Progress'), ('confirmed', 'Confirmed'), ('not_confirmed', 'Not Confirmed')], default="progress")
+    state = fields.Selection([('New', 'New'),('Progress', 'Progress'), ('Confirmed', 'Confirmed'), 
+                              ('Cancelled', 'Cancelled'),
+                              ('Job', 'Job')], default="New")
+    stage = fields.Selection([('New', 'New'),('Progress', 'Progress'), ('Confirmed', 'Confirmed'), 
+                              ('Cancelled', 'Cancelled'),
+                              ('Job', 'Job')], default="New")
+
     sea_rate = fields.Float('Sea Rate #######')
-    insurance_cost_id = fields.Many2one('insurance.cost', 'Insurance Cost')
+    insurance_cost_id = fields.Many2one('insurance.cost', 'Insurance Cost') 
     insurance_cost_ids = fields.Many2many('insurance.cost', compute="_insurance_cost_ids")
     insurance_rate = fields.Float(related="insurance_cost_id.total",readonly=True)
     transport_rate = fields.Float(compute='_compute_transport_rate')
@@ -326,7 +332,7 @@ class SaleInquiry(models.Model):
             'res_model': 'job',  
             'view_id': False,  
             'views': [(tree_res, 'tree'), (form_res, 'form')], 
-            'domain': [('partner_id.id','=',self.partner_id.id),('type', '=', self.type)], 
+            'domain': [('sale_inquiry_id.id', '=', self.id)], 
             'target': 'current',  
                } 
     
@@ -390,7 +396,111 @@ class SaleInquiry(models.Model):
             'domain': [('partner_id.id','=',self.partner_id.id)], 
             'target': 'current',  
                }
+    @api.multi
+    def create_job(self):
+        job_obj = self.env['job']
+        self.ensure_one()
+        job_obj.create({'sale_inquiry_id':self.id})
         
+    
+
+    @api.multi
+    def approve_sale_mgr(self):
+        self.write({'state': 'Progress','stage': 'Progress'})
+    
+    @api.multi
+    def approve_acct_mgr(self):
+        self.write({'state': 'Confirmed','stage': 'Confirmed'})
+        
+    @api.multi
+    def approve_gm(self):
+        self.write({'state': 'Job','stage': 'Job'})
+        
+    
+    @api.multi
+    def cancel_gm(self):
+        self.write({'state': 'Cancelled','stage': 'Cancelled'})
+    
+    @api.multi
+    def set_new_gm(self):
+        self.write({'state': 'New','stage': 'New'})
+#     
+#     @api.multi
+#     def get_confirm_wizard(self):
+#         sales_rec = self.env["sale.inquiry"].search([('id', 'in', self._context.get('active_ids'))])
+#         if sales_rec:
+#             sales_rec.write({'state': 'Confirmed','stage': 'Confirmed'})
+#     
+#     @api.multi
+#     def get_cancel_wizard(self):
+#         sales_rec = self.env["sale.inquiry"].search([('id', 'in', self._context.get('active_ids'))])
+#         if sales_rec:
+#             sales_rec.write({'state': 'Cancelled','stage': 'Cancelled'})
+#     @api.multi
+#     def get_progress_wizard(self):
+#          try:
+#              form_id = self.env['ir.model.data'].get_object_reference('sale_inquiry', 'progress_sales_inquiry_form_view')[1]
+#          except ValueError:
+#             form_id = False
+#          return{
+#                     'name': "Progress sales inquiry form view",
+#                     'view_type': 'form',
+#                     'view_mode':"[form]",
+#                     'view_id': False,
+#                     'res_model': 'common_wizard',
+#                     'type': 'ir.actions.act_window',
+#                     'target':'new',
+#                     'views': [(form_id, 'form')],
+#                     }
+#     @api.multi
+#     def get_confirm_wizard(self):
+#         try:
+#             form_id = self.env['ir.model.data'].get_object_reference('sale_inquiry', 'confirm_sales_inquiry_form_view')[1]
+#         except ValueError:
+#             form_id = False
+#         return{
+#                     'name': "Confirm sales inquiry form view",
+#                     'view_type': 'form',
+#                     'view_mode':"[form]",
+#                     'view_id': False,
+#                     'res_model': 'common_wizard',
+#                     'type': 'ir.actions.act_window',
+#                     'target':'new',
+#                     'views': [(form_id, 'form')],
+#                     }
+#     @api.multi
+#     def get_cancel_wizard(self):
+#          try:
+#              form_id = self.env['ir.model.data'].get_object_reference('sale_inquiry', 'cancel_sales_inquiry_form_view')[1]
+#          except ValueError:
+#             form_id = False
+#          return{
+#                     'name': "Cancel sales inquiry form view",
+#                     'view_type': 'form',
+#                     'view_mode':"[form]",
+#                     'view_id': False,
+#                     'res_model': 'common_wizard',
+#                     'type': 'ir.actions.act_window',
+#                     'target':'new',
+#                     'views': [(form_id, 'form')],
+#                     }
+    @api.multi
+    def get_job_wizard(self):
+         try:
+             form_id = self.env['ir.model.data'].get_object_reference('sale_inquiry', 'job_sales_inquiry_form_view')[1]
+         except ValueError:
+            form_id = False
+         return{
+                    'name': "Job sales inquiry form view",
+                    'view_type': 'form',
+                    'view_mode':"[form]",
+                    'view_id': False,
+                    'res_model': 'common_wizard',
+                    'type': 'ir.actions.act_window',
+                    'target':'new',
+                    'views': [(form_id, 'form')],
+                    }
+                   
 class SaleClearanceCostLine(models.Model):
     _name = 'sale.clearance.cost.line'
     

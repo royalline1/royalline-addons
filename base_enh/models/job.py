@@ -8,13 +8,18 @@ class Job(models.Model):
     _name = 'job'
     
     name = fields.Char(readonly=True)
-    from_validity_date = fields.Date()
-    to_validity_date = fields.Date()
-    partner_id = fields.Many2one('res.partner',required=True)
+    sale_inquiry_id = fields.Many2one('sale.inquiry',store=True)
+    from_validity_date = fields.Date(related='sale_inquiry_id.from_validity_date')
+    to_validity_date = fields.Date(related='sale_inquiry_id.to_validity_date')
+    partner_id = fields.Many2one('res.partner', related="sale_inquiry_id.partner_id")
+#     partner_id = fields.Many2one('sale.inquiry')
     order_line_shipment_ids = fields.One2many('sale.inquiry.line', 'inquiry_id')
-    release = fields.Boolean('Release')
-    admin_release = fields.Boolean('Admin Release')
-    sale_state = fields.Selection([('progress', 'In Progress'), ('confirmed', 'Confirmed'), ('not_confirmed', 'Not Confirmed')], default="progress")
+    release = fields.Boolean(related='sale_inquiry_id.release',string='Release')
+    admin_release = fields.Boolean(related='sale_inquiry_id.admin_release',string='Admin Release')
+    sale_state = fields.Selection([('progress', 'In Progress'), 
+                                   ('confirmed', 'Confirmed'), 
+                                   ('not_confirmed', 'Not Confirmed')],
+                                    related='sale_inquiry_id.sale_state')
 #     shipment_method = fields.Selection([('clearance', 'Clearance'), 
 #                                         ('sea_freight', 'Sea freight'), 
 #                                         ('land_freight', 'Land Freight'), 
@@ -29,22 +34,28 @@ class Job(models.Model):
                                         ('sea_freight', 'Sea freight'), 
                                         ('land_freight', 'Land Freight'), 
                                         ('air_freight', 'Air Freight'), 
-                                        ('other_services', 'Other Services')],string="Shipment Method",store=True)
+                                        ('other_services', 'Other Services')],
+                                        string="Shipment Method",
+                                        related='sale_inquiry_id.shipment_method')
     shipment_type = fields.Selection([('import', 'Import'), 
                                         ('export', 'Export'), 
                                         ('cross', 'Cross'), 
-                                        ('internal', 'internal')],string="Shipment Type",store=True)  
+                                        ('internal', 'internal')],string="Shipment Type",
+                                        related='sale_inquiry_id.shipment_type')  
     shipment_logic = fields.Selection([('fcl', 'FCL'), 
                                         ('lcl', 'LCL'), 
-                                        ('roro', 'RORO')],string="Shipment logic",store=True)
-    customer_ref = fields.Char('Customer Reference')
-    shipper_ref = fields.Char('Shipper Reference')
-    consignee_ref = fields.Char('Consignee Reference') 
-    notify_party_ref = fields.Char('Notify Party Ref') 
-    add_notify_ref = fields.Char('Additional Notify Ref') 
-    consignee_id = fields.Many2one('res.partner', string='Consignee')
-    first_notify_id = fields.Many2one('res.partner', string='First Notify Party')
-    add_notify_id = fields.Many2one('res.partner', string='Additional Notify')
+                                        ('roro', 'RORO')],string="Shipment logic",
+                                        related='sale_inquiry_id.shipment_logic')
+    customer_ref = fields.Char(string='Customer Reference',related='sale_inquiry_id.customer_ref')
+    shipper_ref = fields.Char(string='Shipper Reference',related='sale_inquiry_id.shipper_ref')
+    consignee_ref = fields.Char(string='Consignee Reference',related='sale_inquiry_id.consignee_ref') 
+    notify_party_ref = fields.Char(string='Notify Party Ref',related='sale_inquiry_id.notify_party_ref') 
+    add_notify_ref = fields.Char(string='Additional Notify Ref') 
+    consignee_id = fields.Many2one('res.partner', string='Consignee',related="sale_inquiry_id.consignee_id")
+    first_notify_id = fields.Many2one('res.partner', string='First Notify Party',
+                                      related="sale_inquiry_id.first_notify_id")
+    add_notify_id = fields.Many2one('res.partner', string='Additional Notify',
+                                    related="sale_inquiry_id.add_notify_id")
 #   the condition of shipment delivery
     shiping_terms = fields.Selection([('exw', 'EXW'), 
                                         ('fca', 'FCA'), 
@@ -58,73 +69,93 @@ class Job(models.Model):
                                         ('fob', 'FOB'), 
                                         ('cfr', 'CFR'), 
                                         ('cif', 'CIF'),
-                                        ('c_and_f', 'C & F')],string="Shipment Terms",store=True)
+                                        ('c_and_f', 'C & F')],string="Shipment Terms",store=True,
+                                        related='sale_inquiry_id.shiping_terms')
 #   shipment details fields added 22-05-2019
-    volume_ship = fields.Float('Volume')
-    dimensions = fields.Float('Dimensions')
-    weight = fields.Float('Weight')
-    charge_weight = fields.Float('Chargeable Weight')
-    type_package_no = fields.Float('No. & Type of Packages')
+    volume_ship = fields.Float(related='sale_inquiry_id.volume_ship',string='Volume')
+    dimensions = fields.Float(related='sale_inquiry_id.dimensions',string='Dimensions')
+    weight = fields.Float(related='sale_inquiry_id.weight',string='Weight')
+    charge_weight = fields.Float(related='sale_inquiry_id.charge_weight',string='Chargeable Weight')
+    type_package_no = fields.Float(related='sale_inquiry_id.type_package_no',string='No. & Type of Packages')
     
 #     shipment_type = fields.Selection([('cross', 'Cross'), ('import', 'Import'), ('export', 'Export')])
-    sales_person = fields.Many2one('res.users', default=lambda self: self.env.user)
-    user_operation_id = fields.Many2one('res.users')
-    customer_class_id = fields.Many2one('customer.class', related="partner_id.customer_class_id", store=True)
-    shipper_id = fields.Many2one('res.partner', string='Shipper')
+    sales_person = fields.Many2one('res.users', related="sale_inquiry_id.sales_person")
+    user_operation_id = fields.Many2one('res.users',related="sale_inquiry_id.user_operation_id")
+    customer_class_id = fields.Many2one('customer.class', related="sale_inquiry_id.customer_class_id"
+                                        , store=True)
+    shipper_id = fields.Many2one('res.partner', string='Shipper',
+                                  related="sale_inquiry_id.shipper_id")
     
-    country_loading_id = fields.Many2one('res.country', string="Country Of Loading")
-    city_loading_id = fields.Many2one('res.city', string="City Of Loading")
-    place_loading_id = fields.Many2one('res.place', string="Place Of Loading")
-    port_loading_id = fields.Many2one('port', string="POL")
-    state_loading_id = fields.Many2one('res.country.state', string="State Of Loading")
-    country_dest_id = fields.Many2one('res.country', string="Country Of Destination")
-    city_dest_id = fields.Many2one('res.city', string="City Of Destination")
-    place_dest_id = fields.Many2one('res.place', string="Place Of Destination")
-    port_dest_id = fields.Many2one('port', string="POD")
-    place_of_port_id = fields.Many2one('res.place')
-    state_dest_id = fields.Many2one('res.country.state', string="State Of Destination")
-    is_loading = fields.Boolean()
-    is_discharge = fields.Boolean()
+    country_loading_id = fields.Many2one('res.country', string="Country Of Loading",
+                                         related="sale_inquiry_id.country_loading_id")
+    city_loading_id = fields.Many2one('res.city', string="City Of Loading",
+                                      related="sale_inquiry_id.city_loading_id")
+    place_loading_id = fields.Many2one('res.place', string="Place Of Loading",
+                                       related="sale_inquiry_id.place_loading_id")
+    port_loading_id = fields.Many2one('port', string="POL",
+                                      related="sale_inquiry_id.place_loading_id")
+    state_loading_id = fields.Many2one('res.country.state', string="State Of Loading",
+                                       related="sale_inquiry_id.state_loading_id")
+    country_dest_id = fields.Many2one('res.country', string="Country Of Destination",
+                                      related="sale_inquiry_id.country_dest_id")
+    city_dest_id = fields.Many2one('res.city', string="City Of Destination",
+                                   related="sale_inquiry_id.city_dest_id")
+    place_dest_id = fields.Many2one('res.place', string="Place Of Destination",
+                                    related="sale_inquiry_id.place_dest_id")
+    port_dest_id = fields.Many2one('port', string="POD",related="sale_inquiry_id.port_dest_id")
+    place_of_port_id = fields.Many2one('res.place',related="sale_inquiry_id.place_of_port_id")
+    state_dest_id = fields.Many2one('res.country.state', string="State Of Destination"
+                                    ,related="sale_inquiry_id.state_dest_id")
+    is_loading = fields.Boolean(related='sale_inquiry_id.is_loading')
+    is_discharge = fields.Boolean(related='sale_inquiry_id.is_discharge')
     
-    delivery_place_id = fields.Many2one('res.place', string='Place Of Delivery')
+    delivery_place_id = fields.Many2one('res.place', string='Place Of Delivery',
+                                        related="sale_inquiry_id.delivery_place_id")
 
     
-    agreement_method_id = fields.Many2one('agreement.method')
-    customs_dec_id = fields.Many2one('customs.declaration', string="Customs Declaration")
-    shipping_line_id = fields.Many2one('line.cost')
-    shipping_line_ids = fields.Many2many('line.cost', compute="_shipping_line_ids")
-    partner_shipping_line_id = fields.Many2one('res.partner', related="shipping_line_id.line_id")
+    agreement_method_id = fields.Many2one('agreement.method', related="sale_inquiry_id.agreement_method_id")
+    customs_dec_id = fields.Many2one('customs.declaration', string="Customs Declaration",
+                                     related="sale_inquiry_id.customs_dec_id")
+    shipping_line_id = fields.Many2one('line.cost',related="sale_inquiry_id.shipping_line_id")
+    shipping_line_ids = fields.Many2many('line.cost', related="sale_inquiry_id.shipping_line_ids")
+    partner_shipping_line_id = fields.Many2one('res.partner', related="sale_inquiry_id.partner_shipping_line_id")
     
-    free_days = fields.Integer()
-    vessel_id = fields.Many2one('vessel')
-    voyage_id = fields.Many2one('voyages.detail')
-    etd_date = fields.Date('ETD Date', related="voyage_id.etd_date", readonly=True)
-    eta_date = fields.Date('ETA Date', related="voyage_id.eta_date", readonly=True)
+    free_days = fields.Integer(related='sale_inquiry_id.free_days')
+    vessel_id = fields.Many2one('vessel',related="sale_inquiry_id.vessel_id")
+    voyage_id = fields.Many2one('voyages.detail',related="sale_inquiry_id.voyage_id")
+    etd_date = fields.Date('ETD Date', related="sale_inquiry_id.voyage_id.etd_date", readonly=True)
+    eta_date = fields.Date('ETA Date', related="sale_inquiry_id.voyage_id.eta_date", readonly=True)
     
     c_month = fields.Char('Month', default=datetime.date.today().month, readonly=True)
     c_year = fields.Char('Year', default=datetime.date.today().year, readonly=True)
     condition_ids = fields.One2many('sale.inquiry.condition', 'inquiry_id', 'Conditions')
     container_size_ids = fields.One2many('sale.inquiry.container', 'inquiry_id', 'Container Price')
-    container_ids = fields.Many2many('container.size', compute="_compute_container_ids")
+    container_ids = fields.Many2many('container.size', related="sale_inquiry_id.container_ids")
     
     
-    admin_sale_state = fields.Selection([('progress', 'In Progress'), ('confirmed', 'Confirmed'), ('not_confirmed', 'Not Confirmed')], default="progress")
-    sea_rate = fields.Float('Sea Rate #######')
-    insurance_cost_id = fields.Many2one('insurance.cost', 'Insurance Cost')
-    insurance_cost_ids = fields.Many2many('insurance.cost', compute="_insurance_cost_ids")
-    insurance_rate = fields.Float(related="insurance_cost_id.total",readonly=True)
-    transport_rate = fields.Float(compute='_compute_transport_rate')
-    clearance_id = fields.Many2one('clearance.cost','Clearance')
+    admin_sale_state = fields.Selection([('progress', 'In Progress'), 
+                                         ('confirmed', 'Confirmed'), 
+                                         ('not_confirmed', 'Not Confirmed')], 
+                                         related='sale_inquiry_id.state')
+    sea_rate = fields.Float(related='sale_inquiry_id.sea_rate',string='Sea Rate #######')
+    insurance_cost_id = fields.Many2one('insurance.cost', string='Insurance Cost',
+                                        related="sale_inquiry_id.insurance_cost_id")
+    insurance_cost_ids = fields.Many2many('insurance.cost', related="sale_inquiry_id.insurance_cost_ids")
+    insurance_rate = fields.Float(related="sale_inquiry_id.insurance_rate")
+    transport_rate = fields.Float(related="sale_inquiry_id.transport_rate")
+    clearance_id = fields.Many2one('clearance.cost',string='Clearance',
+                                   related="sale_inquiry_id.clearance_id")
     clearance_cost_ids = fields.One2many('sale.clearance.cost.line', 'inquiry_id', 'Clearance Cost',readonly=True)
     additional_cost_ids = fields.One2many('inquiry.additional.cost', 'inquiry_id', 'Additional Cost')
 
 #   Transport details  
-    transporter_cost_id = fields.Many2one('transport.cost', string='Transport')
-    transporter_free_days = fields.Integer(related='transporter_cost_id.free_days', string='Transport Free Days')
+    transporter_cost_id = fields.Many2one('transport.cost', string='Transport',
+                                          related="sale_inquiry_id.transporter_cost_id")
+    transporter_free_days = fields.Integer(related='sale_inquiry_id.transporter_free_days', string='Transport Free Days')
 #     transporter_name = fields.Char(related='transporter_cost_id.partner_id', string='Transporter name')
-    transporter_total = fields.Float(related='transporter_cost_id.total', string='Transport Total')
+    transporter_total = fields.Float(related='sale_inquiry_id.transporter_total', string='Transport Total')
 #   Commodity key
-    commodity_ids = fields.Many2many('commodity')  
+    commodity_ids = fields.Many2many('commodity', related='sale_inquiry_id.commodity_ids')  
 
 
 
@@ -227,8 +258,8 @@ class Job(models.Model):
     @api.returns('self', lambda value:value.id)
     def create(self, vals_list):
         for val in vals_list:
-            val['name'] = self.env['ir.sequence'].next_by_code('inquiry.seq')
-        return super(SaleInquiry, self).create(vals_list)
+            val['name'] = self.env['ir.sequence'].next_by_code('job.seq')
+        return super(Job, self).create(vals_list)
     
     
     
