@@ -12,8 +12,11 @@ class Job(models.Model):
     from_validity_date = fields.Date(related='sale_inquiry_id.from_validity_date')
     to_validity_date = fields.Date(related='sale_inquiry_id.to_validity_date')
     partner_id = fields.Many2one('res.partner', related="sale_inquiry_id.partner_id")
-#     partner_id = fields.Many2one('sale.inquiry')
-    order_line_shipment_ids = fields.One2many('sale.inquiry.line', 'inquiry_id')
+    
+    order_line_shipment_ids = fields.One2many('sale.inquiry.line', 
+                                              inverse_name='job_id',
+                                              related='sale_inquiry_id.order_line_shipment_ids')
+    
     release = fields.Boolean(related='sale_inquiry_id.release',string='Release')
     admin_release = fields.Boolean(related='sale_inquiry_id.admin_release',string='Admin Release')
     sale_state = fields.Selection([('progress', 'In Progress'), 
@@ -93,7 +96,7 @@ class Job(models.Model):
     place_loading_id = fields.Many2one('res.place', string="Place Of Loading",
                                        related="sale_inquiry_id.place_loading_id")
     port_loading_id = fields.Many2one('port', string="POL",
-                                      related="sale_inquiry_id.place_loading_id")
+                                      related="sale_inquiry_id.port_loading_id")
     state_loading_id = fields.Many2one('res.country.state', string="State Of Loading",
                                        related="sale_inquiry_id.state_loading_id")
     country_dest_id = fields.Many2one('res.country', string="Country Of Destination",
@@ -128,8 +131,10 @@ class Job(models.Model):
     
     c_month = fields.Char('Month', default=datetime.date.today().month, readonly=True)
     c_year = fields.Char('Year', default=datetime.date.today().year, readonly=True)
-    condition_ids = fields.One2many('sale.inquiry.condition', 'inquiry_id', 'Conditions')
-    container_size_ids = fields.One2many('sale.inquiry.container', 'inquiry_id', 'Container Price')
+    condition_ids = fields.One2many('sale.inquiry.condition', inverse_name='job_id', 
+                                    related='sale_inquiry_id.condition_ids',string='Conditions')
+    container_size_ids = fields.One2many('sale.inquiry.container', inverse_name='job_id',
+                                         string= 'Container Price',related='sale_inquiry_id.container_size_ids')
     container_ids = fields.Many2many('container.size', related="sale_inquiry_id.container_ids")
     
     
@@ -145,8 +150,14 @@ class Job(models.Model):
     transport_rate = fields.Float(related="sale_inquiry_id.transport_rate")
     clearance_id = fields.Many2one('clearance.cost',string='Clearance',
                                    related="sale_inquiry_id.clearance_id")
-    clearance_cost_ids = fields.One2many('sale.clearance.cost.line', 'inquiry_id', 'Clearance Cost',readonly=True)
-    additional_cost_ids = fields.One2many('inquiry.additional.cost', 'inquiry_id', 'Additional Cost')
+    clearance_cost_ids = fields.One2many('sale.clearance.cost.line', 
+                                         inverse_name='job_id', string='Clearance Cost'
+                                         ,related='sale_inquiry_id.clearance_cost_ids')
+    
+    additional_cost_ids = fields.One2many('inquiry.additional.cost', 
+                                          inverse_name='job_id',
+                                          related='sale_inquiry_id.additional_cost_ids', 
+                                          string='Additional Cost')
 
 #   Transport details  
     transporter_cost_id = fields.Many2one('transport.cost', string='Transport',
@@ -157,7 +168,17 @@ class Job(models.Model):
 #   Commodity key
     commodity_ids = fields.Many2many('commodity', related='sale_inquiry_id.commodity_ids')  
 
-
+#   JOB FIELDS 
+    booking_no = fields.Char(string='Booking No')
+    booking_date = fields.Date(string='Booking Date')
+    booking_confirmation = fields.Date(string='Book Confirm Date')
+    contract_no = fields.Char(string='Contract No')
+    price_owner = fields.Many2one('res.partner', string='Price Owner', default=1)
+    empt_container_depot = fields.Many2one('res.partner', string='Empty Container Depot')
+    analytic_account = fields.Many2one('account.analytic.account', string='Analytical Account')
+    Bill_Lading_No = fields.Char (string='Bill Of Lading No.') 
+    issue_bill_lading_to = fields.Many2one ('res.partner', string='Issue Bill of lading To')
+    
 
     @api.depends('container_size_ids','container_size_ids.cost')
     def _compute_transport_rate(self):
@@ -167,7 +188,7 @@ class Job(models.Model):
     def _compute_container_ids(self):
         for rec in self:
             rec.container_ids = [(6,0,rec.container_size_ids.mapped('line_cost_line_id.sea_lines_id.container_size_id.id'))]
-            
+             
     @api.onchange('clearance_id','container_size_ids','container_size_ids.line_cost_line_id','container_size_ids.container_qty')
     def _compute_clearance_cost_ids(self):
         for rec in self:

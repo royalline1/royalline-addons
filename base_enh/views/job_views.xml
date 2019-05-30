@@ -113,6 +113,10 @@
                                                 domain="[('is_shipper','=',True)]"
                                                 options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" readonly="1"/>
 							                <field name="shipper_ref" readonly="1"/>
+							                <field name="issue_bill_lading_to" domain="[('is_consignee','=',True),
+							                                                            ('is_shipper','=',True),
+							                                                            ('is_notify','=',True)]"
+				                                                               options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
 							             </group>
 							             <group>
 							                 <field name="consignee_id" domain="[('is_consignee','=',True)]"
@@ -413,6 +417,27 @@
         								<form></form>
         							</field>
         						</page>
+        					    <page string="Booking">
+        					       <group>
+        					           <group>
+        					               <field name="booking_no" />
+        					               <field name="booking_date" />
+        					               <field name="booking_confirmation" />
+        					               <field name="contract_no" />
+        					           </group>
+        					           <group>
+                                           <field name="price_owner" 
+                                                  options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+                                                  />
+                                           <field name="empt_container_depot" 
+                                                  domain="[('is_depot','=',True)]"
+                                                  options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                                           <field name="analytic_account" 
+                                                  options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                                           <field name="Bill_Lading_No" />
+                                       </group>
+        					       </group>
+        					    </page>
 						</notebook>
 					</sheet>
 				</form>
@@ -425,6 +450,9 @@
 			<field name="res_model">job</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">kanban,tree,form</field>
+			<field name="domain">[('user_operation_id','=',uid)]</field>
+			<!-- , -->
+			<!-- ('partner_id.sale_person_ids.type','in',['follow','operation']) -->
 		</record>
 		
 

@@ -11,6 +11,7 @@ class InquiryAdditionalCost(models.Model):
     product_id = fields.Many2one('product.product', string='Name', required=True)
     cost = fields.Float(required=True)
     inquiry_id = fields.Many2one('sale.inquiry')
+    job_id = fields.Many2one('job')
 
 
 class SaleInquiryCondition(models.Model):
@@ -18,6 +19,7 @@ class SaleInquiryCondition(models.Model):
     
     name = fields.Char(required=True)
     inquiry_id = fields.Many2one('sale.inquiry', ondelete='cascade')
+    job_id = fields.Many2one('job', ondelete='cascade')
 
     
 class SaleInquiryContainer(models.Model):
@@ -35,10 +37,11 @@ class SaleInquiryContainer(models.Model):
     second_rate = fields.Float()
     third_rate = fields.Float()
     inquiry_id = fields.Many2one('sale.inquiry')
+    job_id = fields.Many2one('job')
     shipment_type = fields.Selection([('cross', 'Cross'), ('import', 'Import'), ('export', 'Export')], related="inquiry_id.shipment_type")
     line_id = fields.Many2one('line.cost', related="inquiry_id.shipping_line_id")
     country_loading_id = fields.Many2one('res.country', related="inquiry_id.country_loading_id")
-    port_loading_id = fields.Many2one('port', related="inquiry_id.port_loading_id")
+    port_loading_id = fields.Many2one(string='port', related="inquiry_id.port_loading_id")
     country_dest_id = fields.Many2one('res.country', related="inquiry_id.country_dest_id")
     port_dest_id = fields.Many2one('port', related="inquiry_id.port_dest_id")
     is_loading = fields.Boolean( related="inquiry_id.is_loading")
@@ -80,6 +83,7 @@ class SaleInquiryLineShipment(models.Model):
     other_condition = fields.Char('Other condition', related="product_id.other_condition")
     other_condition_att = fields.Binary(attachment=True, string="Attachment", related="product_id.other_condition_att")
     inquiry_id = fields.Many2one('sale.inquiry')
+    job_id = fields.Many2one('job')
     
 
 
@@ -319,9 +323,8 @@ class SaleInquiry(models.Model):
     def call_job(self):  
         mod_obj = self.env['ir.model.data']
         try:
-            tree_res = mod_obj.get_object_reference('job', 'view_job_tree')[1]
+            tree_res = mod_obj.get_object_reference('job', 'view_job__tree')[1]
             form_res = mod_obj.get_object_reference('job', 'view_job_form')[1]
-#             search_res = mod_obj.get_object_reference('trade_name', 'view_trade_tran_search1')[1]
         except ValueError:
             form_res = tree_res = search_res = False
         return {  
@@ -331,8 +334,8 @@ class SaleInquiry(models.Model):
             'view_mode': "[tree,form]",  
             'res_model': 'job',  
             'view_id': False,  
-            'views': [(tree_res, 'tree'), (form_res, 'form')], 
-            'domain': [('sale_inquiry_id.id', '=', self.id)], 
+            'views': [(tree_res, 'tree'),(form_res, 'form')], 
+            'domain': [('sale_inquiry_id.id', '=', self.id),('user_operation_id','=', self._uid)], 
             'target': 'current',  
                } 
     
@@ -396,110 +399,37 @@ class SaleInquiry(models.Model):
             'domain': [('partner_id.id','=',self.partner_id.id)], 
             'target': 'current',  
                }
+  
+
     @api.multi
-    def create_job(self):
+    def approve_sale_mgr(self):
+        """sales manager approval button  """
+        self.write({'state': 'Progress','stage': 'Progress'})
+    
+    @api.multi
+    def approve_acct_mgr(self):
+        """accounting manager approval button  """
+        self.write({'state': 'Confirmed','stage': 'Confirmed'})
+        
+    @api.multi
+    def approve_gm(self):
+        """general manager approval and create job button  """
+        self.write({'state': 'Job','stage': 'Job'})
         job_obj = self.env['job']
         self.ensure_one()
         job_obj.create({'sale_inquiry_id':self.id})
         
     
-
-    @api.multi
-    def approve_sale_mgr(self):
-        self.write({'state': 'Progress','stage': 'Progress'})
-    
-    @api.multi
-    def approve_acct_mgr(self):
-        self.write({'state': 'Confirmed','stage': 'Confirmed'})
-        
-    @api.multi
-    def approve_gm(self):
-        self.write({'state': 'Job','stage': 'Job'})
-        
-    
     @api.multi
     def cancel_gm(self):
+        """general manager cancel sale inquiry button  """
         self.write({'state': 'Cancelled','stage': 'Cancelled'})
     
     @api.multi
     def set_new_gm(self):
+        """general manager set sale inquiry button  """
         self.write({'state': 'New','stage': 'New'})
-#     
-#     @api.multi
-#     def get_confirm_wizard(self):
-#         sales_rec = self.env["sale.inquiry"].search([('id', 'in', self._context.get('active_ids'))])
-#         if sales_rec:
-#             sales_rec.write({'state': 'Confirmed','stage': 'Confirmed'})
-#     
-#     @api.multi
-#     def get_cancel_wizard(self):
-#         sales_rec = self.env["sale.inquiry"].search([('id', 'in', self._context.get('active_ids'))])
-#         if sales_rec:
-#             sales_rec.write({'state': 'Cancelled','stage': 'Cancelled'})
-#     @api.multi
-#     def get_progress_wizard(self):
-#          try:
-#              form_id = self.env['ir.model.data'].get_object_reference('sale_inquiry', 'progress_sales_inquiry_form_view')[1]
-#          except ValueError:
-#             form_id = False
-#          return{
-#                     'name': "Progress sales inquiry form view",
-#                     'view_type': 'form',
-#                     'view_mode':"[form]",
-#                     'view_id': False,
-#                     'res_model': 'common_wizard',
-#                     'type': 'ir.actions.act_window',
-#                     'target':'new',
-#                     'views': [(form_id, 'form')],
-#                     }
-#     @api.multi
-#     def get_confirm_wizard(self):
-#         try:
-#             form_id = self.env['ir.model.data'].get_object_reference('sale_inquiry', 'confirm_sales_inquiry_form_view')[1]
-#         except ValueError:
-#             form_id = False
-#         return{
-#                     'name': "Confirm sales inquiry form view",
-#                     'view_type': 'form',
-#                     'view_mode':"[form]",
-#                     'view_id': False,
-#                     'res_model': 'common_wizard',
-#                     'type': 'ir.actions.act_window',
-#                     'target':'new',
-#                     'views': [(form_id, 'form')],
-#                     }
-#     @api.multi
-#     def get_cancel_wizard(self):
-#          try:
-#              form_id = self.env['ir.model.data'].get_object_reference('sale_inquiry', 'cancel_sales_inquiry_form_view')[1]
-#          except ValueError:
-#             form_id = False
-#          return{
-#                     'name': "Cancel sales inquiry form view",
-#                     'view_type': 'form',
-#                     'view_mode':"[form]",
-#                     'view_id': False,
-#                     'res_model': 'common_wizard',
-#                     'type': 'ir.actions.act_window',
-#                     'target':'new',
-#                     'views': [(form_id, 'form')],
-#                     }
-    @api.multi
-    def get_job_wizard(self):
-         try:
-             form_id = self.env['ir.model.data'].get_object_reference('sale_inquiry', 'job_sales_inquiry_form_view')[1]
-         except ValueError:
-            form_id = False
-         return{
-                    'name': "Job sales inquiry form view",
-                    'view_type': 'form',
-                    'view_mode':"[form]",
-                    'view_id': False,
-                    'res_model': 'common_wizard',
-                    'type': 'ir.actions.act_window',
-                    'target':'new',
-                    'views': [(form_id, 'form')],
-                    }
+
                    
 class SaleClearanceCostLine(models.Model):
     _name = 'sale.clearance.cost.line'
@@ -507,6 +437,7 @@ class SaleClearanceCostLine(models.Model):
     container_id = fields.Many2one('container.size')
     cost = fields.Float()
     inquiry_id = fields.Many2one('sale.inquiry',ondelete="cascade")
+    job_id = fields.Many2one('job',ondelete="cascade")
    
     
   

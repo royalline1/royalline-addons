@@ -30,7 +30,6 @@
                                    string="General Manger Approval" class="oe_highlight" states="Confirmed"/>
                            <button name="cancel_gm" type="object" string="Cancel" class="oe_highlight" states="Confirmed"/>
                            <button name="set_new_gm" type="object" string="Set to New" class="oe_highlight" states="Cancelled"/>
-                           <button name="create_job" type="object" string="Create Job" class="oe_highlight" states="Job"/>
                            <field name="stage" widget="statusbar" statusbar_visible="New,Progress,Confirmed,Cancelled,Job" />
                     </header>
 					<sheet>
@@ -95,7 +94,7 @@
                                              <field name="admin_release" string="Admin Conf Release"/>
                                         </group>
                                         <group>
-                                             <field name="state" string="Admin Status" />
+                                             <field name="state" string="Admin Status" readonly="True"/>
                                              <field name="user_operation_id"
                                                 context="{'operation_filter':partner_id}"
                                                 options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" string="Operation Handling"/>

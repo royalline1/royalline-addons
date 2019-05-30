@@ -67,6 +67,7 @@ class ResPartner(models.Model):
     is_clearance_company= fields.Boolean('Is Clearance Company')
     is_transporter_company= fields.Boolean('Is Transporter Company')
     is_insurance_company= fields.Boolean('Is Insurance Company')
+    is_depot = fields.Boolean('Is Depot')
 
     phone_ids = fields.One2many('res.phone','partner_id', string='Phones Number')
     
@@ -266,28 +267,7 @@ class MITCompanies (models.Model):
             'domain': [('registration_No','=',self.company_No),('type', '=', self.type)], 
             'target': 'current',  
                } 
-    #Method to get Transactions Trade Details
-#     @api.multi
-#     def call_trade_transaction_view(self):
-#         mod_obj = self.env['ir.model.data']
-#         try:
-#             tree_res = mod_obj.get_object_reference('vb_trade', 'view_trade_tran_tree1')[1]
-#             form_res = mod_obj.get_object_reference('vb_trade', 'view_trade_tran_form1')[1]
-#             search_res = mod_obj.get_object_reference('vb_trade', 'view_trade_tran_search1')[1]
-#         except ValueError:
-#             form_res = tree_res = search_res = False
-#         return{
-#                'name': "Transactions Trade Details",
-#                'view_type': 'form',
-#                'view_mode':"[tree,form]",
-#                'view_id': False,
-#                'res_model': 'vb.trade_tran',
-#                'type': 'ir.actions.act_window',
-#                'views': [(tree_res, 'tree'), (form_res, 'form')],
-#                'domain': [('acct_id','=',self.id),('state','in',['Posted','Void']),('tran_type', '!=', 'Opening')],
-#                'context': {'search_default_current_month':1,'enable_date_range_bar':1, 'search_fields': 'tran_date'},
-#                'search_view_id':[(search_res)],
-#                }
+
             
 class TradeName (models.Model):
     _name = 'trade.name'

@@ -463,6 +463,7 @@
 					<field name="is_clearance_company" attrs="{'invisible':[('supplier','=',False)]}"/>
 					<field name="is_transporter_company" attrs="{'invisible':[('supplier','=',False)]}"/>
 					<field name="is_insurance_company" attrs="{'invisible':[('supplier','=',False)]}"/>
+					<field name="is_depot" />
 				</xpath>
 
 				<xpath expr="//group[1]/group[2]" position="inside">
