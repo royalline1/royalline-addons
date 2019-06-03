@@ -62,7 +62,7 @@
 							<group>
 								<field name="name" />
 								<field name="partner_shipping_line_id" invisible="1" />
-								<field name="sale_inquiry_id"/>
+								<field name="sale_inquiry_id" readonly="1"/>
 							</group>
 							<group>
 								<field name="from_validity_date" readonly="1"/>
@@ -79,6 +79,8 @@
                                              <field name="release" readonly="1"/>
                                              <field name="sale_state" string="Sales Status" readonly="1"/>
                                              <field name="admin_release" string="Admin Conf Release" readonly="1"/>
+                                             <field name="operation_type"/>
+                                             <field name="service"/>
                                         </group>
                                         <group>
                                              <field name="admin_sale_state" string="Admin Status" readonly="1"/>
@@ -90,6 +92,7 @@
                                                 string="Inquiry Datetime" />
                                              <field name="c_year" readonly="1"/>
                                              <field name="c_month" readonly="1"/>
+                                             <field name="intercom"/>
                                              
 							             </group>
 							         </group>
@@ -113,7 +116,7 @@
                                                 domain="[('is_shipper','=',True)]"
                                                 options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" readonly="1"/>
 							                <field name="shipper_ref" readonly="1"/>
-							                <field name="issue_bill_lading_to" domain="[('is_consignee','=',True),
+							                <field name="issue_bill_lading_to" domain="['|','|',('is_consignee','=',True),
 							                                                            ('is_shipper','=',True),
 							                                                            ('is_notify','=',True)]"
 				                                                               options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
@@ -438,6 +441,33 @@
                                        </group>
         					       </group>
         					    </page>
+        					    <page string="Driver Info">
+        					    <group>
+        					       <group>
+        					           <field name="driver_id"
+                                               domain="[('is_diver','=',True)]"
+                                               options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+        					       </group>
+        					    </group>
+        					    <group>
+                                    <group>
+                                        <field name="driver_name"/>
+                                        <field name="driver_mobile"/>
+                                    </group>
+                                    <group>
+                                        <field name="plate_code"/>
+                                        <field name="plate_number"/>
+                                    </group>
+                                </group>
+        					    </page>
+        					    <page string="Trcking">
+        					       <group>
+        					           <group>
+        					           <field name="act"/>
+        					           <field name="container_loaded_truck"/>
+        					           </group>
+        					       </group>
+        					    </page>
 						</notebook>
 					</sheet>
 				</form>
@@ -451,8 +481,7 @@
 			<field name="view_type">form</field>
 			<field name="view_mode">kanban,tree,form</field>
 			<field name="domain">[('user_operation_id','=',uid)]</field>
-			<!-- , -->
-			<!-- ('partner_id.sale_person_ids.type','in',['follow','operation']) -->
+			<!-- ('user_operation_id','=',uid), -->
 		</record>
 		
 

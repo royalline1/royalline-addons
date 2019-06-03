@@ -29,6 +29,8 @@
 							<group>
 								<field name="note" />
 								<field name="TEU" />
+								<field name="container_no" />
+                                <field name="container_status" />
 							</group>
 							
 						</group>

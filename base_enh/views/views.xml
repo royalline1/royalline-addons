@@ -434,7 +434,7 @@
 					expr="//notebook//page[1]//field[@name='child_ids']//form//field[@name='comment']"
 					position="after">
 					<field name="customs_id" />
-
+                    
 				</xpath>
 				<xpath
 					expr="//notebook//page[3]//group[@name='container_row_2']"
@@ -456,6 +456,7 @@
 					<field name="is_notify" attrs="{'invisible':[('customer','=',False)]}"/>
 					<field name="is_agent" attrs="{'invisible':['|',('customer','=',False),('supplier','=',False)]}"/>
 					<field name="is_diver" />
+					<!-- <field name="driver_id" /> -->
 					<field name="is_customs_point" attrs="{'invisible':[('customer','=',True)]}"/>
 					<field name="is_competitor" />
 					<field name="is_sea_line" attrs="{'invisible':[('supplier','=',False)]}"/>

@@ -335,7 +335,7 @@ class SaleInquiry(models.Model):
             'res_model': 'job',  
             'view_id': False,  
             'views': [(tree_res, 'tree'),(form_res, 'form')], 
-            'domain': [('sale_inquiry_id.id', '=', self.id),('user_operation_id','=', self._uid)], 
+            'domain': [('sale_inquiry_id.id', '=', self.id),('user_operation_id.id','=', self._uid)], 
             'target': 'current',  
                } 
     
@@ -414,10 +414,14 @@ class SaleInquiry(models.Model):
     @api.multi
     def approve_gm(self):
         """general manager approval and create job button  """
-        self.write({'state': 'Job','stage': 'Job'})
-        job_obj = self.env['job']
-        self.ensure_one()
-        job_obj.create({'sale_inquiry_id':self.id})
+        if not self.user_operation_id:
+            raise UserError("Please select operation to handle the job")
+        else:
+            self.write({'state': 'Job','stage': 'Job'})
+            job_obj = self.env['job']
+            self.ensure_one()
+            job_obj.create({'sale_inquiry_id':self.id})
+
         
     
     @api.multi

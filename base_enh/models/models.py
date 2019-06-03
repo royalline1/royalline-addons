@@ -3,6 +3,7 @@
 from odoo import models, fields, api
 from odoo.osv import expression
 from odoo.exceptions import UserError
+from os import linesep
 
 class SalePerson(models.Model):
     _name = "sale.person"
@@ -54,7 +55,7 @@ class ResCity(models.Model):
     
 class ResPartner(models.Model):
     _inherit = 'res.partner'
-    
+
     is_shipper = fields.Boolean('Is Shipper')
     is_consignee = fields.Boolean('Is Consignee')
     is_notify = fields.Boolean('Is notify Party')
@@ -112,8 +113,28 @@ class ResPartner(models.Model):
             for record in self:
                 name = (record.name + ' | ' + record.parent_id.name) if record.parent_id else record.name
                 lines.append((record.id,name))
-            return lines
+            return linese
+        lines = []
+        for record in self:
+            name = record.name + ' | ' + str(record.plate_code) + ' | '+ str(record.plate_number) if record.is_diver else record.name
+            lines.append((record.id,str(name)))
+        return lines
         return super(ResPartner, self).name_get()
+#     @api.multi
+#     def name_get(self):
+#         lines = []
+#         for rec in self:
+#             name = (rec.name + ' | ' + str(rec.) + ' | ' + str(rec.))
+#             lines.append(rec.id,name)
+#         return lines
+#     @api.multi
+#     def name_get(self):
+#         lines = []
+#         for record in self:
+#             name = record.name + ' | ' + str(record.plate_code) + ' | '+ str(record.plate_number) 
+#             lines.append((record.id,str(name)))
+#         return lines
+        
     
     @api.model
     def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
@@ -148,6 +169,7 @@ class SeaLines(models.Model):
     
     container_size_id = fields.Many2one('container.size',string="Container Size")
     name = fields.Char(related="container_size_id.size")
+   
     type = fields.Selection([('import','Import'),('export','Export'),('cross','Cross')])
     free_days = fields.Integer('Free Days')
     first_demurrage_from = fields.Integer('First Way Demurrage From')

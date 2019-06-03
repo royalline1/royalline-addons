@@ -23,6 +23,19 @@ class Job(models.Model):
                                    ('confirmed', 'Confirmed'), 
                                    ('not_confirmed', 'Not Confirmed')],
                                     related='sale_inquiry_id.sale_state')
+    
+    operation_type = fields.Selection([('house', 'House'), 
+                                   ('master', 'Master'), 
+                                   ('direct', 'Direct'),
+                                   ('other', 'Other')],
+                                    string='Operation Type')
+    
+    service = fields.Selection([('door_to_door', 'Door To Door'), 
+                                   ('door_to_port', 'Door To Port'), 
+                                   ('port_to_port', 'Port To Port'),
+                                   ('port_to_door', 'Port To Door')],
+                                    string='Service')
+    intercom = fields.Char ('Intercom (CR)')
 #     shipment_method = fields.Selection([('clearance', 'Clearance'), 
 #                                         ('sea_freight', 'Sea freight'), 
 #                                         ('land_freight', 'Land Freight'), 
@@ -178,102 +191,119 @@ class Job(models.Model):
     analytic_account = fields.Many2one('account.analytic.account', string='Analytical Account')
     Bill_Lading_No = fields.Char (string='Bill Of Lading No.') 
     issue_bill_lading_to = fields.Many2one ('res.partner', string='Issue Bill of lading To')
-    
+#   Tracking fields 
+    act = fields.Char('ACT')
+    container_loaded_truck = fields.Char('Container Loaded on Truck') 
+#   Driver Details
+      
+    driver_id = fields.Many2one('res.partner', string="Driver") 
+    driver_name = fields.Char (related="driver_id.name", string="Name")
+    driver_mobile = fields.Char (related="driver_id.mobile", string="Mobile") 
+    plate_code = fields.Char (related="driver_id.plate_code", string="Plate Code")
+    plate_number = fields.Char (related="driver_id.plate_number", string="Plate Number")  
 
-    @api.depends('container_size_ids','container_size_ids.cost')
-    def _compute_transport_rate(self):
-        for rec in self:
-            rec.transport_rate = sum([0]+rec.container_size_ids.mapped('cost'))
-    @api.depends('container_size_ids','container_size_ids.line_cost_line_id')
-    def _compute_container_ids(self):
-        for rec in self:
-            rec.container_ids = [(6,0,rec.container_size_ids.mapped('line_cost_line_id.sea_lines_id.container_size_id.id'))]
-             
-    @api.onchange('clearance_id','container_size_ids','container_size_ids.line_cost_line_id','container_size_ids.container_qty')
-    def _compute_clearance_cost_ids(self):
-        for rec in self:
-            cci_obj = self.env['sale.clearance.cost.line']
-            print(11)
-            rec.clearance_cost_ids.unlink()
-            print(22)
-            if rec.clearance_id:
-                for i in rec.container_size_ids:
-                    total = 0.0
-                    qty = i.container_qty
-                    for l in rec.clearance_id.cost_line_ids:
-                        if qty <= 0:
-                            break
-                        c_qty = l.to_truck - l.from_truck  +1
-                        c_qty = c_qty if c_qty < qty else qty
-                        qty -= c_qty
-                        total += l.cost * c_qty
-                    rec.clearance_cost_ids = [(0,0,{'container_id':i.line_cost_line_id.sea_lines_id.container_size_id.id,'cost':total,'inquiry_id':rec.id})]
-                        
-    @api.depends('country_loading_id','country_dest_id',
-                 'city_loading_id','state_loading_id',
-                 'city_dest_id','state_dest_id',)
-    def _insurance_cost_ids(self):
-       insurance_obj = self.env['insurance.cost']
-       for rec in self:
-            domain = [  ('country_loading_id', '=', rec.country_loading_id.id),
-                        ('country_dest_id', '=', rec.country_dest_id.id),
-                        ]
-            domain = AND([domain, OR([[('city_loading_id', '=', rec.city_loading_id.id),
-                                      ('city_dest_id', '=', rec.city_dest_id.id)],
-                                    [('state_loading_id', '=', rec.state_loading_id.id),
-                                      ('state_dest_id', '=', rec.state_dest_id.id)]])])
-           
-            insurance_cost_ids = insurance_obj.search(domain)
-            rec.insurance_cost_ids = [(6,0,insurance_cost_ids.ids)]
-            
-            
+#     @api.multi
+#     def _compute_name_driver(self):
+#         result = []
+#         for record in self:
+#             result.append((record.id, '%s | %s'%(record.name,record.code)))
+# 
+#         return result
     
-    @api.depends('order_line_shipment_ids',
-                 'order_line_shipment_ids.product_id',
-                 'country_loading_id','port_dest_id',
-                 'port_loading_id','country_dest_id',
-                 'shipment_type','partner_id',
-                 'is_loading','city_loading_id',
-                 'place_loading_id','state_loading_id',
-                 'city_dest_id','place_dest_id',
-                 'state_dest_id','is_discharge')
-    def _shipping_line_ids(self):
-       line_cost_obj = self.env['line.cost']
-       for rec in self:
-            prod_ids = rec.order_line_shipment_ids.mapped('product_id')
-            domain = [  ('country_loading_id', '=', rec.country_loading_id.id),
-                        ('port_loading_id', '=', rec.port_loading_id.id),
-                        ('port_dest_id', '=', rec.port_dest_id.id),
-                        ('country_dest_id', '=', rec.country_dest_id.id),
-                        ('line_cost_ids.sea_lines_id.type', '=', rec.shipment_type),
-                        ('expired_price', '=', False)]
-            domain = AND([domain, OR([[('customer_id', '=', rec.partner_id.id)],[('customer_id', '=', False)]])])
-           
-            domain = AND([domain, OR([[('product_id', 'in', prod_ids.ids)],[('fak', '=', False)]])])         
-                        
-            if rec.is_loading:
-                domain = AND([domain,
-                                AND([
-                                    [('line_cost_ids.is_loading', '=', True),('place_loading_id', '=', rec.place_loading_id.id)],
-                                    OR([[('city_loading_id', '=', rec.city_loading_id.id)],[('state_loading_id', '=', rec.state_loading_id.id)]])
-                                    ])
-                            ])
-            if rec.is_discharge:
-                domain = AND([domain,
-                                AND([
-                                    [('line_cost_ids.is_discharge', '=', True),('place_dest_id', '=', rec.place_dest_id.id)],
-                                    OR([[('city_dest_id', '=', rec.city_dest_id.id)],[('state_dest_id', '=', rec.state_dest_id.id)]])
-                                    ])
-                            ])
-            line_cost_ids = line_cost_obj.search(domain)
-            rec.shipping_line_ids = [(6,0,line_cost_ids.ids)]
-           
-          
-    @api.constrains('from_validity_date', 'to_validity_date')
-    def validity_date_constraint(self):
-        for rec in self:
-            if rec.from_validity_date and rec.to_validity_date and rec.from_validity_date > rec.to_validity_date:  
-                raise UserError("""The 'From Validity Date' must be less than 'To Validity Date'.""")
+#     @api.depends('container_size_ids','container_size_ids.cost')
+#     def _compute_transport_rate(self):
+#         for rec in self:
+#             rec.transport_rate = sum([0]+rec.container_size_ids.mapped('cost'))
+#     @api.depends('container_size_ids','container_size_ids.line_cost_line_id')
+#     def _compute_container_ids(self):
+#         for rec in self:
+#             rec.container_ids = [(6,0,rec.container_size_ids.mapped('line_cost_line_id.sea_lines_id.container_size_id.id'))]
+#             
+#     @api.onchange('clearance_id','container_size_ids','container_size_ids.line_cost_line_id','container_size_ids.container_qty')
+#     def _compute_clearance_cost_ids(self):
+#         for rec in self:
+#             cci_obj = self.env['sale.clearance.cost.line']
+#             print(11)
+#             rec.clearance_cost_ids.unlink()
+#             print(22)
+#             if rec.clearance_id:
+#                 for i in rec.container_size_ids:
+#                     total = 0.0
+#                     qty = i.container_qty
+#                     for l in rec.clearance_id.cost_line_ids:
+#                         if qty <= 0:
+#                             break
+#                         c_qty = l.to_truck - l.from_truck  +1
+#                         c_qty = c_qty if c_qty < qty else qty
+#                         qty -= c_qty
+#                         total += l.cost * c_qty
+#                     rec.clearance_cost_ids = [(0,0,{'container_id':i.line_cost_line_id.sea_lines_id.container_size_id.id,'cost':total,'inquiry_id':rec.id})]
+#                         
+#     @api.depends('country_loading_id','country_dest_id',
+#                  'city_loading_id','state_loading_id',
+#                  'city_dest_id','state_dest_id',)
+#     def _insurance_cost_ids(self):
+#        insurance_obj = self.env['insurance.cost']
+#        for rec in self:
+#             domain = [  ('country_loading_id', '=', rec.country_loading_id.id),
+#                         ('country_dest_id', '=', rec.country_dest_id.id),
+#                         ]
+#             domain = AND([domain, OR([[('city_loading_id', '=', rec.city_loading_id.id),
+#                                       ('city_dest_id', '=', rec.city_dest_id.id)],
+#                                     [('state_loading_id', '=', rec.state_loading_id.id),
+#                                       ('state_dest_id', '=', rec.state_dest_id.id)]])])
+#            
+#             insurance_cost_ids = insurance_obj.search(domain)
+#             rec.insurance_cost_ids = [(6,0,insurance_cost_ids.ids)]
+#             
+#             
+#     
+#     @api.depends('order_line_shipment_ids',
+#                  'order_line_shipment_ids.product_id',
+#                  'country_loading_id','port_dest_id',
+#                  'port_loading_id','country_dest_id',
+#                  'shipment_type','partner_id',
+#                  'is_loading','city_loading_id',
+#                  'place_loading_id','state_loading_id',
+#                  'city_dest_id','place_dest_id',
+#                  'state_dest_id','is_discharge')
+#     def _shipping_line_ids(self):
+#        line_cost_obj = self.env['line.cost']
+#        for rec in self:
+#             prod_ids = rec.order_line_shipment_ids.mapped('product_id')
+#             domain = [  ('country_loading_id', '=', rec.country_loading_id.id),
+#                         ('port_loading_id', '=', rec.port_loading_id.id),
+#                         ('port_dest_id', '=', rec.port_dest_id.id),
+#                         ('country_dest_id', '=', rec.country_dest_id.id),
+#                         ('line_cost_ids.sea_lines_id.type', '=', rec.shipment_type),
+#                         ('expired_price', '=', False)]
+#             domain = AND([domain, OR([[('customer_id', '=', rec.partner_id.id)],[('customer_id', '=', False)]])])
+#            
+#             domain = AND([domain, OR([[('product_id', 'in', prod_ids.ids)],[('fak', '=', False)]])])         
+#                         
+#             if rec.is_loading:
+#                 domain = AND([domain,
+#                                 AND([
+#                                     [('line_cost_ids.is_loading', '=', True),('place_loading_id', '=', rec.place_loading_id.id)],
+#                                     OR([[('city_loading_id', '=', rec.city_loading_id.id)],[('state_loading_id', '=', rec.state_loading_id.id)]])
+#                                     ])
+#                             ])
+#             if rec.is_discharge:
+#                 domain = AND([domain,
+#                                 AND([
+#                                     [('line_cost_ids.is_discharge', '=', True),('place_dest_id', '=', rec.place_dest_id.id)],
+#                                     OR([[('city_dest_id', '=', rec.city_dest_id.id)],[('state_dest_id', '=', rec.state_dest_id.id)]])
+#                                     ])
+#                             ])
+#             line_cost_ids = line_cost_obj.search(domain)
+#             rec.shipping_line_ids = [(6,0,line_cost_ids.ids)]
+#            
+#           
+#     @api.constrains('from_validity_date', 'to_validity_date')
+#     def validity_date_constraint(self):
+#         for rec in self:
+#             if rec.from_validity_date and rec.to_validity_date and rec.from_validity_date > rec.to_validity_date:  
+#                 raise UserError("""The 'From Validity Date' must be less than 'To Validity Date'.""")
     
     @api.model_create_multi
     @api.returns('self', lambda value:value.id)
