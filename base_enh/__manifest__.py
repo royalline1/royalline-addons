@@ -13,7 +13,7 @@
 
     'category': 'Uncategorized',
     'version': '12.0.1.0',
-    'depends': ['base','contacts','sale','base_address_city','product','hr','account'],
+    'depends': ['base','contacts','sale','base_address_city','product','hr','account','base_address_city'],
 
     'data': [
        'security/ir.model.access.csv',
@@ -41,6 +41,7 @@
        'views/commodity.xml',
        'views/packaging_views.xml',
        'views/job_views.xml',
+       'views/bill_of_lading.xml',
        'views/menus_views.xml',      
     ],
 }

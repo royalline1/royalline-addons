@@ -6,6 +6,7 @@ from odoo.osv.expression import AND , OR
 
 class Job(models.Model):
     _name = 'job'
+    _inherit = ['mail.thread']
     
     name = fields.Char(readonly=True)
     sale_inquiry_id = fields.Many2one('sale.inquiry',store=True)

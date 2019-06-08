@@ -121,6 +121,10 @@
 									<field name="agency" />
 									<field name="is_loading" />
 									<field name="is_discharge" />
+									<field name="is_insurance_cost" />
+									<field name="is_clearance_cost" />
+									<field name="insurance_price" attrs="{'readonly':[('is_insurance_cost','=',False)]}"/>
+									<field name="clearance_price" attrs="{'readonly':[('is_clearance_cost','=',False)]}"/>
 									<field name="transport_loading_price" attrs="{'readonly':[('is_loading','=',False)]}"/>
 									<field name="transport_discharge_price" attrs="{'readonly':[('is_discharge','=',False)]}"/>
 									<field name="product_id"

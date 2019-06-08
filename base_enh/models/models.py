@@ -95,7 +95,6 @@ class ResPartner(models.Model):
     
     sale_person_ids= fields.One2many('sale.person','partner_id')
     
-    city_drop_id = fields.Many2one('res.city' , string="City")
 
 #   City local name   
     local_name = fields.Char("Local Name")
