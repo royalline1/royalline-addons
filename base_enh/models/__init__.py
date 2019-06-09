@@ -19,3 +19,6 @@ from . import product
 from . import commodity
 from . import packaging
 from . import job
+from . import driver_info
+from . import followup
+from . import seal

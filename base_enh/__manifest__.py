@@ -41,6 +41,7 @@
        'views/commodity.xml',
        'views/packaging_views.xml',
        'views/job_views.xml',
+#        'views/driver_line.xml',
        'views/menus_views.xml',      
     ],
 }

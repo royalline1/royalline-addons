@@ -45,3 +45,8 @@ sale_inquiry,sale_inquiry,model_sale_inquiry,base.group_user,1,1,1,1
 job_access,job_access,model_job,base.group_user,1,1,1,1
 commodity_access,commodity_access,model_commodity,base.group_user,1,1,1,1
 packaging_access,packaging_access,model_packaging,base.group_user,1,1,1,1
+driver_info_access,driver_info_access,model_driver_info,base.group_user,1,1,1,1
+followup_access,followup_access,model_followup,base.group_user,1,1,1,1
+seal_access,seal_access,model_seal,base.group_user,1,1,1,1
+
+

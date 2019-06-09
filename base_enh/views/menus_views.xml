@@ -18,6 +18,11 @@
                    action="res_place_action" 
                    name="Places" 
                    sequence="2"/>
+        <!-- <menuitem  id="driver_line_menu"
+                   parent="menu_location" 
+                   action="driver_info_action" 
+                   name="Driver Line" 
+                   sequence="3"/> -->
         
         <!-- top bar menue - cost -->
         <menuitem id="menu_costs" 

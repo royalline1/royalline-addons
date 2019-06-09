@@ -22,6 +22,17 @@
 			<field name="arch" type="xml">
 				<form >
 				<!-- create="false" delete="false" edit="false" -->
+				    <header>
+                           <button name="add_con_lines" type="object" 
+                                   string="Add Container" class="oe_highlight" attrs="{'invisible': [('added_con', '=', True)]}"/>
+                           <!-- <button name="approve_acct_mgr" type="object" 
+                                   string="Account Manger Approval" class="oe_highlight" states="Progress"/>
+                           <button name="approve_gm" type="object" 
+                                   string="General Manger Approval" class="oe_highlight" states="Confirmed"/>
+                           <button name="cancel_gm" type="object" string="Cancel" class="oe_highlight" states="Confirmed"/>
+                           <button name="set_new_gm" type="object" string="Set to New" class="oe_highlight" states="Cancelled"/>
+                           <field name="stage" widget="statusbar" statusbar_visible="New,Progress,Confirmed,Cancelled,Job" /> -->
+                    </header>
 					<sheet>
 					    <!-- <div class="oe_button_box" name="button_box">  
                         <button name="get_trade_name" type="object"  
@@ -443,6 +454,27 @@
         					    </page>
         					    <page string="Driver Info">
         					    <group>
+<<<<<<< HEAD
+        					       <field name="added_con" invisible="True"/>
+        					    </group>
+        					    <field name="driver_ids">
+        					       <tree edit="True" editable="botton">
+        					           <field name="partner_id" domain="[('is_diver','=',True)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+        					           <field name="name"/>
+        					           <field name="mobile"/>
+        					           <field name="plate_code"/>
+        					           <field name="plate_number"/>
+        					           <field name="is_original_document"/>
+        					           <field name="container_no"/>
+        					           <field name="state"/>
+        					           <field name="followup_id" style="color: #875A7B;"/>
+        					           <field name="seal_id" style="color: #875A7B;"/>
+        					           <field name="container_size_ids" style="color: #875A7B;"/>
+        					       </tree>
+                                </field>
+        					    </page>
+        					    <page string="Tracking">
+=======
         					       <group>
         					           <field name="driver_id"
                                                domain="[('is_diver','=',True)]"
@@ -461,6 +493,7 @@
                                 </group>
         					    </page>
         					    <page string="Trcking">
+>>>>>>> 825a3a2f0aa03976c51e559a918efc28c22fdaad
         					       <group>
         					           <group>
         					           <field name="act"/>

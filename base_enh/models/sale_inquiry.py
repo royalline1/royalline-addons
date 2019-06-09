@@ -38,6 +38,7 @@ class SaleInquiryContainer(models.Model):
     third_rate = fields.Float()
     inquiry_id = fields.Many2one('sale.inquiry')
     job_id = fields.Many2one('job')
+    driver_info_id = fields.Many2one('driver.info')
     shipment_type = fields.Selection([('cross', 'Cross'), ('import', 'Import'), ('export', 'Export')], related="inquiry_id.shipment_type")
     line_id = fields.Many2one('line.cost', related="inquiry_id.shipping_line_id")
     country_loading_id = fields.Many2one('res.country', related="inquiry_id.country_loading_id")
