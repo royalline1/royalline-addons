@@ -90,6 +90,7 @@ class SaleInquiryLineShipment(models.Model):
 
 class SaleInquiry(models.Model):
     _name = 'sale.inquiry'
+    _inherit = ['mail.thread']
     
     name = fields.Char(readonly=True)
     from_validity_date = fields.Date()

@@ -420,11 +420,8 @@
 					</button>
 				</button>
 				
-				<xpath expr="//field[@name='country_id']"
-				    position="after">
-				    <field name="city_drop_id" placeholder="City" domain="[('country_id','=',country_id)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
-				</xpath>
 				
+                
                 <xpath
                     expr="//field[@name='vat']"
                     position="before">
@@ -571,7 +568,12 @@
 			<field name="arch" type="xml">
 
 				<field name="zipcode" position="replace" />
-				<field name="state_id" position="replace" />
+				<field name="state_id" position="attributes" >
+				<attribute name="domain">[('country_id','=',country_id)]</attribute>
+				</field>
+				<field name="country_id" position="attributes" >
+				<attribute name="invisible">1</attribute>
+				</field>
 			</field>
 		</record>
 
@@ -623,6 +625,31 @@
 				</xpath>
 			</field>
 		</record>
+		
+		<record id="open_cities_of_state" model="ir.actions.act_window">
+            <field name="name">Cities</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.city</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="base_address_city.view_city_tree"/>
+            <field name="domain">[('state_id','=',active_id)]</field>
+            <field name="target">current</field>
+        </record>
+
+		<record model="ir.ui.view" id="view_country_form">
+			<field name="name">res.country</field>
+			<field name="model">res.country</field>
+			<field name="inherit_id" ref="base.view_country_form" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//field[@name='state_ids']//tree" position="inside">
+				<button name="%(open_cities_of_state)d" string='Open Cities' type='action' />
+
+
+				</xpath>
+			</field>
+		</record>
+		
 
 
 

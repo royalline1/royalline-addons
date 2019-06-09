@@ -117,7 +117,7 @@
 							     <page string="Parties">
 							         <group>
 							             <group>
-							                 <field name="partner_id" domain="[('customer','=',True)]"
+							                 <field name="partner_id" 
                                                     options="{'no_create_edit': True, 'no_create': True}" />
 
                                             <field name="customer_class_id"
@@ -150,10 +150,10 @@
                                                     domain="[('country_id','=',country_loading_id)]"
                                                     options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                                 <field name="city_loading_id"
-                                                    domain="[('country_id','=',country_loading_id)]"
+                                                    domain="[('country_id','=',country_loading_id),'|',('state_id','=',state_loading_id),('state_id','=',False)]"
                                                     options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                                 <field name="place_loading_id"
-                                                    domain="[('country_id','=',country_loading_id)]"
+                                                    domain="[('country_id','=',country_loading_id),('city_id','=',city_loading_id)]"
                                                     options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                                 <field name="port_loading_id"
                                                     domain="[('country_id','=',country_loading_id)]"
@@ -169,15 +169,16 @@
                                                     domain="[('country_id','=',country_dest_id)]"
                                                     options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                                 <field name="city_dest_id"
-                                                    domain="[('country_id','=',country_dest_id)]"
+                                                    domain="[('country_id','=',country_dest_id),'|',('state_id','=',state_dest_id),('state_id','=',False)]"
                                                     options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                                 <field name="place_dest_id"
-                                                    domain="[('country_id','=',country_dest_id)]"
+                                                    domain="[('country_id','=',country_dest_id),('city_id','=',city_loading_id)]"
                                                     options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                                 <field name="port_dest_id"
                                                     domain="[('country_id','=',country_dest_id)]"
                                                     options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                                 <field name="delivery_place_id"
+                                                	domain="[('country_id','=',country_dest_id),('city_id','=',city_loading_id)]"
                                                     options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
     							         </group>
 							         </group>
@@ -425,6 +426,10 @@
         						</page>
 						</notebook>
 					</sheet>
+				<div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                 </div>
 				</form>
 			</field>
 		</record>
