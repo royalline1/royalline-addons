@@ -194,7 +194,6 @@ class Job(models.Model):
 #   Tracking fields 
     act = fields.Char('ACT')
     container_loaded_truck = fields.Char('Container Loaded on Truck') 
-<<<<<<< HEAD
 
 #   Driver Details      
     driver_ids = fields.One2many('driver.info', 
@@ -205,16 +204,6 @@ class Job(models.Model):
 #     plate_code = fields.Char (related="driver_id.plate_code", string="Plate Code")
 #     plate_number = fields.Char (related="driver_id.plate_number", string="Plate Number")  
 
-=======
-#   Driver Details
-      
-    driver_id = fields.Many2one('res.partner', string="Driver") 
-    driver_name = fields.Char (related="driver_id.name", string="Name")
-    driver_mobile = fields.Char (related="driver_id.mobile", string="Mobile") 
-    plate_code = fields.Char (related="driver_id.plate_code", string="Plate Code")
-    plate_number = fields.Char (related="driver_id.plate_number", string="Plate Number")  
-
->>>>>>> 825a3a2f0aa03976c51e559a918efc28c22fdaad
 #     @api.multi
 #     def _compute_name_driver(self):
 #         result = []
@@ -317,10 +306,7 @@ class Job(models.Model):
 #         for rec in self:
 #             if rec.from_validity_date and rec.to_validity_date and rec.from_validity_date > rec.to_validity_date:  
 #                 raise UserError("""The 'From Validity Date' must be less than 'To Validity Date'.""")
-<<<<<<< HEAD
     added_con = fields.Boolean()
-=======
->>>>>>> 825a3a2f0aa03976c51e559a918efc28c22fdaad
     
     @api.model_create_multi
     @api.returns('self', lambda value:value.id)
@@ -337,11 +323,16 @@ class Job(models.Model):
     @api.multi
     def add_con_lines(self):
         if self.driver_ids:
-            con_no_count = self.driver_ids.container_no
-            i = 0
-            for i in range(int(con_no_count)):
-                self.write({'driver_ids':[(0,0, {'container_no':0})],'added_con':True})
-                i = i + 1
+            if self.container_size_ids.container_qty > 0:
+                con_no_count = self.container_size_ids.container_qty
+                i = 0
+                for i in range(int(con_no_count)):
+                    self.write({'driver_ids':[(0,0, {'container_no':0})],'added_con':True})
+                    i = i + 1
+            else:
+                raise UserError("Container QTY should be more than 0")    
+        else:
+            raise UserError("Please select driver first")
    
     
   

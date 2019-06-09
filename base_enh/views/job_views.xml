@@ -454,7 +454,6 @@
         					    </page>
         					    <page string="Driver Info">
         					    <group>
-<<<<<<< HEAD
         					       <field name="added_con" invisible="True"/>
         					    </group>
         					    <field name="driver_ids">
@@ -467,33 +466,13 @@
         					           <field name="is_original_document"/>
         					           <field name="container_no"/>
         					           <field name="state"/>
-        					           <field name="followup_id" style="color: #875A7B;"/>
-        					           <field name="seal_id" style="color: #875A7B;"/>
+        					           <field name="followup_id" style="color: #875A7B;" widget="many2many_tags"/>
+        					           <field name="seal_id" style="color: #875A7B;" widget="many2many_tags"/>
         					           <field name="container_size_ids" style="color: #875A7B;"/>
         					       </tree>
                                 </field>
         					    </page>
         					    <page string="Tracking">
-=======
-        					       <group>
-        					           <field name="driver_id"
-                                               domain="[('is_diver','=',True)]"
-                                               options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
-        					       </group>
-        					    </group>
-        					    <group>
-                                    <group>
-                                        <field name="driver_name"/>
-                                        <field name="driver_mobile"/>
-                                    </group>
-                                    <group>
-                                        <field name="plate_code"/>
-                                        <field name="plate_number"/>
-                                    </group>
-                                </group>
-        					    </page>
-        					    <page string="Trcking">
->>>>>>> 825a3a2f0aa03976c51e559a918efc28c22fdaad
         					       <group>
         					           <group>
         					           <field name="act"/>

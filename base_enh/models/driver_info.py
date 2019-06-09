@@ -19,8 +19,8 @@ class DriverInfo(models.Model):
                                         ('yard', 'Yard'),
                                         ('vessel', 'Vessel'), 
                                         ('other', 'Other')],string="Container Status")  
-    followup_id = fields.Many2one ('followup',string='Follow Up')
-    seal_id = fields.Many2one ('seal',string='Seal')
+    followup_id = fields.Many2many ('followup',string='Follow Up')
+    seal_id = fields.Many2many ('seal',string='Seal')
     
     container_size_ids = fields.One2many('sale.inquiry.container',
                                           inverse_name='driver_info_id',
