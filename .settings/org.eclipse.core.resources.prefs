@@ -5,6 +5,7 @@ encoding//base_enh/models/agreement_method.py=utf-8
 encoding//base_enh/models/bill_of_lading.py=utf-8
 encoding//base_enh/models/clearance_cost.py=utf-8
 encoding//base_enh/models/customer_class.py=utf-8
+encoding//base_enh/models/followup.py=utf-8
 encoding//base_enh/models/job.py=utf-8
 encoding//base_enh/models/line_cost.py=utf-8
 encoding//base_enh/models/models.py=utf-8
