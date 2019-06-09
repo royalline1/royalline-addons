@@ -20,3 +20,4 @@ from . import commodity
 from . import packaging
 from . import job
 from . import bill_of_lading
+from . import hr_employee
