@@ -23,3 +23,4 @@ from . import driver_info
 from . import followup
 from . import seal
 from . import bill_of_lading
+from . import hr_employee
