@@ -450,6 +450,17 @@
 					<field name="customs_id" />
 
 				</xpath>
+                <xpath
+                    expr="//notebook//page[1]//field[@name='child_ids']//form//field[@name='function']"
+                    position="replace">
+                    <field name="job_position_id" />
+
+                </xpath>
+                <xpath expr='//kanban/templates/t/div/div/div[@t-if="record.function.raw_value"]' position="replace">
+                    <div t-if="record.job_position_id.raw_value">
+                        <field name="job_position_id"/>
+                    </div>
+                </xpath>
 				<xpath
 					expr="//notebook//page[3]//group[@name='container_row_2']"
 					position="inside">

@@ -50,3 +50,4 @@ followup_access,followup_access,model_followup,base.group_user,1,1,1,1
 seal_access,seal_access,model_seal,base.group_user,1,1,1,1
 bill_of_lading,bill_of_lading,model_bill_of_lading,base.group_user,1,1,1,1
 travels,travels,model_travels,base.group_user,1,1,1,1
+job_position_access,job_position_access,model_job_position,base.group_user,1,1,1,1

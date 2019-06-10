@@ -105,6 +105,7 @@ class ResPartner(models.Model):
 #   commodity ids
     commodity_ids = fields.Many2many('commodity')  
     job_id = fields.Many2one ('job')
+    job_position_id = fields.Many2one('job.position', string="Staff Job Position")
     @api.multi
     def name_get(self):
         if 'custom_point' in self._context:
