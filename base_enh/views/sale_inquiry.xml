@@ -63,11 +63,11 @@
                               <table style='width:100%;'>
                                 <tr>
                                   <th style='width:7%;'><label for="shipment_method" string='Shipment Method' style="font-weight:bold;"/></th>
-                                  <td style='width:15%;'><field name="shipment_method" widget="radio"/></td>
-                                  <th style='width:3%;'><label for="shipment_type" string='Shipment Type' style="font-weight:bold;"/></th>
-                                  <td style='width:20%;'><field name="shipment_type"  widget="radio"/></td>
-                                  <th style='width:7%;'><label for="shipment_logic" string='Shipment logic' style="font-weight:bold;"/></th>
-                                  <td style='width:15%;'><field name="shipment_logic" widget="radio"/></td>
+                                  <td style='width:15%;'><field name="shipment_method" widget="radio" /></td>
+                                  <th style='width:3%;' attrs="{'invisible': [('shipment_method', 'not in',['clearance','sea_freight','land_freight','air_freight','other_services'])]}"><label for="shipment_type" string='Shipment Type' style="font-weight:bold;"/></th>
+                                  <td style='width:20%;'  attrs="{'invisible': [('shipment_method', 'not in',['clearance','sea_freight','land_freight','air_freight','other_services'])]}" ><field name="shipment_type"  widget="radio" /></td>
+                                  <th style='width:7%;' attrs="{'invisible': [('shipment_type', 'not in',['import','export','cross','internal'])]}"><label for="shipment_logic" string='Shipment logic' style="font-weight:bold;"/></th>
+                                  <td style='width:15%;' attrs="{'invisible': [('shipment_type', 'not in',['import','export','cross','internal'])]}"><field name="shipment_logic" widget="radio"/></td>
                                 </tr>
                              </table>
                         </group>                        
@@ -271,116 +271,6 @@
                                         </tree>
                                     </field>
 							     </page>
-							     <!-- <page string="General Info">
-							         <group>
-    							         <group>
-            								
-            								
-            								
-            								
-            								
-            								
-            								
-            
-            								
-            								
-    							         </group>
-            							 <group>
-            								
-            								
-            								
-                                            <field name="shipment_method"/>
-                                            <field name="shipment_type"/>
-            								
-            								
-            								
-            								<field name="partner_shipping_line_id" invisible="1" />
-            								
-            
-            								
-            								
-        							     </group>
-        							 </group>
-        						</page> -->
-        						<!-- <page string="Commodity">
-        						  <field name="commodity_ids">
-        						      <tree >
-                                            <field name="name" />
-                                        </tree>
-                                    </field>
-        						</page> -->
-        						<!-- <page string="Order Line Shipment">
-        							<label for="order_line_shipment_ids"
-        								style="font-weight: bold" />
-        							<field name="order_line_shipment_ids">
-        								<tree editable="botton">
-        									<field name="product_id"
-        										options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-        									<field name="temperature" />
-        									<field name="warehouse_condition" />
-        									<field name="transport_condition" />
-        									<field name="port_condition" />
-        									<field name="other_condition" />
-        								</tree>
-        								<form>
-        									<group>
-        										<group>
-        											<field name="product_id"
-        												options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-        											<field name="temperature" />
-        											<field name="warehouse_condition" />
-        											<field name="warehouse_condition_att" />
-        											<field name="transport_condition" />
-        											<field name="transport_condition_att" />
-        											<field name="port_condition" />
-        											<field name="port_condition_att" />
-        											<field name="other_condition" />
-        											<field name="other_condition_att" />
-        										</group>
-        									</group>
-        								</form>
-    							     </field>
-    						     </page> -->
-    						     <!-- <page string="Conditions">
-
-        						</page> -->
-
-    							<!-- <page string="Insurance">
-        							<group>
-        								<field name="insurance_cost_ids" invisible="1" />
-        								<field name="insurance_cost_id"
-        									domain="[('id','in',insurance_cost_ids)]"
-        									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" string="Insurance ID"/>
-        								<field name="insurance_rate" />
-        								<field name="container_ids" invisible="1" />
-        								<field name="transport_rate" />
-        							</group>
-    							</page> -->
-    							<!-- <page string="Clearance">
-    							     <group>
-        								<field name="customs_dec_id"
-                                                options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-        								<field name="clearance_id"
-        									domain="[('shipment_type','=',shipment_type),
-        								('customs_declaration_id','=',customs_dec_id)]"
-        									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" string="Clearance ID"/>
-            							<label for="clearance_cost_ids" style="font-weight: bold" />
-            							<field name="clearance_cost_ids" force_save="1">
-            								<tree>
-            									<field name="container_id" />
-            									<field name="cost" />
-            								</tree>
-            								<form></form>
-            							</field>
-        							</group>
-    							</page> -->
-    							<!-- <page string="Transporter Details">
-        							<group>
-                                            <field name="transporter_cost_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-                                            <field name="transporter_free_days"/>
-                                            <field name="transporter_total"/>
-                                    </group>
-                                </page> -->
                                 <page string="Vendors">
                                     <group string="Insurance Details">
                                         <field name="insurance_cost_ids" invisible="1" />

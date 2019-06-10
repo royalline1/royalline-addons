@@ -100,28 +100,20 @@ class SaleInquiry(models.Model):
     release = fields.Boolean('Release')
     admin_release = fields.Boolean('Admin Release')
     sale_state = fields.Selection([('progress', 'In Progress'), ('confirmed', 'Confirmed'), ('not_confirmed', 'Not Confirmed')], default="progress")
-#     shipment_method = fields.Selection([('clearance', 'Clearance'), 
-#                                         ('sea_freight', 'Sea freight'), 
-#                                         ('land_freight', 'Land Freight'), 
-#                                         ('air_freight', 'Air Freight'), 
-#                                         ('other_services', 'Other Services')])
-#     shipment_type = fields.Selection([('import', 'Import'), 
-#                                         ('export', 'Export'), 
-#                                         ('cross', 'Cross'), 
-#                                         ('internal', 'internal')])
+
 #   sales inquiry filters
     shipment_method = fields.Selection([('clearance', 'Clearance'), 
                                         ('sea_freight', 'Sea freight'), 
                                         ('land_freight', 'Land Freight'), 
                                         ('air_freight', 'Air Freight'), 
-                                        ('other_services', 'Other Services')],string="Shipment Method",store=True)
+                                        ('other_services', 'Other Services')],string="Shipment Method")
     shipment_type = fields.Selection([('import', 'Import'), 
                                         ('export', 'Export'), 
                                         ('cross', 'Cross'), 
-                                        ('internal', 'internal')],string="Shipment Type",store=True)  
+                                        ('internal', 'internal')],string="Shipment Type")  
     shipment_logic = fields.Selection([('fcl', 'FCL'), 
                                         ('lcl', 'LCL'), 
-                                        ('roro', 'RORO')],string="Shipment logic",store=True)
+                                        ('roro', 'RORO')],string="Shipment logic")
     customer_ref = fields.Char('Customer Reference')
     shipper_ref = fields.Char('Shipper Reference')
     consignee_ref = fields.Char('Consignee Reference') 
@@ -217,7 +209,71 @@ class SaleInquiry(models.Model):
 #   Commodity key
     commodity_ids = fields.Many2many('commodity')  
 
-
+#   loaded country related
+    @api.onchange('country_loading_id')
+    def erase_related_addr(self):
+        self.state_loading_id = u''
+        self.city_loading_id= u''
+        self.place_loading_id = u''
+        self.port_loading_id = u''
+        self.place_of_port_id = u''
+    
+    @api.onchange('state_loading_id')
+    def erase_related_addr_three(self):
+        self.city_loading_id= u''
+        self.place_loading_id = u''
+        self.port_loading_id = u''
+        self.place_of_port_id = u''
+        
+    @api.onchange('city_loading_id')
+    def erase_related_addr_four(self): 
+        self.place_loading_id = u''
+        self.port_loading_id = u''
+        self.place_of_port_id = u''
+        
+    @api.onchange('place_loading_id')
+    def erase_related_addr_five(self): 
+        self.port_loading_id = u''
+        self.place_of_port_id = u''
+        
+    @api.onchange('port_loading_id')
+    def erase_related_addr_six(self): 
+        self.place_of_port_id = u''
+       
+#   country destination related   
+    @api.onchange('country_dest_id')
+    def erase_related_addr_seven(self):
+        self.state_dest_id = u''
+        self.city_dest_id= u''
+        self.place_dest_id = u''
+        self.port_dest_id = u''
+        self.delivery_place_id = u''
+        
+    @api.onchange('state_dest_id')
+    def erase_related_addr_eight(self):
+        self.city_dest_id= u''
+        self.place_dest_id = u''
+        self.port_dest_id = u''
+        self.delivery_place_id = u''
+        
+    @api.onchange('city_dest_id')
+    def erase_related_addr_nign(self):
+        self.place_dest_id = u''
+        self.port_dest_id = u''
+        self.delivery_place_id = u''
+        
+    @api.onchange('place_dest_id')
+    def erase_related_addr_ten(self):
+        self.port_dest_id = u''
+        self.delivery_place_id = u''
+    
+    @api.onchange('port_dest_id')
+    def erase_related_addr_eleven(self):
+        self.delivery_place_id = u''
+    
+    
+        
+            
 
     @api.depends('container_size_ids','container_size_ids.cost')
     def _compute_transport_rate(self):
