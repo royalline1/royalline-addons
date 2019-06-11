@@ -24,7 +24,9 @@
 				<!-- create="false" delete="false" edit="false" -->
 				    <header>
                            <button name="add_con_lines" type="object" 
-                                   string="Add Container" class="oe_highlight" attrs="{'invisible': [('added_con', '=', True)]}"/>
+                                   string="Add Container" class="oe_highlight" 
+                                   attrs="{'invisible': [('added_con', '=', True)]}"
+                                   confirm="Are you sure you want to 'Add' drivers to driver info?"/>
                            <!-- <button name="approve_acct_mgr" type="object" 
                                    string="Account Manger Approval" class="oe_highlight" states="Progress"/>
                            <button name="approve_gm" type="object" 

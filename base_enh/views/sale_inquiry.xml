@@ -30,7 +30,7 @@
                                    confirm="Are you sure you want to 'Approve' this Sale Inquiry?"/>
                            <button name="approve_gm" type="object" 
                                    string="General Manger Approval" class="oe_highlight" states="Confirmed" 
-                                   confirm="Are you sure you want to 'Approve' this Sale Inquiry?"/>
+                                   confirm="Are you sure you want to 'Approve' this Sale Inquiry AND 'Create' Job?"/>
                            <button name="cancel_gm" type="object" string="Cancel" class="oe_highlight" states="Confirmed" 
                                    confirm="Are you sure you want to 'Cancel' this Sale Inquiry?"/>
                            <button name="set_new_gm" type="object" string="Set to New" class="oe_highlight" states="Cancelled" 
@@ -98,26 +98,33 @@
                                                     domain="[('customer','=',True)]"/>
 
                                             <field name="customer_class_id"
-                                                    options="{'no_create_edit': True, 'no_create': True}" />
+                                                    options="{'no_create_edit': True, 'no_create': True}" 
+                                                    attrs="{'readonly': [('partner_id', '=',False)]}"/>
 							                <field name="customer_ref" 
 							                       attrs="{'readonly': [('partner_id', '=',False)]}"/>
 							                <field name="shipper_id"
                                                 domain="[('is_shipper','=',True)]"
-                                                options="{'no_create_edit': True, 'no_create': True}" />
+                                                options="{'no_create_edit': True, 'no_create': True}" 
+                                                attrs="{'readonly': [('partner_id', '=',False)]}"/>
 							                <field name="shipper_ref"
 							                       attrs="{'readonly': [('shipper_id', '=',False)]}"/>
 							             </group>
 							             <group>
 							                 <field name="consignee_id" domain="[('is_consignee','=',True)]"
-                                                options="{'no_create_edit': True, 'no_create': True}"/>
+                                                options="{'no_create_edit': True, 'no_create': True}"
+                                                attrs="{'readonly': [('partner_id', '=',False)]}"/>
 							                 <field name="consignee_ref"
 							                        attrs="{'readonly': [('consignee_id', '=',False)]}"/>
-							                 <field name="first_notify_id" domain="[('is_notify','=',True)]"
-                                                options="{'no_create_edit': True, 'no_create': True}"/>
+							                 <field name="first_notify_id" 
+							                        domain="[('is_notify','=',True)]"
+                                                    options="{'no_create_edit': True, 'no_create': True}"
+                                                    attrs="{'readonly': [('partner_id', '=',False)]}"/>
 							                 <field name="notify_party_ref" 
 							                        attrs="{'readonly': [('first_notify_id', '=',False)]}"/>
-							                 <field name="add_notify_id" domain="[('is_notify','=',True)]"
-                                                options="{'no_create_edit': True, 'no_create': True}"/>
+							                 <field name="add_notify_id" 
+							                        domain="[('is_notify','=',True)]"
+                                                    options="{'no_create_edit': True, 'no_create': True}"
+                                                    attrs="{'readonly': [('partner_id', '=',False)]}"/>
 							                 <field name="add_notify_ref"
 							                        attrs="{'readonly': [('add_notify_id', '=',False)]}"/>
 							             </group>
