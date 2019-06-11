@@ -23,13 +23,18 @@
 				<form>
 				    <header>
 				           <button name="approve_sale_mgr" type="object" 
-				                   string="Sale Manager Approval" class="oe_highlight" states="New"/>
+				                   string="Sale Manager Approval" class="oe_highlight" states="New"
+				                   confirm="Are you sure you want to 'Approve' this Sale Inquiry?"/>
                            <button name="approve_acct_mgr" type="object" 
-                                   string="Account Manger Approval" class="oe_highlight" states="Progress"/>
+                                   string="Account Manger Approval" class="oe_highlight" states="Progress" 
+                                   confirm="Are you sure you want to 'Approve' this Sale Inquiry?"/>
                            <button name="approve_gm" type="object" 
-                                   string="General Manger Approval" class="oe_highlight" states="Confirmed"/>
-                           <button name="cancel_gm" type="object" string="Cancel" class="oe_highlight" states="Confirmed"/>
-                           <button name="set_new_gm" type="object" string="Set to New" class="oe_highlight" states="Cancelled"/>
+                                   string="General Manger Approval" class="oe_highlight" states="Confirmed" 
+                                   confirm="Are you sure you want to 'Approve' this Sale Inquiry?"/>
+                           <button name="cancel_gm" type="object" string="Cancel" class="oe_highlight" states="Confirmed" 
+                                   confirm="Are you sure you want to 'Cancel' this Sale Inquiry?"/>
+                           <button name="set_new_gm" type="object" string="Set to New" class="oe_highlight" states="Cancelled" 
+                                   confirm="Are you sure you want to ' Set To New ' this Sale Inquiry?"/>
                            <field name="stage" widget="statusbar" statusbar_visible="New,Progress,Confirmed,Cancelled,Job" />
                     </header>
 					<sheet>
@@ -82,11 +87,46 @@
 								<field name="to_validity_date" />
 							</group>
 						</group>
-							<notebook>
-							     <page string="Introduction">
+							<notebook attrs="{'invisible': [('shipment_logic', 'not in',['fcl','lcl','roro'])]}">
+							     
+							     <page string="Parties">
 							         <group>
 							             <group>
-							                 <field name="agreement_method_id"
+							                 <field name="partner_id" 
+                                                    options="{'no_create_edit': True, 'no_create': True}" 
+                                                    string="Partner / Customer"
+                                                    domain="[('customer','=',True)]"/>
+
+                                            <field name="customer_class_id"
+                                                    options="{'no_create_edit': True, 'no_create': True}" />
+							                <field name="customer_ref" 
+							                       attrs="{'readonly': [('partner_id', '=',False)]}"/>
+							                <field name="shipper_id"
+                                                domain="[('is_shipper','=',True)]"
+                                                options="{'no_create_edit': True, 'no_create': True}" />
+							                <field name="shipper_ref"
+							                       attrs="{'readonly': [('shipper_id', '=',False)]}"/>
+							             </group>
+							             <group>
+							                 <field name="consignee_id" domain="[('is_consignee','=',True)]"
+                                                options="{'no_create_edit': True, 'no_create': True}"/>
+							                 <field name="consignee_ref"
+							                        attrs="{'readonly': [('consignee_id', '=',False)]}"/>
+							                 <field name="first_notify_id" domain="[('is_notify','=',True)]"
+                                                options="{'no_create_edit': True, 'no_create': True}"/>
+							                 <field name="notify_party_ref" 
+							                        attrs="{'readonly': [('first_notify_id', '=',False)]}"/>
+							                 <field name="add_notify_id" domain="[('is_notify','=',True)]"
+                                                options="{'no_create_edit': True, 'no_create': True}"/>
+							                 <field name="add_notify_ref"
+							                        attrs="{'readonly': [('add_notify_id', '=',False)]}"/>
+							             </group>
+							         </group>
+							     </page>
+							     <page string="Introduction">
+                                     <group>
+                                         <group>
+                                             <field name="agreement_method_id"
                                                 options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                              <field name="shiping_terms" required="True"/>
                                              <field name="release" />
@@ -104,8 +144,8 @@
                                              <field name="c_year" />
                                              <field name="c_month" />
                                              
-							             </group>
-							         </group>
+                                         </group>
+                                     </group>
                                      <label for="condition_ids" style="font-weight: bold" />
                                     <field name="condition_ids">
                                         <tree editable="botton">
@@ -113,34 +153,7 @@
                                         </tree>
                                         <form></form>
                                     </field>
-							     </page>
-							     <page string="Parties">
-							         <group>
-							             <group>
-							                 <field name="partner_id" 
-                                                    options="{'no_create_edit': True, 'no_create': True}" />
-
-                                            <field name="customer_class_id"
-                                                    options="{'no_create_edit': True, 'no_create': True}" />
-							                <field name="customer_ref"/>
-							                <field name="shipper_id"
-                                                domain="[('is_shipper','=',True)]"
-                                                options="{'no_create_edit': True, 'no_create': True}" />
-							                <field name="shipper_ref"/>
-							             </group>
-							             <group>
-							                 <field name="consignee_id" domain="[('is_consignee','=',True)]"
-                                                options="{'no_create_edit': True, 'no_create': True}"/>
-							                 <field name="consignee_ref"/>
-							                 <field name="first_notify_id" domain="[('is_notify','=',True)]"
-                                                options="{'no_create_edit': True, 'no_create': True}"/>
-							                 <field name="notify_party_ref" />
-							                 <field name="add_notify_id" domain="[('is_notify','=',True)]"
-                                                options="{'no_create_edit': True, 'no_create': True}"/>
-							                 <field name="add_notify_ref"/>
-							             </group>
-							         </group>
-							     </page>
+                                 </page>
 							     <page string="Locations">
 							         <group>
     							         <group>

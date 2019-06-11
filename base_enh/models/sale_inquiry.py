@@ -222,19 +222,17 @@ class SaleInquiry(models.Model):
     def erase_related_addr_three(self):
         self.city_loading_id= u''
         self.place_loading_id = u''
-        self.port_loading_id = u''
-        self.place_of_port_id = u''
+
         
     @api.onchange('city_loading_id')
     def erase_related_addr_four(self): 
         self.place_loading_id = u''
-        self.port_loading_id = u''
-        self.place_of_port_id = u''
+
         
-    @api.onchange('place_loading_id')
-    def erase_related_addr_five(self): 
-        self.port_loading_id = u''
-        self.place_of_port_id = u''
+#     @api.onchange('place_loading_id')
+#     def erase_related_addr_five(self): 
+#         self.port_loading_id = u''
+#         self.place_of_port_id = u''
         
     @api.onchange('port_loading_id')
     def erase_related_addr_six(self): 
@@ -253,28 +251,50 @@ class SaleInquiry(models.Model):
     def erase_related_addr_eight(self):
         self.city_dest_id= u''
         self.place_dest_id = u''
-        self.port_dest_id = u''
-        self.delivery_place_id = u''
+
         
     @api.onchange('city_dest_id')
     def erase_related_addr_nign(self):
         self.place_dest_id = u''
-        self.port_dest_id = u''
-        self.delivery_place_id = u''
+
         
-    @api.onchange('place_dest_id')
-    def erase_related_addr_ten(self):
-        self.port_dest_id = u''
-        self.delivery_place_id = u''
+#     @api.onchange('place_dest_id')
+#     def erase_related_addr_ten(self):
+#         self.port_dest_id = u''
+#         self.delivery_place_id = u''
     
     @api.onchange('port_dest_id')
     def erase_related_addr_eleven(self):
         self.delivery_place_id = u''
-    
-    
-        
-            
 
+    @api.onchange('partner_id')
+    def partner_onchange(self):
+        """ erase customer reference if customer 'Partner' field is empty"""
+        self.customer_ref=u''
+    
+    @api.onchange('shipper_id')
+    def shipper_onchange(self):
+        """ erase shipper reference if 'Shipper' field is empty"""
+        self.shipper_ref=u''
+    
+    @api.onchange('consignee_id')
+    def consignee_onchange(self):
+        """ erase consignee reference if 'Consignee' field is empty"""
+        self.consignee_ref=u''        
+    
+    @api.onchange('first_notify_id')
+    def first_notify_onchange(self):
+        """ erase notify reference if 'Notify Party' field is empty"""
+        self.notify_party_ref=u''
+        
+    @api.onchange('add_notify_id')
+    def add_nofity_onchange(self):
+        """ erase additional notify reference if 'Additional Notify Party' field is empty"""
+        self.add_notify_ref=u''
+        
+        
+        
+    
     @api.depends('container_size_ids','container_size_ids.cost')
     def _compute_transport_rate(self):
         for rec in self:
