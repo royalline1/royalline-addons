@@ -33,9 +33,10 @@
 								<field name="country_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="port_type" widget="many2many_tags" />
+								<field name="state_id" domain="[('country_id','=',country_id)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
 								<field name="type" invisible="True" />
-								<field name="city_id"
-									domain="[('country_id','=',country_id)]" />
+								<field name="city_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+									domain="[('country_id','=',country_id),'|',('state_id','=',state_id),('state_id','=',False)]" />
 							</group>
 						</group>
 					</sheet>
@@ -673,7 +674,7 @@
 
 				<xpath expr="//field[@name='state_ids']//tree"
 					position="inside">
-					<button name="%(open_cities_of_state)d" string='Open Cities'
+					<button context="{'default_state_id':active_id}" name="%(open_cities_of_state)d" string='Open Cities'
 						type='action' />
 
 
@@ -710,6 +711,37 @@
 							<field name="reason" />
 						</tree>
 					</field>
+				</xpath>
+			</field>
+		</record>
+
+
+		<record model="ir.ui.view" id="view_employee_form_inherit_hr_attendance">
+			<field name="name">hr.employee</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr_attendance.view_employee_form_inherit_hr_attendance" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='pin']"
+					position="attributes">
+					<attribute name="password">True</attribute>
+					
+				</xpath>
+
+			</field>
+		</record>
+		
+		
+		
+		
+		
+		<record model="ir.ui.view" id="view_res_country_city_extended_form">
+			<field name="name">res.country</field>
+			<field name="model">res.country</field>
+			<field name="inherit_id" ref="base_address_city.view_res_country_city_extended_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//button[@name='%(base_address_city.action_res_city_tree)d']"
+					position="attributes">
+					<attribute name="attrs">{'invisible':[('state_ids','=',[])]}</attribute>
 				</xpath>
 			</field>
 		</record>

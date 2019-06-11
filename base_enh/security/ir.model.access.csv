@@ -51,3 +51,4 @@ seal_access,seal_access,model_seal,base.group_user,1,1,1,1
 bill_of_lading,bill_of_lading,model_bill_of_lading,base.group_user,1,1,1,1
 travels,travels,model_travels,base.group_user,1,1,1,1
 job_position_access,job_position_access,model_job_position,base.group_user,1,1,1,1
+job_commodity_line,job_commodity_line,model_job_commodity_line,base.group_user,1,1,1,1

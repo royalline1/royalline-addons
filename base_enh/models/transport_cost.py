@@ -40,7 +40,6 @@ class TransportCost(models.Model):
    
     qut_number =fields.Char('Quotation Number')
     is_next = fields.Boolean('Is Next Price')
-    is_expired = fields.Boolean('Is Expired Price')
     partner_id = fields.Many2one('res.partner',string="Transporter",domain=[('is_transporter_company', '=', True)])
     free_days = fields.Integer('Free Days')    
     country_loading_id = fields.Many2one('res.country', string="Country Of Loading", required=True)
@@ -58,6 +57,19 @@ class TransportCost(models.Model):
     price_line_ids = fields.One2many('transport.price.line','cost_id',string="Price")
     total = fields.Float('Total', compute='_compute_total',store=True)
     note = fields.Text()
+    is_expired = fields.Boolean('Is Expired Price',compute='_compute_is_expired')
+    from_date = fields.Date('From Date')
+    to_date = fields.Date('To Date')
+    
+    
+    @api.multi
+    @api.depends('to_date')
+    def _compute_is_expired(self):
+        for rec in self:
+            if rec.to_date and rec.to_date < fields.Date.today():
+               rec.is_expired = True 
+            else:
+               rec.is_expired = False
     
     
 #     @api.constrains('is_port','place_dest_id')

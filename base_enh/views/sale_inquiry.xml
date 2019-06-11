@@ -192,13 +192,13 @@
                                                     domain="[('country_id','=',country_dest_id),'|',('state_id','=',state_dest_id),('state_id','=',False)]"
                                                     options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                                 <field name="place_dest_id"
-                                                    domain="[('country_id','=',country_dest_id),('city_id','=',city_loading_id)]"
+                                                    domain="[('country_id','=',country_dest_id),('city_id','=',city_dest_id)]"
                                                     options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                                 <field name="port_dest_id"
                                                     domain="[('country_id','=',country_dest_id)]"
                                                     options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                                 <field name="delivery_place_id"
-                                                	domain="[('country_id','=',country_dest_id),('city_id','=',city_loading_id)]"
+                                                	domain="[('country_id','=',country_dest_id),('city_id','=',city_dest_id)]"
                                                     options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
     							         </group>
 							         </group>
@@ -338,6 +338,7 @@
 					</sheet>
 				<div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
                         <field name="message_ids" widget="mail_thread"/>
                  </div>
 				</form>

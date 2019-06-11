@@ -90,7 +90,7 @@ class SaleInquiryLineShipment(models.Model):
 
 class SaleInquiry(models.Model):
     _name = 'sale.inquiry'
-    _inherit = ['mail.thread']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
     name = fields.Char(readonly=True)
     from_validity_date = fields.Date()
@@ -355,7 +355,7 @@ class SaleInquiry(models.Model):
     def _shipping_line_ids(self):
        line_cost_obj = self.env['line.cost']
        for rec in self:
-            prod_ids = rec.order_line_shipment_ids.mapped('product_id')
+            commodity_ids = rec.commodity_ids
             domain = [  ('country_loading_id', '=', rec.country_loading_id.id),
                         ('port_loading_id', '=', rec.port_loading_id.id),
                         ('port_dest_id', '=', rec.port_dest_id.id),
@@ -364,7 +364,7 @@ class SaleInquiry(models.Model):
                         ('expired_price', '=', False)]
             domain = AND([domain, OR([[('customer_id', '=', rec.partner_id.id)],[('customer_id', '=', False)]])])
            
-            domain = AND([domain, OR([[('product_id', 'in', prod_ids.ids)],[('fak', '=', False)]])])         
+            domain = AND([domain, OR([[('commodity_id', 'in', commodity_ids.ids)],[('fak', '=', False)]])])         
                         
             if rec.is_loading:
                 domain = AND([domain,

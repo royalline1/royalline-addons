@@ -4,9 +4,22 @@ import datetime
 from odoo.exceptions import UserError
 from odoo.osv.expression import AND , OR
 
+class JobCommodityLine(models.Model):
+    _name = 'job.commodity.line'
+    
+    commodity_id = fields.Many2one('commodity',String='Commodity',required=True)
+    package_name = fields.Char()
+    quantity = fields.Float()
+    operation = fields.Char()
+    volume = fields.Float()
+    gross_weight = fields.Char()
+    job_id = fields.Many2one('job')
+    
+    
+
 class Job(models.Model):
     _name = 'job'
-    _inherit = ['mail.thread']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
     name = fields.Char(readonly=True)
     sale_inquiry_id = fields.Many2one('sale.inquiry',store=True)
@@ -194,6 +207,8 @@ class Job(models.Model):
                                           string='Driver')
 
     added_con = fields.Boolean()
+    
+    commodity_line_ids = fields.One2many('job.commodity.line','job_id')
     
     @api.model_create_multi
     @api.returns('self', lambda value:value.id)

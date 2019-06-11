@@ -31,6 +31,8 @@
 							<group>
 								<field name="qut_number" />
 								<field name="is_next" />
+								<field name="from_date" />
+								<field name="to_date" />
 								<field name="is_expired" />
 								<field name="shipment_method" />
 								<field name="shipment_type" />

@@ -22,7 +22,7 @@ class ResPlace(models.Model):
     country_id = fields.Many2one('res.country',required=True)
     city_id = fields.Many2one('res.city',required=True)
     state_id = fields.Many2one('res.country.state')
-    is_port = fields.Boolean('Is Port')
+    is_port = fields.Boolean('Is Terminal')
     port_id = fields.Many2one('port')
     address = fields.Text('Address',required=True)
     is_delivery_place = fields.Boolean('Is Delivery Place') 
@@ -35,7 +35,8 @@ class Port(models.Model):
     code = fields.Char(string='Code')
     type = fields.Selection([('air',"Air"),('sea',"Sea"),('dry',"Dry")],required=True,default='air')
     country_id = fields.Many2one('res.country',stirng="Country",required=True)
-    port_type = fields.Many2many('port.type', string='Port Type')
+    state_id = fields.Many2one('res.country.state','State')
+    port_type = fields.Many2many('port.type', string='Port Type',required=True)
     city_id = fields.Many2one('res.city',required=True)
  
 class PortType(models.Model):

@@ -78,13 +78,22 @@ class LineCost(models.Model):
     start_date = fields.Date('Start Date')
     expiry_date = fields.Date('Expiry Date')
     note = fields.Text('Notes')
-    expired_price = fields.Boolean()
+    expired_price = fields.Boolean(compute='_compute_is_expired')
     next_price = fields.Boolean()
     line_cost_ids = fields.One2many('line.cost.line','line_cost_id',string="Price")
     additional_cost_ids = fields.One2many('additional.cost','line_cost_id',string="Additional Cost")
     product_discount_id = fields.Many2one('product.product', string='Additional Discount' ,domain=[('is_discount', '=', True)])
     discount = fields.Float(default=0.0)
     
+    
+    @api.multi
+    @api.depends('expiry_date')
+    def _compute_is_expired(self):
+        for rec in self:
+            if rec.expiry_date and rec.expiry_date < fields.Date.today():
+               rec.expired_price = True 
+            else:
+               rec.expired_price = False
     
     @api.model_create_multi
     @api.returns('self', lambda value:value.id)

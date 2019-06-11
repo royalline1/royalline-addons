@@ -13,7 +13,7 @@
 
     'category': 'Uncategorized',
     'version': '12.0.1.0',
-    'depends': ['base','contacts','sale','base_address_city','product','hr','account','base_address_city','hr'],
+    'depends': ['base','contacts','sale','base_address_city','product','hr','account','base_address_city','hr_attendance'],
 
     'data': [
        'security/ir.model.access.csv',

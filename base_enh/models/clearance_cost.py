@@ -24,7 +24,7 @@ class ClearanceCost(models.Model):
    
     qut_number =fields.Char('Quotation Number',required=True)
     is_next = fields.Boolean('Is Next Price')
-    is_expired = fields.Boolean('Is Expired Price')
+    is_expired = fields.Boolean('Is Expired Price',compute="_compute_is_expired")
     shipment_method = fields.Selection([('all_in', 'All In'), ('sea_freight', 'Sea freight'), ('land_freight', 'Land Freight'), ('air_freight', 'Air Freight'), ('clearance', 'Clearance')])
     shipment_type = fields.Selection([ ('import', 'Import'), ('export', 'Export')])
     partner_id = fields.Many2one('res.partner',string="Clearance",domain=[('is_clearance_company', '=', True)])
@@ -36,7 +36,19 @@ class ClearanceCost(models.Model):
     cost_line_ids = fields.One2many('clearance.cost.line','cost_id',string="Additional Cost")
     total = fields.Float('Total', compute='_compute_total',store=True)
     note = fields.Text()
+    from_date = fields.Date('From Date')
+    to_date = fields.Date('To Date')
     
+    
+    @api.multi
+    @api.depends('to_date')
+    def _compute_is_expired(self):
+        for rec in self:
+            if rec.to_date and rec.to_date < fields.Date.today():
+               rec.is_expired = True 
+            else:
+               rec.is_expired = False
+            
     @api.depends('customs_id')
     def _compute_partner_point_ids(self):
         for rec in self:

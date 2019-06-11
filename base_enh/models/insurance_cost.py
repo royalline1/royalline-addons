@@ -39,6 +39,19 @@ class InsuranceCost(models.Model):
     cost_line_ids = fields.One2many('insurance.cost.line','cost_id',string="Additional Cost")
     condition_ids = fields.One2many('insurance.condition','cost_id',string="Condition")
     
+    
+    is_expired = fields.Boolean('Is Expired Price',compute='_compute_is_expired')
+    
+    
+    @api.multi
+    @api.depends('to_date')
+    def _compute_is_expired(self):
+        for rec in self:
+            if rec.to_date and rec.to_date < fields.Date.today():
+               rec.is_expired = True 
+            else:
+               rec.is_expired = False
+    
     @api.depends('rate','cost_line_ids','cost_line_ids.cost')
     def _compute_total(self):
         for rec in self:
