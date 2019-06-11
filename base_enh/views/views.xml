@@ -688,7 +688,7 @@
 			<field name="model">hr.employee</field>
 			<field name="inherit_id" ref="hr.view_employee_form" />
 			<field name="arch" type="xml">
-				<xpath expr="//notebook//page[2]//field[@name='visa_expire']"
+				<xpath expr="//notebook//page[@name='personal_information']//field[@name='visa_expire']"
 					position="after">
 					<field name="social_security_no" />
 					<field name="tax_registration_no" />
