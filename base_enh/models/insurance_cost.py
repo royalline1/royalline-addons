@@ -13,7 +13,8 @@ class InsuranceCondition(models.Model):
 class AdditionalInsuCost(models.Model):
     _name = 'insurance.cost.line'
     
-    product_id = fields.Many2one('product.product', string='Additional Name', required=True )
+    product_id = fields.Many2one('product.product', string='Additional Name', required=True,
+                                 domain=[('is_add_cost', '=', True)] )
     cost = fields.Float()
     cost_id = fields.Many2one('line.cost',  required=True)
 

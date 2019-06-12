@@ -208,7 +208,7 @@ class SaleInquiry(models.Model):
     transporter_total = fields.Float(related='transporter_cost_id.total', string='Transport Total')
 #   Commodity key
     commodity_ids = fields.Many2many('commodity')  
-
+    
 #   loaded country related
     @api.onchange('country_loading_id')
     def erase_related_addr(self):

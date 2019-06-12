@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
-
+from odoo.exceptions import UserError
 
 
 class AdditionalCost(models.Model):
     _name = 'additional.cost'
     
     
-    product_id = fields.Many2one('product.product', string='Additional Name', required=True ,domain=[('is_discount', '=', True)])
+    product_id = fields.Many2one('product.product', string='Additional Name', required=True ,domain=[('is_add_cost', '=', True)])
     cost = fields.Float()
     line_cost_id = fields.Many2one('line.cost' ,required=True)
     
@@ -61,9 +61,20 @@ class LineCost(models.Model):
     place_loading_id = fields.Many2one('res.place', string="Place Of Loading")
     transport_loading_id = fields.Many2one('transport.type', string="Transport Type Of Loading")
     port_loading_id = fields.Many2one('port', string="POL")
+    terminal_loading_id = fields.Many2one('res.place', string="Terminal")
+    
+    is_same_country = fields.Boolean('Is Same Country', default=True)
     country_dest_id = fields.Many2one('res.country', string="Country Of Destination")
     state_dest_id = fields.Many2one('res.country.state', string="State Of Destination")
     city_dest_id = fields.Many2one('res.city', string="City Of Destination")
+    terminal_des_same_id = fields.Many2one('res.place', string="Terminal Same Country")
+    
+    country_diff_dest_id = fields.Many2one('res.country', string="Different Country Of Destination")
+    state_diff_dest_id = fields.Many2one('res.country.state', string="Different State Of Destination")
+    city_diff_dest_id = fields.Many2one('res.city', string="Different City Of Destination")
+    delivery_diff_place_id = fields.Many2one('res.place', 'Different Place Of Delivery')
+    terminal_des_diff_id = fields.Many2one('res.place', string="Terminal Diff Country")
+    
     place_dest_id = fields.Many2one('res.place', string="Place Of Destination")
     port_dest_id = fields.Many2one('port', string="POD")
     transport_dest_id = fields.Many2one('transport.type', string="Transport Type Of Destination")
@@ -94,6 +105,14 @@ class LineCost(models.Model):
                rec.expired_price = True 
             else:
                rec.expired_price = False
+               
+   
+    @api.constrains('expiry_date','start_date')
+    def _expired_date(self):
+        for rec in self:
+            if rec.expiry_date < rec.start_date:
+               raise UserError("'Expiry date' should be greater than 'Start date'")
+
     
     @api.model_create_multi
     @api.returns('self', lambda value:value.id)

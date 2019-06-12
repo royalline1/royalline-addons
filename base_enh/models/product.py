@@ -8,7 +8,7 @@ class ProductProduct(models.Model):
     
     is_discount = fields.Boolean('Is Discount')
     is_inv_charges = fields.Boolean('Is Invoice Charges')
-
+    is_add_cost = fields.Boolean('Is Additional Cost')
     
 class ProductProduct(models.Model):
     _inherit = "product.product"

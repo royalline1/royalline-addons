@@ -26,7 +26,8 @@ class TransportlinsuCost(models.Model):
     _name = 'transport.cost.line'
     _rec_name = 'container_size_id'
     
-    product_id = fields.Many2one('product.product', string='Transport Name', required=True )
+    product_id = fields.Many2one('product.product', string='Transport Name', required=True, 
+                                 domain=[('is_add_cost', '=', True)])
     container_size_id = fields.Many2one('container.size', required=True)
     cost = fields.Float(required=True)
     per_quantity = fields.Boolean()

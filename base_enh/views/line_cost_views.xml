@@ -65,6 +65,9 @@
 								<field name="port_loading_id"
 									domain="[('country_id','=',country_loading_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="terminal_loading_id"
+								       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+								       domain="[('country_id','=',country_loading_id),('is_port','=',True),'|',('city_id','=',city_loading_id),('city_id','=',False)]"/>
 								<field name="transt_time" />
 								<field name="start_date" />
 								<field name="expiry_date" />
@@ -75,6 +78,7 @@
 								
 							</group>
 							<group>
+							    <field name="is_same_country"/>
 								<field name="country_dest_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="state_dest_id"
@@ -91,9 +95,34 @@
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="transport_dest_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+								<field name="terminal_des_same_id"
+								       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+                                       domain="[('country_id','=',country_dest_id),('is_port','=',True),'|',('state_id','=',state_dest_id),('state_id','=',False)]"/>
+								
+								<field name="country_diff_dest_id" 
+								       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+								       attrs="{'invisible':[('is_same_country','=',True)]}"/>
+								<field name="state_diff_dest_id"
+								       domain="[('country_id','=',country_diff_dest_id)]"
+                                       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+                                       attrs="{'invisible':[('is_same_country','=',True)]}"/>
+								<field name="city_diff_dest_id"
+								       domain="[('country_id','=',country_diff_dest_id),'|',('state_id','=',state_diff_dest_id),('state_id','=',False)]"
+                                       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+                                       attrs="{'invisible':[('is_same_country','=',True)]}"/>
+								<field name="delivery_diff_place_id" 
+								       domain="[('country_id','=',country_diff_dest_id),('is_delivery_place','=',True),'|',('state_id','=',state_diff_dest_id),('state_id','=',False),'|',('city_id','=',city_diff_dest_id),('city_id','=',False)]"
+                                       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+                                       attrs="{'invisible':[('is_same_country','=',True)]}"/>
+								<field name="terminal_des_diff_id"
+                                       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+                                       domain="[('country_id','=',country_diff_dest_id),('is_port','=',True),'|',('state_id','=',state_diff_dest_id),('state_id','=',False)]"
+                                       attrs="{'invisible':[('is_same_country','=',True)]}"/>
+								
 								<field name="delivery_place_id"
 									domain="[('country_id','=',country_dest_id),('city_id','=',city_dest_id),('is_delivery_place','=',True)]"
-									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
+									attrs="{'invisible':[('is_same_country','=',False)]}"/>
 								<field name="bill_fees"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="customer_id"

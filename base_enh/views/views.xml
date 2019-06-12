@@ -619,7 +619,10 @@
 						<field name="is_discount" />
 						<label for="is_discount" />
 					</div>
-
+                    <div>
+                        <field name="is_add_cost" />
+                        <label for="is_add_cost" />
+                    </div>
 
 				</div>
 			</field>
