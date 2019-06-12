@@ -50,6 +50,7 @@ class LineCostLine(models.Model):
 
 class LineCost(models.Model):
     _name = 'line.cost'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'line_id'
     
     line_id = fields.Many2one('res.partner', string="Shipping Line", required=True,domain=[('company_type', '=', 'company'),('is_sea_line', '=', True)])

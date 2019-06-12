@@ -37,6 +37,7 @@ class TransportlinsuCost(models.Model):
 
 class TransportCost(models.Model):
     _name = 'transport.cost'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'qut_number'
    
     qut_number =fields.Char('Quotation Number')
