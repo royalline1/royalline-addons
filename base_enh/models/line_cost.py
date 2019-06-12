@@ -61,19 +61,21 @@ class LineCost(models.Model):
     place_loading_id = fields.Many2one('res.place', string="Place Of Loading")
     transport_loading_id = fields.Many2one('transport.type', string="Transport Type Of Loading")
     port_loading_id = fields.Many2one('port', string="POL")
-    terminal_loading_id = fields.Many2one('res.place', string="Terminal")
+    terminal_loading_id = fields.Many2one('res.place', string="Terminal of Loading")
     
     is_same_country = fields.Boolean('Is Same Country', default=True)
     country_dest_id = fields.Many2one('res.country', string="Country Of Destination")
     state_dest_id = fields.Many2one('res.country.state', string="State Of Destination")
     city_dest_id = fields.Many2one('res.city', string="City Of Destination")
-    terminal_des_same_id = fields.Many2one('res.place', string="Terminal Same Country")
+    terminal_des_same_id = fields.Many2one('res.place', string="Terminal of Discharge")
     
-    country_diff_dest_id = fields.Many2one('res.country', string="Different Country Of Destination")
-    state_diff_dest_id = fields.Many2one('res.country.state', string="Different State Of Destination")
-    city_diff_dest_id = fields.Many2one('res.city', string="Different City Of Destination")
-    delivery_diff_place_id = fields.Many2one('res.place', 'Different Place Of Delivery')
-    terminal_des_diff_id = fields.Many2one('res.place', string="Terminal Diff Country")
+    country_diff_dest_id = fields.Many2one('res.country', string="Country Of Last Destination")
+    state_diff_dest_id = fields.Many2one('res.country.state', string="State Of Last Destination")
+    city_diff_dest_id = fields.Many2one('res.city', string="City Of Last Destination")
+    place_diff_dest_id = fields.Many2one('res.place', string="Place Of Last Destination")
+    port_diff_id = fields.Many2one('port', string="POD Last Country")
+    delivery_diff_place_id = fields.Many2one('res.place', 'Place Of Last Delivery')
+    terminal_des_diff_id = fields.Many2one('res.place', string="Terminal of delivery")
     
     place_dest_id = fields.Many2one('res.place', string="Place Of Destination")
     port_dest_id = fields.Many2one('port', string="POD")
@@ -112,6 +114,12 @@ class LineCost(models.Model):
         for rec in self:
             if rec.expiry_date < rec.start_date:
                raise UserError("'Expiry date' should be greater than 'Start date'")
+           
+    @api.constrains('transt_time')
+    def _transit_time(self):
+        for rec in self:
+            if rec.transt_time <= 0:
+               raise UserError("Transit time should be more than Zero!")
 
     
     @api.model_create_multi
