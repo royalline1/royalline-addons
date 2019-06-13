@@ -200,8 +200,8 @@ class SeaLines(models.Model):
     def name_get(self):
         lines = []
         for record in self:
-            name = record.name + ' | ' + record.type
-            lines.append((record.id,name))
+            name = str(record.name) + ' | ' + str(record.type)
+            lines.append((record.id,str(name)))
         return lines
     
     

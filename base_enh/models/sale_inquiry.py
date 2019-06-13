@@ -217,22 +217,16 @@ class SaleInquiry(models.Model):
         self.place_loading_id = u''
         self.port_loading_id = u''
         self.place_of_port_id = u''
+       
     
     @api.onchange('state_loading_id')
     def erase_related_addr_three(self):
         self.city_loading_id= u''
         self.place_loading_id = u''
 
-        
     @api.onchange('city_loading_id')
     def erase_related_addr_four(self): 
         self.place_loading_id = u''
-
-        
-#     @api.onchange('place_loading_id')
-#     def erase_related_addr_five(self): 
-#         self.port_loading_id = u''
-#         self.place_of_port_id = u''
         
     @api.onchange('port_loading_id')
     def erase_related_addr_six(self): 
@@ -257,12 +251,6 @@ class SaleInquiry(models.Model):
     def erase_related_addr_nign(self):
         self.place_dest_id = u''
 
-        
-#     @api.onchange('place_dest_id')
-#     def erase_related_addr_ten(self):
-#         self.port_dest_id = u''
-#         self.delivery_place_id = u''
-    
     @api.onchange('port_dest_id')
     def erase_related_addr_eleven(self):
         self.delivery_place_id = u''
