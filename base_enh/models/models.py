@@ -36,6 +36,13 @@ class ResPlace(models.Model):
         self.address=u''
         self.zip_code=u''
         self.port_id=u''
+    
+    @api.onchange('state_id')
+    def erase_state_related(self):
+        for rec in self:
+            rec.city_id = u''
+            rec.port_id = u''
+            rec.address = u''
         
 class Port(models.Model):
     _name = 'port'
