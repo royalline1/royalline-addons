@@ -9,8 +9,10 @@ class AdditionalCost(models.Model):
     
     
     product_id = fields.Many2one('product.product', string='Additional Name', required=True ,domain=[('is_add_cost', '=', True)])
-    cost = fields.Float()
+    cost = fields.Float(required=True)
     line_cost_id = fields.Many2one('line.cost' ,required=True)
+    
+    _sql_constraints = [('check_additional_cost_cost', 'CHECK(cost > 0)', 'The additional cost must be greater than zero.')]
     
     
 class LineCostLine(models.Model):
@@ -36,10 +38,10 @@ class LineCostLine(models.Model):
     line_cost_id = fields.Many2one('line.cost', required=True)
     total = fields.Float('Total',compute='_compute_total')
     
-    @api.depends('agency','transport_loading_price','value','rate','transport_discharge_price')
+    @api.depends('agency','transport_loading_price','value','rate','transport_discharge_price','clearance_price','insurance_price')
     def _compute_total(self):
         for rec in self:
-            rec.total = rec.agency + rec.rate+ rec.transport_discharge_price + rec.transport_loading_price - rec.value
+            rec.total = rec.clearance_price + rec.insurance_price + rec.agency + rec.rate+ rec.transport_discharge_price + rec.transport_loading_price - rec.value
             
     @api.model
     def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
@@ -99,7 +101,11 @@ class LineCost(models.Model):
     product_discount_id = fields.Many2one('product.product', string='Additional Discount' ,domain=[('is_discount', '=', True)])
     discount = fields.Float(default=0.0)
     
-    
+    @api.onchange('fak')
+    def _onchange_fak(self):
+        self.commodity_id = False
+        
+        
     @api.multi
     @api.depends('expiry_date')
     def _compute_is_expired(self):

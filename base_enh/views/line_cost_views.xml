@@ -178,7 +178,8 @@
 						<group>
 							<field name="additional_cost_ids" nolabel="1">
 								<tree editable="botton">
-									<field name="product_id" />
+									<field name="product_id" domian="[('id_add_cost','=',True)]"
+									options="{'no_open':True,'no_create':True,'no_create_edit':True}" />
 									<field name="cost" />
 								</tree>
 							</field>

@@ -677,7 +677,8 @@
 
 				<xpath expr="//field[@name='state_ids']//tree"
 					position="inside">
-					<button context="{'default_state_id':active_id}" name="%(open_cities_of_state)d" string='Open Cities'
+					<field name="country_id" invisible="1"/>
+					<button context="{'default_state_id':active_id,'default_country_id':country_id}" name="%(open_cities_of_state)d" string='Open Cities'
 						type='action' />
 
 
@@ -744,7 +745,7 @@
 			<field name="arch" type="xml">
 				<xpath expr="//button[@name='%(base_address_city.action_res_city_tree)d']"
 					position="attributes">
-					<attribute name="attrs">{'invisible':[('state_ids','=',[])]}</attribute>
+					<attribute name="attrs">{'invisible':[('state_ids','!=',[])]}</attribute>
 				</xpath>
 			</field>
 		</record>
