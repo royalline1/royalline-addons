@@ -49,6 +49,12 @@ class LineCostLine(models.Model):
         print(args)
         return super(LineCostLine, self)._search( args, offset=offset, limit=limit, order=order, count=count, access_rights_uid=access_rights_uid)
 
+    @api.onchange('product_id') 
+    def erase_value_discount(self):
+        """Erase discount value if product name changed"""
+        for rec in self:
+            rec.value=u''
+        
 
 class LineCost(models.Model):
     _name = 'line.cost'
@@ -106,6 +112,74 @@ class LineCost(models.Model):
         self.commodity_id = False
         
         
+    #   loaded country related
+    @api.onchange('country_loading_id')
+    def erase_related_addr(self):
+        self.state_loading_id = u''
+        self.city_loading_id= u''
+        self.place_loading_id = u''
+        self.port_loading_id = u''
+        self.terminal_loading_id = u''
+    
+    @api.onchange('state_loading_id')
+    def erase_related_addr_three(self):
+        self.city_loading_id= u''
+        self.place_loading_id = u''
+    
+    @api.onchange('city_loading_id')
+    def erase_related_addr_four(self): 
+        self.place_loading_id = u''
+        
+    @api.onchange('port_loading_id')
+    def erase_related_addr_six(self): 
+        self.terminal_loading_id = u''
+    
+#   Destination country related
+    @api.onchange('country_dest_id')
+    def erase_related_addr_des(self):
+        self.state_dest_id = u''
+        self.city_dest_id= u''
+        self.place_dest_id = u''
+        self.port_dest_id = u''
+        self.terminal_des_same_id = u''
+        self.delivery_place_id = u''
+    
+    @api.onchange('state_dest_id')
+    def erase_related_addr_three_des(self):
+        self.city_dest_id= u''
+        self.place_dest_id = u''
+    
+    @api.onchange('city_dest_id')
+    def erase_related_addr_four_des(self): 
+        self.place_dest_id = u''
+        
+    @api.onchange('port_dest_id')
+    def erase_related_addr_six_des(self): 
+        self.terminal_des_same_id = u''  
+    
+    #   Last country related
+    @api.onchange('country_diff_dest_id')
+    def erase_related_addr_last(self):
+        self.state_diff_dest_id = u''
+        self.city_diff_dest_id= u''
+        self.place_diff_dest_id = u''
+        self.port_diff_id = u''
+        self.terminal_des_diff_id = u''
+        self.delivery_diff_place_id = u''
+    
+    @api.onchange('state_diff_dest_id')
+    def erase_related_addr_three_last(self):
+        self.city_diff_dest_id= u''
+        self.place_diff_dest_id = u''
+    
+    @api.onchange('city_diff_dest_id')
+    def erase_related_addr_four_last(self): 
+        self.place_diff_dest_id = u''
+        
+    @api.onchange('port_diff_id')
+    def erase_related_addr_six_last(self): 
+        self.terminal_des_diff_id = u''  
+    
     @api.multi
     @api.depends('expiry_date')
     def _compute_is_expired(self):
@@ -128,6 +202,18 @@ class LineCost(models.Model):
             if rec.transt_time <= 0:
                raise UserError("Transit time should be more than Zero!")
 
+    @api.constrains('discount')
+    def discount_value(self):
+        for rec in self:
+            if rec.discount <= 0.00:
+                raise UserError(" 'Discount' value should be greater than '0.00' ")
+    
+    @api.onchange('product_discount_id')
+    def erase_discount_value(self):
+        for rec in self:
+            rec.discount=u''
+                
+    
     
     @api.model_create_multi
     @api.returns('self', lambda value:value.id)

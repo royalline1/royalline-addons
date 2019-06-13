@@ -83,8 +83,8 @@
 								<field name="partner_shipping_line_id" invisible="1" />
 							</group>
 							<group>
-								<field name="from_validity_date" />
-								<field name="to_validity_date" />
+								<field name="from_validity_date" attrs="{'invisible': [('shipment_logic', 'not in',['fcl','lcl','roro'])]}"/>
+								<field name="to_validity_date" attrs="{'invisible': [('shipment_logic', 'not in',['fcl','lcl','roro'])]}"/>
 							</group>
 						</group>
 							<notebook attrs="{'invisible': [('shipment_logic', 'not in',['fcl','lcl','roro'])]}">

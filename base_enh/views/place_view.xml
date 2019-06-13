@@ -25,16 +25,23 @@
                     <sheet>
                         <group>
                             <group>
-                            <field name="country_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
-                                <field name="city_id" domain="[('country_id','=',country_id)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
-                                       attrs="{'readonly': [('country_id', '=',False)]}"/>
+                                <field name="country_id" 
+                                       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                                <field name="city_id" 
+                                        domain="[('country_id','=',country_id),('state_id','=',state_id)]" 
+                                        options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+                                        attrs="{'readonly': [('country_id', '=',False)]}"/>
                             </group>
                             <group>
-                                <field name="state_id" domain="[('country_id','=',country_id)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+                                <field name="state_id" 
+                                       domain="[('country_id','=',country_id)]" 
+                                       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
                                        attrs="{'readonly': [('country_id', '=',False)]}"/>
                                 <field name="is_port" />
-                                <field name="port_id" domain="[('country_id','=',country_id)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
-                                       attrs="{'readonly': [('country_id', '=',False)]}"/>
+                                <field name="port_id" 
+                                       domain="[('country_id','=',country_id)]" 
+                                       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+                                       attrs="{'readonly': ['|',('country_id', '=',False),('is_port', '=',False)]}"/>
                             </group>
                             <group>
                                 <field name="address" attrs="{'readonly': [('country_id', '=',False)]}"/>
