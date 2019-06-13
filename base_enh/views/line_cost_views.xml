@@ -58,7 +58,7 @@
 								<field name="city_loading_id"
 									domain="[('country_id','=',country_loading_id),'|',('state_id','=',state_loading_id),('state_id','=',False)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
-									attrs="{'readonly':[('state_loading_id','=',False)]}"/>
+									attrs="{'readonly':[('country_loading_id','=',False)]}"/>
 								<field name="place_loading_id"
 									domain="[('country_id','=',country_loading_id),('city_id','=',city_loading_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
@@ -93,7 +93,7 @@
 								<field name="city_dest_id"
 									domain="[('country_id','=',country_dest_id),'|',('state_id','=',state_dest_id),('state_id','=',False)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
-									attrs="{'readonly':[('state_dest_id','=',False)]}"/>
+									attrs="{'readonly':[('country_dest_id','=',False)]}"/>
 								<field name="place_dest_id"
 									domain="[('country_id','=',country_dest_id),('city_id','=',city_dest_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
@@ -137,7 +137,7 @@
                                 <field name="city_diff_dest_id"
                                        domain="[('country_id','=',country_diff_dest_id),'|',('state_id','=',state_diff_dest_id),('state_id','=',False)]"
                                        options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
-                                       attrs="{'readonly':[('state_diff_dest_id','=',False)]}"/>
+                                       attrs="{'readonly':[('country_diff_dest_id','=',False)]}"/>
                                 <field name="delivery_diff_place_id" 
                                        domain="[('country_id','=',country_diff_dest_id),('is_delivery_place','=',True),'|',('state_id','=',state_diff_dest_id),('state_id','=',False),'|',('city_id','=',city_diff_dest_id),('city_id','=',False)]"
                                        options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
