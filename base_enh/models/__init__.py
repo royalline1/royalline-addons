@@ -25,3 +25,4 @@ from . import seal
 from . import bill_of_lading
 from . import hr_employee
 from . import job_position
+from . import route

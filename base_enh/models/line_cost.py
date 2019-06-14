@@ -12,7 +12,7 @@ class AdditionalCost(models.Model):
     cost = fields.Float(required=True)
     line_cost_id = fields.Many2one('line.cost' ,required=True)
     
-    _sql_constraints = [('check_additional_cost_cost', 'CHECK(cost > 0)', 'The additional cost must be greater than zero.')]
+#     _sql_constraints = [('check_additional_cost_cost', 'CHECK(cost > 0)', 'The additional cost must be greater than zero.')]
     
     
 class LineCostLine(models.Model):

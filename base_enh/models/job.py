@@ -205,6 +205,10 @@ class Job(models.Model):
     driver_ids = fields.One2many('driver.info', 
                                           inverse_name='job_driver_id', 
                                           string='Driver')
+#   route ID
+    route_ids = fields.One2many('route', 
+                                          inverse_name='job_route_id', 
+                                          string='Route')  
 
     added_con = fields.Boolean()
     
@@ -224,17 +228,15 @@ class Job(models.Model):
     
     @api.multi
     def add_con_lines(self):
-        if self.driver_ids:
-            if self.container_size_ids.container_qty > 0:
-                con_no_count = self.container_size_ids.container_qty
+        for rec in self:
+            if rec.container_size_ids.container_qty > 0:
+                con_no_count = rec.container_size_ids.container_qty
                 i = 0
                 for i in range(int(con_no_count)):
-                    self.write({'driver_ids':[(0,0, {'container_no':0})],'added_con':True})
+                    rec.write({'driver_ids':[(0,0, {'container_no':0})],'added_con':True})
                     i = i + 1
             else:
                 raise UserError("Container QTY should be more than 0")    
-        else:
-            raise UserError("Please select driver first")
    
     
   

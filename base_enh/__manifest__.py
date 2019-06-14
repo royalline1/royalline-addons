@@ -43,6 +43,7 @@
        'views/job_views.xml',
 #        'views/driver_line.xml',
        'views/bill_of_lading.xml',
+       'views/route.xml',
        'views/job_position.xml',
        'views/menus_views.xml',      
     ],

@@ -19,6 +19,8 @@
                    action="res_place_action" 
                    name="Places" 
                    sequence="2"/>
+        <menuitem  id="route_menu"
+            parent="menu_location" action="route_action" sequence="3"/>
         <!-- <menuitem  id="driver_line_menu"
                    parent="menu_location" 
                    action="driver_info_action" 
