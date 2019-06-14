@@ -142,7 +142,7 @@ class Job(models.Model):
     shipping_line_ids = fields.Many2many('line.cost', related="sale_inquiry_id.shipping_line_ids")
     partner_shipping_line_id = fields.Many2one('res.partner', related="sale_inquiry_id.partner_shipping_line_id")
     
-    free_days = fields.Integer(related='sale_inquiry_id.free_days')
+    free_days = fields.Integer()
     vessel_id = fields.Many2one('vessel',related="sale_inquiry_id.vessel_id")
     voyage_id = fields.Many2one('voyages.detail',related="sale_inquiry_id.voyage_id")
     etd_date = fields.Date('ETD Date', related="sale_inquiry_id.voyage_id.etd_date", readonly=True)
@@ -196,7 +196,7 @@ class Job(models.Model):
     empt_container_depot = fields.Many2one('res.partner', string='Empty Container Depot')
     analytic_account = fields.Many2one('account.analytic.account', string='Analytical Account')
     Bill_Lading_No = fields.Char (string='Bill Of Lading No.') 
-    issue_bill_lading_to = fields.Many2one ('res.partner', string='Issue Bill of lading To')
+    issue_bill_lading_to = fields.Many2one ('res.partner', related='sale_inquiry_id.issue_bill_lading_to', string='Issue Bill of lading To')
 #   Tracking fields 
     act = fields.Char('ACT')
     container_loaded_truck = fields.Char('Container Loaded on Truck') 
@@ -210,13 +210,6 @@ class Job(models.Model):
     
     commodity_line_ids = fields.One2many('job.commodity.line','job_id')
     
-    
-    def open_ticket(self):
-        action = self.env.ref('helpdesk.helpdesk_ticket_action_team').read()[0]
-        action['domain'] = [('job_id','=',self.id)]
-        action['context'] = {}
-        return action
-        
     @api.model_create_multi
     @api.returns('self', lambda value:value.id)
     def create(self, vals_list):

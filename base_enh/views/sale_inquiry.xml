@@ -108,6 +108,12 @@
                                                 attrs="{'readonly': [('partner_id', '=',False)]}"/>
 							                <field name="shipper_ref"
 							                       attrs="{'readonly': [('shipper_id', '=',False)]}"/>
+							                <field name="issue_bill_lading_to" domain="['|','|','|',
+							                                                            ('is_consignee','=',True),
+                                                                                        ('is_shipper','=',True),
+                                                                                        ('is_notify','=',True),
+                                                                                        ('customer','=',True)]"
+                                                                               options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
 							             </group>
 							             <group>
 							                 <field name="consignee_id" domain="[('is_consignee','=',True)]"

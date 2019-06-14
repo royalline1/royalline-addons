@@ -5,12 +5,6 @@ from odoo.osv import expression
 from odoo.exceptions import UserError
 from os import linesep
 
-class Helpdesk(models.Model):
-    _inherit = 'helpdesk.ticket'
-    
-    job_id = fields.Many2one('job')
-    
-    
 class SalePerson(models.Model):
     _name = "sale.person"
     
@@ -60,7 +54,21 @@ class Port(models.Model):
     state_id = fields.Many2one('res.country.state','State')
     port_type = fields.Many2many('port.type', string='Port Type',required=True)
     city_id = fields.Many2one('res.city',required=True)
- 
+    
+    @api.onchange('country_id')
+    def erase_country_related(self):
+        """Erase related fields to 'Country' once empty or changed"""
+        for rec in self:
+            rec.state_id=u''
+            rec.city_id=u''
+    
+    @api.onchange('state_id')
+    def erase_state_related(self):
+        """erase related fields to state once empty or changed"""
+        for rec in self:
+            rec.city_id=u''
+        
+    
 class PortType(models.Model):
     _name = 'port.type'
      
