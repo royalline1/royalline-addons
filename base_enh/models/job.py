@@ -210,6 +210,13 @@ class Job(models.Model):
     
     commodity_line_ids = fields.One2many('job.commodity.line','job_id')
     
+    
+    def open_ticket(self):
+        action = self.env.ref('helpdesk.helpdesk_ticket_action_team').read()[0]
+        action['domain'] = [('job_id','=',self.id)]
+        action['context'] = {}
+        return action
+        
     @api.model_create_multi
     @api.returns('self', lambda value:value.id)
     def create(self, vals_list):

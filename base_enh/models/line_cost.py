@@ -101,7 +101,7 @@ class LineCost(models.Model):
     expiry_date = fields.Date('Expiry Date')
     note = fields.Text('Notes')
     expired_price = fields.Boolean(compute='_compute_is_expired')
-    next_price = fields.Boolean()
+    next_price = fields.Boolean(compute='_compute_is_expired')
     line_cost_ids = fields.One2many('line.cost.line','line_cost_id',string="Price")
     additional_cost_ids = fields.One2many('additional.cost','line_cost_id',string="Additional Cost")
     product_discount_id = fields.Many2one('product.product', string='Additional Discount' ,domain=[('is_discount', '=', True)])
@@ -181,13 +181,17 @@ class LineCost(models.Model):
         self.terminal_des_diff_id = u''  
     
     @api.multi
-    @api.depends('expiry_date')
+    @api.depends('expiry_date','start_date')
     def _compute_is_expired(self):
         for rec in self:
             if rec.expiry_date and rec.expiry_date < fields.Date.today():
                rec.expired_price = True 
             else:
                rec.expired_price = False
+            if rec.start_date and rec.start_date > fields.Date.today():
+               rec.next_price = True 
+            else:
+               rec.next_price = False
                
    
     @api.constrains('expiry_date','start_date')
@@ -205,8 +209,8 @@ class LineCost(models.Model):
     @api.constrains('discount')
     def discount_value(self):
         for rec in self:
-            if rec.discount <= 0.00:
-                raise UserError(" 'Discount' value should be greater than '0.00' ")
+            if rec.discount < 0:
+                raise UserError(" 'Discount' value should be greater than or equal zero.")
     
     @api.onchange('product_discount_id')
     def erase_discount_value(self):

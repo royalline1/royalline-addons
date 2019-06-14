@@ -13,6 +13,13 @@ class Travels(models.Model):
     reason = fields.Text()
     employee_id = fields.Many2one('hr.employee', ondelete='cascade')
     
+class DiseasesMedications(models.Model):
+    _name = 'diseases.medications'
+    
+    diseases = fields.Char(required=True)
+    medications = fields.Char()
+    employee_id = fields.Many2one('hr.employee', ondelete='cascade')
+    
 
 
 class HrEmployee(models.Model):
@@ -27,4 +34,5 @@ class HrEmployee(models.Model):
     has_us_citizenship = fields.Boolean('Do You Have U.S. citizenship')
     has_diseases = fields.Boolean('Do you Have Chronic Diseases and /or Infectious Diseases')
     travels_ids = fields.One2many('travels','employee_id')
+    diseases_medications_ids = fields.One2many('diseases.medications','employee_id')
     

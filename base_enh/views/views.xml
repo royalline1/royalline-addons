@@ -33,9 +33,12 @@
 								<field name="country_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="port_type" widget="many2many_tags" />
-								<field name="state_id" domain="[('country_id','=',country_id)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+								<field name="state_id"
+									domain="[('country_id','=',country_id)]"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="type" invisible="True" />
-								<field name="city_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+								<field name="city_id"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
 									domain="[('country_id','=',country_id),'|',('state_id','=',state_id),('state_id','=',False)]" />
 							</group>
 						</group>
@@ -451,17 +454,19 @@
 					<field name="customs_id" />
 
 				</xpath>
-                <xpath
-                    expr="//notebook//page[1]//field[@name='child_ids']//form//field[@name='function']"
-                    position="replace">
-                    <field name="job_position_id" />
+				<xpath
+					expr="//notebook//page[1]//field[@name='child_ids']//form//field[@name='function']"
+					position="replace">
+					<field name="job_position_id" />
 
-                </xpath>
-                <xpath expr='//kanban/templates/t/div/div/div[@t-if="record.function.raw_value"]' position="replace">
-                    <div t-if="record.job_position_id.raw_value">
-                        <field name="job_position_id"/>
-                    </div>
-                </xpath>
+				</xpath>
+				<xpath
+					expr='//kanban/templates/t/div/div/div[@t-if="record.function.raw_value"]'
+					position="replace">
+					<div t-if="record.job_position_id.raw_value">
+						<field name="job_position_id" />
+					</div>
+				</xpath>
 				<xpath
 					expr="//notebook//page[3]//group[@name='container_row_2']"
 					position="inside">
@@ -619,10 +624,10 @@
 						<field name="is_discount" />
 						<label for="is_discount" />
 					</div>
-                    <div>
-                        <field name="is_add_cost" />
-                        <label for="is_add_cost" />
-                    </div>
+					<div>
+						<field name="is_add_cost" />
+						<label for="is_add_cost" />
+					</div>
 
 				</div>
 			</field>
@@ -677,9 +682,10 @@
 
 				<xpath expr="//field[@name='state_ids']//tree"
 					position="inside">
-					<field name="country_id" invisible="1"/>
-					<button context="{'default_state_id':active_id,'default_country_id':country_id}" name="%(open_cities_of_state)d" string='Open Cities'
-						type='action' />
+					<field name="country_id" invisible="1" />
+					<button
+						context="{'default_state_id':active_id,'default_country_id':country_id}"
+						name="%(open_cities_of_state)d" string='Open Cities' type='action' />
 
 
 				</xpath>
@@ -692,24 +698,34 @@
 			<field name="model">hr.employee</field>
 			<field name="inherit_id" ref="hr.view_employee_form" />
 			<field name="arch" type="xml">
-				<xpath expr="//notebook//page[@name='personal_information']//field[@name='visa_expire']"
+				<xpath
+					expr="//notebook//page[@name='personal_information']//field[@name='visa_expire']"
 					position="after">
 					<field name="social_security_no" />
 					<field name="tax_registration_no" />
 					<field name="health_care_insurance_no" />
 					<field name="national_id_card_no" />
 					<field name="national_register_no" />
-					<field name="diseases_medications" />
 					<field name="has_us_citizenship" />
 					<field name="has_diseases" />
+					<field name="diseases_medications_ids" attrs="{'invisible':[('has_diseases','!=',True)]}">
+						<tree editable="botton">
+							<field name="diseases"/>
+							<field name="medications"/>
+						</tree>
+						<form></form>
+
+					</field>
 				</xpath>
 
 				<xpath expr="//notebook//page[2]" position="inside">
-					 <label for="travels_ids"/>
+					<label for="travels_ids" />
 					<field name="travels_ids">
 						<tree editable="botton">
-							<field name="country_from_id"  options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
-							<field name="country_to_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+							<field name="country_from_id"
+								options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+							<field name="country_to_id"
+								options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 							<field name="date_of_departure" />
 							<field name="date_of_arrival" />
 							<field name="reason" />
@@ -720,37 +736,58 @@
 		</record>
 
 
-		<record model="ir.ui.view" id="view_employee_form_inherit_hr_attendance">
+		<record model="ir.ui.view"
+			id="view_employee_form_inherit_hr_attendance">
 			<field name="name">hr.employee</field>
 			<field name="model">hr.employee</field>
-			<field name="inherit_id" ref="hr_attendance.view_employee_form_inherit_hr_attendance" />
+			<field name="inherit_id"
+				ref="hr_attendance.view_employee_form_inherit_hr_attendance" />
 			<field name="arch" type="xml">
-				<xpath expr="//field[@name='pin']"
-					position="attributes">
+				<xpath expr="//field[@name='pin']" position="attributes">
 					<attribute name="password">True</attribute>
-					
+
 				</xpath>
 
 			</field>
 		</record>
-		
-		
-		
-		
-		
-		<record model="ir.ui.view" id="view_res_country_city_extended_form">
+
+
+
+
+
+		<record model="ir.ui.view"
+			id="view_res_country_city_extended_form">
 			<field name="name">res.country</field>
 			<field name="model">res.country</field>
-			<field name="inherit_id" ref="base_address_city.view_res_country_city_extended_form" />
+			<field name="inherit_id"
+				ref="base_address_city.view_res_country_city_extended_form" />
 			<field name="arch" type="xml">
-				<xpath expr="//button[@name='%(base_address_city.action_res_city_tree)d']"
+				<xpath
+					expr="//button[@name='%(base_address_city.action_res_city_tree)d']"
 					position="attributes">
-					<attribute name="attrs">{'invisible':[('state_ids','!=',[])]}</attribute>
+					<attribute name="attrs">{'invisible':[('state_ids','!=',[])]}
+					</attribute>
 				</xpath>
 			</field>
 		</record>
 
 
+
+
+		<record model="ir.ui.view"
+			id="helpdesk_ticket_view_form">
+			<field name="name">helpdesk.ticket</field>
+			<field name="model">helpdesk.ticket</field>
+			<field name="inherit_id"
+				ref="helpdesk.helpdesk_ticket_view_form" />
+			<field name="arch" type="xml">
+				<xpath
+					expr="//field[@name='deadline']"
+					position="after">
+					<field name="job_id" options="{'no_create':True,'no_create_edit':True,'no_open':True}"/>
+				</xpath>
+			</field>
+		</record>
 
 
 

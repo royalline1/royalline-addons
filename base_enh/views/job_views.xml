@@ -36,8 +36,13 @@
                            <field name="stage" widget="statusbar" statusbar_visible="New,Progress,Confirmed,Cancelled,Job" /> -->
                     </header>
 					<sheet>
-					    <!-- <div class="oe_button_box" name="button_box">  
-                        <button name="get_trade_name" type="object"  
+					
+					
+					    <div class="oe_button_box" name="button_box">  
+					    <button name="open_ticket" type="object"  
+                        class="oe_stat_button" icon="fa-pencil" string="Tickets"/>  
+                    
+                       <!--  <button name="get_trade_name" type="object"  
                         class="oe_stat_button" icon="fa-pencil" string="Job">  
                        (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
                         string="You String Name" />   
@@ -56,8 +61,8 @@
                         class="oe_stat_button" icon="fa-pencil" string="Invoices">  
                              (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
                         string="You String Name" />   
-                       </button> 
-                       </div> -->
+                       </button> -->
+                       </div> 
                         <group>
                               <table style='width:100%;'>
                                 <tr>
