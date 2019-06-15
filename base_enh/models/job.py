@@ -237,12 +237,21 @@ class Job(models.Model):
             else:
                 raise UserError("Container QTY should be more than 0")   
             
-#     @api.multi
-#     def add_route(self):
-#         """add start and end point of the Freight""" 
-#         for rec in self:
-#             if rec.shipment_method == 'land_freight':
-#                 rec.write({'route_ids':[(0,0, {'shipment_method':'land_freight'})]})
+    @api.multi
+    def add_route(self):
+        """add start and end point of the Freight""" 
+        for rec in self:
+            if rec.place_loading_id:
+                rec.write({'route_ids':[(0,0, {'shipment_method':'land_freight',
+                                               'country_id':rec.country_loading_id.id,
+                                               'state_id':rec.state_loading_id.id,
+                                               'city_id':rec.city_loading_id.id})]})
+            elif rec.empt_container_depot:
+                rec.write({'route_ids':[(0,0, {'shipment_method':'land_freight',
+                                               'country_id':rec.empt_container_depot.country_id.id,
+                                               'state_id':rec.empt_container_depot.state_id.id,
+                                               'city_id':rec.empt_container_depot.city_id.id})]})
+            
         
         
         
