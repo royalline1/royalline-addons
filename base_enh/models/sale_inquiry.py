@@ -105,8 +105,7 @@ class SaleInquiry(models.Model):
     shipment_method = fields.Selection([('clearance', 'Clearance'), 
                                         ('sea_freight', 'Sea freight'), 
                                         ('land_freight', 'Land Freight'), 
-                                        ('air_freight', 'Air Freight'), 
-                                        ('other_services', 'Other Services')],string="Shipment Method")
+                                        ('air_freight', 'Air Freight')],string="Shipment Method")
     shipment_type = fields.Selection([('import', 'Import'), 
                                         ('export', 'Export'), 
                                         ('cross', 'Cross'), 

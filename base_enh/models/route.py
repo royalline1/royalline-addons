@@ -9,8 +9,7 @@ class Route(models.Model):
     shipment_method = fields.Selection([('clearance', 'Clearance'), 
                                         ('sea_freight', 'Sea freight'), 
                                         ('land_freight', 'Land Freight'), 
-                                        ('air_freight', 'Air Freight'), 
-                                        ('other_services', 'Other Services')],
+                                        ('air_freight', 'Air Freight')],
                                         string="Shipment Method")
     country_id = fields.Many2one('res.country', string="Country")
     state_id = fields.Many2one('res.country.state', string="State")
@@ -22,4 +21,5 @@ class Route(models.Model):
     custom_point_id = fields.Many2one('res.partner', string="Customs Point")
     depot_id = fields.Many2one('res.partner', string="Depot")
     border_point_id = fields.Many2one('res.partner', string="Border Point")
+    dry_port_id = fields.Many2one('port', string="Dry Port")
     

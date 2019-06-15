@@ -55,8 +55,7 @@ class Job(models.Model):
     shipment_method = fields.Selection([('clearance', 'Clearance'), 
                                         ('sea_freight', 'Sea freight'), 
                                         ('land_freight', 'Land Freight'), 
-                                        ('air_freight', 'Air Freight'), 
-                                        ('other_services', 'Other Services')],
+                                        ('air_freight', 'Air Freight')],
                                         string="Shipment Method",
                                         related='sale_inquiry_id.shipment_method')
     shipment_type = fields.Selection([('import', 'Import'), 
@@ -236,7 +235,21 @@ class Job(models.Model):
                     rec.write({'driver_ids':[(0,0, {'container_no':0})],'added_con':True})
                     i = i + 1
             else:
-                raise UserError("Container QTY should be more than 0")    
+                raise UserError("Container QTY should be more than 0")   
+            
+#     @api.multi
+#     def add_route(self):
+#         """add start and end point of the Freight""" 
+#         for rec in self:
+#             if rec.shipment_method == 'land_freight':
+#                 rec.write({'route_ids':[(0,0, {'shipment_method':'land_freight'})]})
+        
+        
+        
+        
+        
+        
+         
    
     
   

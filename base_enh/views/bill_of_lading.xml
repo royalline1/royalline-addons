@@ -20,6 +20,8 @@
 					<field name="vessel_id" />
 					<field name="voyage_id" />
 					<field name="contract_no" />
+					<field name="place_of_loading" />
+                    <field name="place_of_receipt" />
 				</tree>
 			</field>
 		</record>
@@ -39,6 +41,8 @@
 								<field name="consignee_id" />
 								<field name="first_notify_id" />
 								<field name="add_notify_id" />
+								<field name="place_of_loading" />
+                                <field name="place_of_receipt" />
 							</group>
 							<group>
 								<field name="booking_no" />
@@ -64,7 +68,7 @@
 
 		<record model="ir.actions.act_window"
 			id="bill_of_lading_action">
-			<field name="name">Bill of Lading</field>
+			<field name="name">Internal Bill of Lading</field>
 			<field name="res_model">bill.of.lading</field>
 			<field name="view_mode">tree,form</field>
 		</record>

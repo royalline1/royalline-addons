@@ -3,9 +3,11 @@
     <data>
         
         <menuitem id="menu_logistic_manag" name="Logistic" /> 
+        <menuitem id="menu_bill_of_lading_manag" name="Bill of Lading" parent="menu_logistic_manag" sequence="3"/> 
         <menuitem id="menu_sale_inquiry" action="sale_inquiry_action" parent="menu_logistic_manag" sequence="1"/>
         <menuitem id="menu_job" action="view_job_action" parent="menu_logistic_manag" name="Job" sequence="2"/>
-       <menuitem id="menu_bill_of_lading" action="bill_of_lading_action" parent="menu_logistic_manag"  sequence="3"/>
+        <menuitem id="menu_bill_of_lading" action="bill_of_lading_action" parent="menu_bill_of_lading_manag"  sequence="1"/>
+        <menuitem id="menu_external_bill_of_lading" action="external_bill_of_lading_action" parent="menu_bill_of_lading_manag"  sequence="2"/>
          <!-- Top bar menue location -->
         <menuitem id="menu_location" parent="menu_logistic_manag" name="Locations" sequence="3"/>
         
