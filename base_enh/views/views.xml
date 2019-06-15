@@ -774,7 +774,7 @@
 
 
 
-		<!-- <record model="ir.ui.view"
+		 <record model="ir.ui.view"
 			id="helpdesk_ticket_view_form">
 			<field name="name">helpdesk.ticket</field>
 			<field name="model">helpdesk.ticket</field>
@@ -787,7 +787,7 @@
 					<field name="job_id" options="{'no_create':True,'no_create_edit':True,'no_open':True}"/>
 				</xpath>
 			</field>
-		</record> -->
+		</record> 
 
 
 

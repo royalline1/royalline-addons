@@ -120,6 +120,7 @@ class Job(models.Model):
     country_dest_id = fields.Many2one('res.country', string="Country Of Destination",
                                       related="sale_inquiry_id.country_dest_id")
     city_dest_id = fields.Many2one('res.city', string="City Of Destination",
+                                   
                                    related="sale_inquiry_id.city_dest_id")
     place_dest_id = fields.Many2one('res.place', string="Place Of Destination",
                                     related="sale_inquiry_id.place_dest_id")
@@ -194,7 +195,7 @@ class Job(models.Model):
     price_owner = fields.Many2one('res.partner', string='Price Owner', default=1)
     empt_container_depot = fields.Many2one('res.partner', string='Empty Container Depot')
     analytic_account = fields.Many2one('account.analytic.account', string='Analytical Account')
-    Bill_Lading_No = fields.Char (string='Bill Of Lading No.') 
+    bill_lading_no = fields.Char (string='Bill Of Lading No.') 
     issue_bill_lading_to = fields.Many2one ('res.partner', related='sale_inquiry_id.issue_bill_lading_to', string='Issue Bill of lading To')
 #   Tracking fields 
     act = fields.Char('ACT')
@@ -213,6 +214,57 @@ class Job(models.Model):
     
     commodity_line_ids = fields.One2many('job.commodity.line','job_id')
     
+    internal_bol_ids = fields.One2many('bill.of.lading','job_id')
+    external_bol_ids = fields.One2many('external.bill.of.lading','job_id')
+    
+    def create_ibol(self):
+        vals = {'shipping_line':self.shipping_line_id.line_id.name,
+               'bill_lading_no':self.bill_lading_no,
+               'shipper':self.shipper_id.name,
+               'consignee':self.consignee_id.name,
+               'first_notify':self.first_notify_id.name,
+               'add_notify':self.add_notify_id.name,
+               'booking_no':self.booking_no,
+               'contract_no':self.contract_no,
+               'port_loading':self.port_loading_id.name,
+               'port_dest':self.port_dest_id.name,
+               'vessel':self.vessel_id.name,
+               'voyage':self.voyage_id.voyage_number,
+               'place_of_loading':self.place_loading_id.address,
+               'place_of_receipt':self.place_dest_id.address,
+               'job_id':self.id
+               }
+        bill_id = self.env['bill.of.lading'].create(vals)
+        return self.show_ibol()
+    
+    def show_ibol(self):
+        action = self.env.ref('base_enh.bill_of_lading_action').read()[0]
+        action['domain'] = [('id','in',self.internal_bol_ids.ids)]
+        action['context'] = {}
+        return action
+    
+    def create_ebol(self):
+        action = self.env.ref('base_enh.external_bill_of_lading_action').read()[0]
+        action['context'] = {'default_job_id':self.id,'default_show_get':True}
+        action['view_mode'] = 'form'
+        action['domain'] = [('job_id','=',self.id)]
+        action['views'] =  [(self.env.ref('base_enh.external_bill_of_lading_form_view').id, 'form') ]
+        return action
+    
+    def show_ebol(self):
+        action = self.env.ref('base_enh.external_bill_of_lading_action').read()[0]
+        action['domain'] = [('id','in',self.external_bol_ids.ids)]
+        action['context'] = {'default_job_id':self.id,'default_show_get':False}
+        
+        return action
+        
+        
+    def open_ticket(self):
+        action = self.env.ref('helpdesk.helpdesk_ticket_action_team').read()[0]
+        action['domain'] = [('job_id','=',self.id)]
+        action['context'] = {}
+        return action
+        
     @api.model_create_multi
     @api.returns('self', lambda value:value.id)
     def create(self, vals_list):

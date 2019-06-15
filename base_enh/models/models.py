@@ -5,6 +5,14 @@ from odoo.osv import expression
 from odoo.exceptions import UserError
 from os import linesep
 
+
+class Helpdesk(models.Model):
+    _inherit = 'helpdesk.ticket'
+    
+    job_id = fields.Many2one('job')
+    
+    
+
 class SalePerson(models.Model):
     _name = "sale.person"
     
