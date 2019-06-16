@@ -106,6 +106,7 @@ class LineCost(models.Model):
     additional_cost_ids = fields.One2many('additional.cost','line_cost_id',string="Additional Cost")
     product_discount_id = fields.Many2one('product.product', string='Additional Discount' ,domain=[('is_discount', '=', True)])
     discount = fields.Float(default=0.0)
+    active=fields.Boolean(default=True)
     @api.onchange('fak')
     def _onchange_fak(self):
         self.commodity_id = False

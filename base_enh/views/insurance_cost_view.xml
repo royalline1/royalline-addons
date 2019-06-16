@@ -18,6 +18,7 @@
 					<field name="from_date" />
 					<field name="to_date" />
 					<field name="insurance_type_id" />
+					<field name="active"/>
 				</tree>
 			</field>
 		</record>
@@ -46,6 +47,7 @@
 									<field name="rate" />
 							</group>
 							<group>
+							    <field name="active"/>
 								<field name="country_dest_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="state_dest_id"

@@ -9,4 +9,4 @@ class InsuranceType(models.Model):
     
     name = fields.Char('Name',required=True)
     note = fields.Char('Note')
-    
+    active=fields.Boolean(default=True)

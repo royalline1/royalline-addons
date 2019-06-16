@@ -26,6 +26,7 @@
 					<field name="expiry_date" />
 					<field name="expired_price" />
 					<field name="next_price" />
+					<field name="active"/>
 				</tree>
 			</field>
 		</record>
@@ -43,6 +44,11 @@
                                     options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                             <field name="quot_number" />
                             <field name="date" />
+					   </group>
+					   <group>
+					       <group>
+					           <field name="active"/>
+					       </group>
 					   </group>
 					</group>
 					<notebook>

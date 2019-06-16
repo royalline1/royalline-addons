@@ -39,7 +39,7 @@ class ClearanceCost(models.Model):
     note = fields.Text()
     from_date = fields.Date('From Date')
     to_date = fields.Date('To Date')
-    
+    active=fields.Boolean(default=True)
     
     @api.multi
     @api.depends('to_date')

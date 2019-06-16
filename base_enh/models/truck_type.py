@@ -10,4 +10,4 @@ class truckType(models.Model):
     name = fields.Char('Size',required=True)
     note = fields.Char('Note')
     image = fields.Binary(attachment=True)
-    
+    active=fields.Boolean(default=True)

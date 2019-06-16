@@ -23,6 +23,7 @@
 					<field name="date" />
 					<field name="price" />
 					<field name="total" />
+					<field name="active"/>
 				</tree>
 			</field>
 		</record>
@@ -59,6 +60,7 @@
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 							</group>
 							<group>
+							    <field name="active"/>
 								<field name="country_dest_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="state_dest_id"

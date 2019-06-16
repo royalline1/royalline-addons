@@ -10,7 +10,7 @@ class CustomsDeclaration(models.Model):
     name = fields.Char('Name',required=True)
     code = fields.Char('Code',required=True)
     note = fields.Char('Note')
-    
+    active=fields.Boolean(default=True)
     @api.multi
     def name_get(self):
         result = []

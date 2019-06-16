@@ -28,7 +28,7 @@ class ResPlace(models.Model):
     address = fields.Text('Address',required=True)
     is_delivery_place = fields.Boolean('Is Delivery Place') 
     zip_code = fields.Integer('ZIP Code')
-    
+    active=fields.Boolean(default=True)
     @api.onchange('country_id')
     def place_erase(self):
         """Erase data from City, state, address, zipcode and Port"""
@@ -56,7 +56,7 @@ class Port(models.Model):
     state_id = fields.Many2one('res.country.state','State')
     port_type = fields.Many2many('port.type', string='Port Type',required=True)
     city_id = fields.Many2one('res.city',required=True)
-    
+    active=fields.Boolean(default=True)
     @api.onchange('country_id')
     def erase_country_related(self):
         """Erase related fields to 'Country' once empty or changed"""
@@ -353,6 +353,7 @@ class TradeName (models.Model):
     registration_date = fields.Datetime('Registration Date')
     state = fields.Text(string='Status')
     owner = fields.Char('Owner')
+    active=fields.Boolean(default=True)
 
 class ImporterCard (models.Model): 
     _name = 'importer.card'
@@ -378,6 +379,7 @@ class IndividualEstablishment (models.Model):
     trade_name = fields.Char ('Trade Name')
     place_id = fields.Many2one('res.place',required=True)
     street = fields.Char ('Street')
+    active=fields.Boolean(default=True)
     
     
     

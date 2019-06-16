@@ -9,6 +9,7 @@
                     <field name="name" />
                     <!-- <field name="CBM" /> -->
                     <field name="note"/>
+                    <field name="active"/>
                 </tree>
             </field>
         </record>
@@ -24,6 +25,9 @@
                                 <group>
                                     <field name="name" />
                                     <!-- <field name="CBM" />   -->
+                                    
+                                </group>
+                                <group>
                                     <field name="active"/>
                                 </group>
                             </group>

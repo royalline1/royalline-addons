@@ -9,4 +9,5 @@ class WeightType(models.Model):
     
     name = fields.Char('Size',required=True)
     note = fields.Char('Note')
+    active=fields.Boolean(default=True)
     

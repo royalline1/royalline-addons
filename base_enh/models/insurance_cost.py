@@ -43,6 +43,7 @@ class InsuranceCost(models.Model):
     
     
     is_expired = fields.Boolean('Is Expired Price',compute='_compute_is_expired')
+    active=fields.Boolean(default=True)
     
     
     @api.multi

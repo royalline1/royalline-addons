@@ -13,6 +13,7 @@
 					<field name="type" invisible="True" />
 					<field name="port_type" widget="many2many_tags" />
 					<field name="city_id" />
+					<field name="active"/>
 				</tree>
 			</field>
 		</record>
@@ -40,6 +41,7 @@
 								<field name="city_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
 									domain="[('country_id','=',country_id),'|',('state_id','=',state_id),('state_id','=',False)]" />
+							     <field name="active"/>
 							</group>
 						</group>
 					</sheet>
@@ -256,7 +258,7 @@
 					<field name="registration_date" />
 					<field name="state" />
 					<field name="owner" />
-					<!-- <field name="active" /> -->
+					<field name="active" />
 				</tree>
 			</field>
 		</record>
@@ -276,6 +278,7 @@
 								<field name="registration_No" />
 							</group>
 							<group>
+							    <field name="active" />
 								<field name="trade_name" />
 								<field name="registration_date" />
 								<field name="state" />
@@ -359,7 +362,7 @@
 					<field name="trade_name" />
 					<field name="place_id" />
 					<field name="street" />
-					<!-- <field name="active" /> -->
+					<field name="active" />
 				</tree>
 			</field>
 		</record>
@@ -380,6 +383,7 @@
 								<field name="capital" />
 							</group>
 							<group>
+							    <field name="active" />
 								<field name="owner_nationality" />
 								<field name="state" />
 								<field name="status_date" />

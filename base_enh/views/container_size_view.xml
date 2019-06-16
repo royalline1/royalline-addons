@@ -10,6 +10,7 @@
 					<field name="size" />
 					<field name="note" />
 					<field name="TEU" />
+					<field name="active" />
 				</tree>
 			</field>
 		</record>
@@ -31,6 +32,7 @@
 								<field name="TEU" />
 								<field name="container_no" />
                                 <field name="container_status" />
+                                <field name="active" />
 							</group>
 							
 						</group>

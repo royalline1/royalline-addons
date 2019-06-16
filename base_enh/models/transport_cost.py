@@ -62,7 +62,7 @@ class TransportCost(models.Model):
     is_expired = fields.Boolean('Is Expired Price',compute='_compute_is_expired')
     from_date = fields.Date('From Date')
     to_date = fields.Date('To Date')
-    
+    active=fields.Boolean(default=True)
     
     @api.multi
     @api.depends('to_date')

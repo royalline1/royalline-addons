@@ -12,6 +12,7 @@
                     <field name="address"/>
                     <field name="is_delivery_place"/>
                     <field name="zip_code"/>
+                    <field name="active"/>
                 </tree>
             </field>
         </record>
@@ -47,6 +48,7 @@
                                 <field name="address" attrs="{'readonly': [('country_id', '=',False)]}"/>
                                 <field name="is_delivery_place"/>
                                 <field name="zip_code" attrs="{'readonly': [('country_id', '=',False)]}"/>
+                                <field name="active"/>
                             </group>
                             
                         </group>

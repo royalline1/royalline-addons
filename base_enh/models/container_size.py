@@ -20,4 +20,4 @@ class ContainerSize(models.Model):
     note = fields.Char('Note')
     TEU = fields.Char('TEU')
     image = fields.Binary(attachment=True)
-    
+    active=fields.Boolean(default=True)

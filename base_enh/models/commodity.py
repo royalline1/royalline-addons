@@ -20,4 +20,4 @@ class Commodity(models.Model):
     UN_No = fields.Char("UN No")
     IMCO_Class = fields.Char("IMCO Class")
     HS_Code = fields.Char("HS Code")
-
+    active=fields.Boolean(default=True)
