@@ -19,6 +19,7 @@ class ClearancelinsuCost(models.Model):
             
 class ClearanceCost(models.Model):
     _name = 'clearance.cost'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'qut_number'
     
    

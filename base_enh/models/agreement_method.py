@@ -5,6 +5,7 @@ from odoo import models, fields, api
 
 class AgreementMethod(models.Model):
     _name = 'agreement.method'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
     name = fields.Char('Name',required=True)
     note = fields.Char('Note')

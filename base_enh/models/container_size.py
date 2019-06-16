@@ -6,6 +6,7 @@ from odoo.osv import expression
 
 class ContainerSize(models.Model):
     _name = 'container.size'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = "size"
     
     size = fields.Char('Size',required=True)

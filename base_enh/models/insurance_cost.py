@@ -20,6 +20,7 @@ class AdditionalInsuCost(models.Model):
 
 class InsuranceCost(models.Model):
     _name = 'insurance.cost'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'qut_number'
     
     partner_id = fields.Many2one('res.partner',string="Insurance Company",domain=[('is_insurance_company', '=', True)])

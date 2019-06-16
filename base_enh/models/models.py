@@ -5,14 +5,6 @@ from odoo.osv import expression
 from odoo.exceptions import UserError
 from os import linesep
 
-
-class Helpdesk(models.Model):
-    _inherit = 'helpdesk.ticket'
-    
-    job_id = fields.Many2one('job')
-    
-    
-
 class SalePerson(models.Model):
     _name = "sale.person"
     
@@ -25,6 +17,7 @@ class SalePerson(models.Model):
 
 class ResPlace(models.Model):
     _name = 'res.place'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'address'
     
     country_id = fields.Many2one('res.country',required=True)
@@ -54,6 +47,7 @@ class ResPlace(models.Model):
         
 class Port(models.Model):
     _name = 'port'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char(string='Name',required=True)
     code = fields.Char(string='Code')
@@ -254,6 +248,7 @@ class ResUsers(models.Model):
     
 class ExtraServices(models.Model):
     _name = 'extra.services'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
     name = fields.Char('Name')
     code = fields.Char('Code')
@@ -262,6 +257,7 @@ class ExtraServices(models.Model):
 
 class WareHouse (models.Model):
     _name = 'ware.house'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
     name = fields.Char('Name')
     code = fields.Char('Code')

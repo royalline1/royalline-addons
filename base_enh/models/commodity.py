@@ -4,6 +4,7 @@ from odoo import models, fields, api
 
 class Commodity(models.Model):
     _name = 'commodity'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
     name = fields.Char ('Name')
     temperature = fields.Float('Temperature')

@@ -39,24 +39,8 @@
                            <field name="stage" widget="statusbar" statusbar_visible="New,Progress,Confirmed,Cancelled,Job" /> -->
                     </header>
 					<sheet>
-						<field name="internal_bol_ids" invisible="1"/>
-						<field name="external_bol_ids" invisible="1"/>
-					    <div class="oe_button_box" name="button_box">  
-					    <button name="open_ticket" type="object"  
-                        class="oe_stat_button" icon="fa-pencil" string="Tickets"/>  
-						<button name="create_ibol" type="object" 
-						attrs="{'invisible':[('internal_bol_ids','!=',[])]}"
-                        class="oe_stat_button" icon="fa-pencil" string="Create Internal Bill Of Lading"/> 
-                        <button name="show_ibol" type="object" 
-						attrs="{'invisible':[('internal_bol_ids','=',[])]}"
-                        class="oe_stat_button" icon="fa-pencil" string="Show Internal Bill Of Lading"/>
-                        <button name="create_ebol" type="object" 
-						attrs="{'invisible':[('external_bol_ids','!=',[])]}"
-                        class="oe_stat_button" icon="fa-pencil" string="Create External Bill Of Lading"/> 
-                        <button name="show_ebol" type="object" 
-						attrs="{'invisible':[('external_bol_ids','=',[])]}"
-                        class="oe_stat_button" icon="fa-pencil" string="Show External Bill Of Lading"/> 
-                        <!--   <button name="get_trade_name" type="object"  
+					    <!-- <div class="oe_button_box" name="button_box">  
+                        <button name="get_trade_name" type="object"  
                         class="oe_stat_button" icon="fa-pencil" string="Job">  
                        (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
                         string="You String Name" />   
@@ -75,8 +59,8 @@
                         class="oe_stat_button" icon="fa-pencil" string="Invoices">  
                              (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
                         string="You String Name" />   
-                       </button> -->
-                       </div>
+                       </button> 
+                       </div> -->
                         <group>
                               <table style='width:100%;'>
                                 <tr>
@@ -468,7 +452,7 @@
                                                   options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
                                            <field name="analytic_account" 
                                                   options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
-                                           <field name="bill_lading_no" />
+                                           <field name="Bill_Lading_No" />
                                        </group>
         					       </group>
         					    </page>
