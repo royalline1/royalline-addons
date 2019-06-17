@@ -437,7 +437,7 @@
 		<menuitem name="Individual Establishment"
 			id="individual_establishment_menu" parent="mitInfo_menu"
 			action="individual_establishment_action" />
-
+        
 		<record model="ir.ui.view" id="res_partner_form_view">
 			<field name="name">res.partner</field>
 			<field name="model">res.partner</field>
@@ -467,6 +467,7 @@
 				<xpath expr="//field[@name='vat']" position="before">
 					<field name="local_name" />
 				</xpath>
+				
 				<xpath
 					expr="//notebook//page[1]//field[@name='child_ids']//form//field[@name='comment']"
 					position="after">
@@ -608,7 +609,7 @@
 				</xpath>
 			</field>
 		</record>
-
+		
 		<!-- <record model="ir.ui.view" id="hr_employee_form_view"> <field name="name">Employees</field> 
 			<field name="model">hr.employee</field> <field name="inherit_id" ref="hr.view_employee_form" 
 			/> <field name="arch" type="xml"> <xpath expr="//notebook//page[2]//group[1]//group[2]//field[@name='bank_account_id'" 
@@ -692,7 +693,31 @@
 			<field name="domain">[('state_id','=',active_id)]</field>
 			<field name="target">current</field>
 		</record>
-
+	    
+	    <!-- contact actions view -->
+        <record id="contacts.action_contacts" model="ir.actions.act_window">
+            <field name="domain">[('sale_person_ids.user_id','=',uid)]</field>
+        </record>
+        
+        <!-- crm action -->
+        <!-- <record id="crm.crm_case_form_view_oppor" model="ir.actions.act_window">
+            <button string="New Quotation" name="475" type="action" class="oe_highlight" 
+                    attrs="{'invisible': ['&amp;', ('probability', '=', 0), ('active', '=', False)]}" 
+                    context="{'search_default_partner_id': partner_id,'default_partner_id': partner_id,'default_team_id': team_id,'default_campaign_id': campaign_id,'default_medium_id': medium_id,'default_origin': name,'default_source_id': source_id}"
+                    invisible="1"/>
+        </record> -->
+        <!-- <record model="ir.ui.view" id="crm_inherit_form_view">
+            <field name="name">crm.lead</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
+            <field name="arch" type="xml">
+            <button string="New Quotation" name="475" type="action" class="oe_highlight" 
+                    attrs="{'invisible': ['&amp;', ('probability', '=', 0), ('active', '=', False)]}" 
+                    context="{'search_default_partner_id': partner_id,'default_partner_id': partner_id,'default_team_id': team_id,'default_campaign_id': campaign_id,'default_medium_id': medium_id,'default_origin': name,'default_source_id': source_id}"
+                    invisible="1"/>
+            </field>
+        </record> -->
+        
 		<record model="ir.ui.view" id="view_country_form">
 			<field name="name">res.country</field>
 			<field name="model">res.country</field>

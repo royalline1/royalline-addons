@@ -210,6 +210,7 @@ class Job(models.Model):
                                           string='Route')  
 
     added_con = fields.Boolean()
+    added_route = fields.Boolean()
     
     commodity_line_ids = fields.One2many('job.commodity.line','job_id')
      
@@ -246,12 +247,12 @@ class Job(models.Model):
                 rec.write({'route_ids':[(0,0, {'shipment_method':'land_freight',
                                                'country_id':rec.country_loading_id.id,
                                                'state_id':rec.state_loading_id.id,
-                                               'city_id':rec.city_loading_id.id})]})
+                                               'city_id':rec.city_loading_id.id})],'added_route':True})
             elif rec.empt_container_depot:
                 rec.write({'route_ids':[(0,0, {'shipment_method':'land_freight',
                                                'country_id':rec.empt_container_depot.country_id.id,
                                                'state_id':rec.empt_container_depot.state_id.id,
-                                               'city_id':rec.empt_container_depot.city_id.id})]})
+                                               'city_id':rec.empt_container_depot.city_id.id})],'added_route':True})
             
         
         

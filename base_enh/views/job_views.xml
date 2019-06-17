@@ -29,6 +29,7 @@
                                    confirm="Are you sure you want to 'Add' drivers to driver info?"/>
                             <button name="add_route" type="object"
                                     string="Add Route" class="oe_highlight"
+                                    attrs="{'invisible': [('added_route', '=', True)]}"
                                     confirm="Are you sure you want to add 'route'?" />
                            <!-- <button name="approve_acct_mgr" type="object" 
                                    string="Account Manger Approval" class="oe_highlight" states="Progress"/>
@@ -459,6 +460,7 @@
         					    <page string="Driver Info">
         					    <group>
         					       <field name="added_con" invisible="True"/>
+        					       <field name="added_route" invisible="True"/>
         					    </group>
         					    <field name="driver_ids">
         					       <tree edit="True" editable="botton">
