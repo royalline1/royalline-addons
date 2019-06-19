@@ -212,11 +212,11 @@ class ResPartner(models.Model):
             res  = list(set(res) & set(self.env['sale.person'].search([('user_id', '=', self.env.user.id),('is_active', '=', True)]).mapped('partner_id.id')))
         return res
     
-    @api.multi
-    def read(self, fields=None, load='_classic_read'):
-        if self.env.user.has_group('base_enh.res_partner_limit_access_group'):
-            self  = self & self.env['sale.person'].search([('user_id', '=', self.env.user.id),('is_active', '=', True)]).mapped('partner_id')
-        return super(ResPartner, self).read(fields,load)
+#     @api.multi
+#     def read(self, fields=None, load='_classic_read'):
+#         if self.env.user.has_group('base_enh.res_partner_limit_access_group'):
+#             self  = self & self.env['sale.person'].search([('user_id', '=', self.env.user.id),('is_active', '=', True)]).mapped('partner_id')
+#         return super(ResPartner, self).read(fields,load)
         
     @api.onchange('city_id')
     def _onchange_city_id(self):

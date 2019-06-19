@@ -450,6 +450,23 @@
 			
 			</field>
 			</record>
+			
+			
+		 <record model="ir.ui.view" id="view_res_partner_filter">
+			<field name="name">res.partner</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_res_partner_filter" />
+			<field name="arch" type="xml">
+			<xpath expr="//field[@name='parent_id']" position="after">
+				<filter string="My Contact" name="my_contact" domain="[('sale_person_ids.user_id','=',uid)]"/>
+                   <separator/>
+				</xpath>
+			
+			
+			</field>
+			</record>
+			
+			
 		<record model="ir.ui.view" id="res_partner_form_view">
 			<field name="name">res.partner</field>
 			<field name="model">res.partner</field>
