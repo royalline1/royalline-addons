@@ -438,6 +438,18 @@
 			id="individual_establishment_menu" parent="mitInfo_menu"
 			action="individual_establishment_action" />
         
+        
+        <record model="ir.ui.view" id="base_res_partner_form_view">
+			<field name="name">res.partner</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base_enh.res_partner_form_view" />
+			<field name="arch" type="xml">
+			<xpath expr="//field[@name='cheek_name']" position="attributes">
+				<attribute name="invisible">1</attribute>
+				</xpath>
+			
+			</field>
+			</record>
 		<record model="ir.ui.view" id="res_partner_form_view">
 			<field name="name">res.partner</field>
 			<field name="model">res.partner</field>
@@ -450,7 +462,17 @@
 						attrs="{'invisible':[('customer','=',True)]}">
 					</button>
 				</button>
-
+				
+				<xpath expr="//notebook//page[@name='sales_purchases']//group[1]//group[3]" position="attributes">
+				<attribute name="invisible">1</attribute>
+				</xpath>
+				
+				<xpath expr="//field[@name='zip']" position="attributes">
+				<attribute name="placeholder">ZIP/Postal Code</attribute>
+				</xpath>
+				
+				
+				
 
 				<xpath expr="//field[@name='city']" position="after">
 					<field name="country_enforce_cities" invisible="1" />
@@ -490,7 +512,7 @@
 				<xpath
 					expr="//notebook//page[3]//group[@name='container_row_2']"
 					position="inside">
-					<group>
+					<label for="sale_person_ids" string="Related User"/>
 						<field name="sale_person_ids">
 							<tree editable="botton">
 								<field name="user_id"
@@ -502,7 +524,6 @@
 							</tree>
 							<form></form>
 						</field>
-					</group>
 				</xpath>
 				<xpath expr="//notebook//page[3]//group[@name='purchase']"
 					position="inside">

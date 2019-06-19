@@ -163,6 +163,12 @@ class ResPartner(models.Model):
     commodity_ids = fields.Many2many('commodity')  
     job_id = fields.Many2one ('job')
     job_position_id = fields.Many2one('job.position', string="Staff Job Position")
+    customer = fields.Boolean(string='Is a Customer', default=False,
+                               help="Check this box if this contact is a customer. It can be selected in sales orders.")
+    street_number2 = fields.Char('P.O. Box', compute='_split_street', help="Door Number",
+                                 inverse='_set_street', store=True)
+    
+    
     @api.multi
     def name_get(self):
         if 'custom_point' in self._context:
@@ -195,15 +201,23 @@ class ResPartner(models.Model):
     
     @api.model
     def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
-        if self.env.user.has_group('base_enh.res_partner_limit_access_group'):
-            args = expression.AND([args] + [[('sale_person_ids.user_id', '=', self.env.user.id)]])
         if 'customs_filter' in self._context and self._context.get('from_customs_filter',True):
             if not self._context.get('customs_filter'):
                 args = expression.AND([args] + [[('id','in',[])]])
             else:
                 partner_id = self.env['res.partner'].browse(self._context.get('customs_filter' ))
                 args = expression.AND([args] + [[('id','in',partner_id.with_context(from_customs_filter=False).child_ids.mapped('customs_id').ids)]])
-        return super(ResPartner, self)._search( args, offset=offset, limit=limit, order=order, count=count, access_rights_uid=access_rights_uid)
+        res =  super(ResPartner, self)._search( args, offset=offset, limit=limit, order=order, count=count, access_rights_uid=access_rights_uid)
+        if self.env.user.has_group('base_enh.res_partner_limit_access_group'):
+            res  = list(set(res) & set(self.env['sale.person'].search([('user_id', '=', self.env.user.id),('is_active', '=', True)]).mapped('partner_id.id')))
+        return res
+    
+    @api.multi
+    def read(self, fields=None, load='_classic_read'):
+        if self.env.user.has_group('base_enh.res_partner_limit_access_group'):
+            self  = self & self.env['sale.person'].search([('user_id', '=', self.env.user.id),('is_active', '=', True)]).mapped('partner_id')
+        return super(ResPartner, self).read(fields,load)
+        
     @api.onchange('city_id')
     def _onchange_city_id(self):
         pass
