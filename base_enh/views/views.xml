@@ -496,6 +496,9 @@
 								<field name="user_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="type" />
+								<field name="from_date" />
+								<field name="to_date" />
+								<field name="is_active" />
 							</tree>
 							<form></form>
 						</field>
@@ -694,10 +697,6 @@
 			<field name="target">current</field>
 		</record>
 	    
-	    <!-- contact actions view -->
-        <record id="contacts.action_contacts" model="ir.actions.act_window">
-            <field name="domain">[('sale_person_ids.user_id','=',uid)]</field>
-        </record>
         
         <!-- crm action -->
         <!-- <record id="crm.crm_case_form_view_oppor" model="ir.actions.act_window">

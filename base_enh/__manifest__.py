@@ -46,6 +46,7 @@
        'views/external_bill_of_lading.xml',
        'views/route.xml',
        'views/job_position.xml',
-       'views/menus_views.xml',      
+       'views/menus_views.xml',  
+       'security/security.xml'    
     ],
 }

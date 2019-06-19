@@ -8,11 +8,35 @@ from os import linesep
 class SalePerson(models.Model):
     _name = "sale.person"
     
-    user_id = fields.Many2one('res.users',required=True)
-    type = fields.Selection([('sale','Sale'),
+    user_id = fields.Many2one('res.users',required=True,inverse="_inverse_sale_id")
+    type = fields.Selection([('sale','Sales'),
                              ('operation','Operation'),
-                             ('follow','Follow')],required=True)
+                             ('follow','Follow')],required=True,inverse="_inverse_sale_id")
+    from_date = fields.Date('From Date',required=True)
+    to_date = fields.Date('To Date',required=True)
+    is_active = fields.Boolean('Active',inverse="_inverse_sale_id")
     partner_id = fields.Many2one('res.partner')
+    
+    
+    @api.multi
+    def _inverse_sale_id(self):
+        for rec in self:
+            print(rec.type,rec.is_active)
+            if len(rec.partner_id.sale_person_ids.filtered(lambda x:x.is_active and x.type =='sale'))>1:
+                raise UserError("You Cannot has more than active sales person")
+            if rec.type == 'sale' and rec.is_active:
+                rec.partner_id.user_id = rec.user_id.id
+            elif rec.type == 'sale' and not  rec.is_active and rec.user_id.id == rec.partner_id.user_id.id:
+                rec.partner_id.user_id = False
+                
+                
+                
+                
+                
+    
+    
+                
+        
     
 
 class ResPlace(models.Model):
@@ -171,6 +195,8 @@ class ResPartner(models.Model):
     
     @api.model
     def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
+        if self.env.user.has_group('base_enh.res_partner_limit_access_group'):
+            args = expression.AND([args] + [[('sale_person_ids.user_id', '=', self.env.user.id)]])
         if 'customs_filter' in self._context and self._context.get('from_customs_filter',True):
             if not self._context.get('customs_filter'):
                 args = expression.AND([args] + [[('id','in',[])]])
