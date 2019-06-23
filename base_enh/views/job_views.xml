@@ -406,6 +406,7 @@
                                                    options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" readonly="1"/>
                                             <field name="transporter_free_days" readonly="1"/>
                                             <field name="transporter_total" readonly="1"/>
+                                            <field name="currency_id" readonly="1"/>
                                     </group>
                                     <group string="Clearance Details">
                                         <field name="customs_dec_id"

@@ -11,7 +11,8 @@ class TransportlinsuPrice(models.Model):
     container_size_id = fields.Many2one('container.size', required=True)
     weight_type_id = fields.Many2one('weight.type')
     truck_type_id = fields.Many2one('truck.type')
-    price = fields.Float(required=True)
+    price = fields.Monetary(required=True)
+    currency_id = fields.Many2one('res.currency', string="Currency")
     cost_id = fields.Many2one('transport.cost')
     
     @api.multi
@@ -29,7 +30,8 @@ class TransportlinsuCost(models.Model):
     product_id = fields.Many2one('product.product', string='Transport Name', required=True, 
                                  domain=[('is_add_cost', '=', True)])
     container_size_id = fields.Many2one('container.size', required=True)
-    cost = fields.Float(required=True)
+    cost = fields.Monetary(required=True)
+    currency_id = fields.Many2one('res.currency', string="Currency")
     per_quantity = fields.Boolean()
     cost_id = fields.Many2one('transport.cost')
     
@@ -54,15 +56,38 @@ class TransportCost(models.Model):
     place_dest_id = fields.Many2one('res.place', string="Place Of Destination")
     is_port = fields.Boolean(related="place_dest_id.is_port",store=True)
     date = fields.Date('Date')
-    price = fields.Float()
+    price = fields.Monetary()
     cost_line_ids = fields.One2many('transport.cost.line','cost_id',string="Additional Cost")
     price_line_ids = fields.One2many('transport.price.line','cost_id',string="Price")
-    total = fields.Float('Total', compute='_compute_total',store=True)
+    total = fields.Monetary('Total', compute='_compute_total',store=True)
     note = fields.Text()
     is_expired = fields.Boolean('Is Expired Price',compute='_compute_is_expired')
     from_date = fields.Date('From Date')
     to_date = fields.Date('To Date')
     active=fields.Boolean(default=True)
+    currency_id = fields.Many2one('res.currency', string="Currency")
+    
+    @api.onchange('qut_number','partner_id')
+    def erse_price(self):
+        """"Erase price once quotation OR Shipper changed"""
+        for rec in self:
+            rec.price=u''
+    
+    @api.onchange('country_loading_id')
+    def erse_loading_country_details(self):
+        """"Erase state city and place once country changed"""
+        for rec in self:
+            rec.state_loading_id=u''
+            rec.city_loading_id=u''
+            rec.place_loading_id=u''
+            
+    @api.onchange('country_dest_id')
+    def erse_deliveiry_country_details(self):
+        """"Erase state city and place once country changed"""
+        for rec in self:
+            rec.state_dest_id=u''
+            rec.city_dest_id=u''
+            rec.place_dest_id=u''
     
     @api.multi
     @api.depends('to_date')
@@ -72,7 +97,12 @@ class TransportCost(models.Model):
                rec.is_expired = True 
             else:
                rec.is_expired = False
-    
+               
+    @api.constrains('from_date', 'to_date')
+    def validity_date_constraint(self):
+        for rec in self:
+            if rec.from_date > rec.to_date:  
+                raise UserError("""The 'From Date' must be less than 'To Date'.""")    
     
 #     @api.constrains('is_port','place_dest_id')
 #     def is_port_check(self):

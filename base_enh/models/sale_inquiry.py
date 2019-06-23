@@ -204,7 +204,8 @@ class SaleInquiry(models.Model):
     transporter_cost_id = fields.Many2one('transport.cost', string='Transport')
     transporter_free_days = fields.Integer(related='transporter_cost_id.free_days', string='Transport Free Days')
 #     transporter_name = fields.Char(related='transporter_cost_id.partner_id', string='Transporter name')
-    transporter_total = fields.Float(related='transporter_cost_id.total', string='Transport Total')
+    transporter_total = fields.Monetary(related='transporter_cost_id.total', string='Transport Total')
+    currency_id = fields.Many2one('res.currency', related="transporter_cost_id.currency_id" ,string="Currency")
 #   Commodity key
     commodity_ids = fields.Many2many('commodity')  
     issue_bill_lading_to = fields.Many2one ('res.partner', string='Issue Bill of lading To')

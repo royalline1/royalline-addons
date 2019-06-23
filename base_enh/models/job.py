@@ -182,7 +182,8 @@ class Job(models.Model):
                                           related="sale_inquiry_id.transporter_cost_id")
     transporter_free_days = fields.Integer(related='sale_inquiry_id.transporter_free_days', string='Transport Free Days')
 #     transporter_name = fields.Char(related='transporter_cost_id.partner_id', string='Transporter name')
-    transporter_total = fields.Float(related='sale_inquiry_id.transporter_total', string='Transport Total')
+    transporter_total = fields.Monetary(related='sale_inquiry_id.transporter_total', string='Transport Total')
+    currency_id = fields.Many2one('res.currency',related='sale_inquiry_id.currency_id', string="Currency")
 #   Commodity key
     commodity_ids = fields.Many2many('commodity', related='sale_inquiry_id.commodity_ids')  
 

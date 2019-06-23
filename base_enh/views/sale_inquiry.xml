@@ -311,6 +311,7 @@
                                             <field name="transporter_cost_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                             <field name="transporter_free_days"/>
                                             <field name="transporter_total"/>
+                                            <field name="currency_id"/>
                                     </group>
                                     <group string="Clearance Details">
                                         <field name="customs_dec_id"
