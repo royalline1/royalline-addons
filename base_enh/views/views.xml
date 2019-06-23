@@ -542,32 +542,165 @@
 							<form></form>
 						</field>
 				</xpath>
+				
+                <xpath
+                    expr="//notebook//page[3]//field[@name='customer']"
+                    position="attributes">
+                    <attribute name="attrs">{'invisible':['|','|',('is_diver','=',True),('is_customs_point','=',True),('is_depot','=',True)]}
+                    </attribute>
+                </xpath>
+                <xpath
+                    expr="//notebook//page[3]//field[@name='supplier']"
+                    position="attributes">
+                    <attribute name="attrs">{'invisible':['|','|',('is_diver','=',True),('is_customs_point','=',True),('is_depot','=',True)]}
+                    </attribute>
+                </xpath>
+                
 				<xpath expr="//notebook//page[3]//group[@name='purchase']"
 					position="inside">
 					<field name="is_shipper"
-						attrs="{'invisible':[('customer','=',False)]}" />
+						 attrs="{'invisible':['|','|',
+                                                       ('is_diver','=',True),
+                                                       ('is_customs_point','=',True),
+                                                       ('is_depot','=',True)]}"/>
 					<field name="is_consignee"
-						attrs="{'invisible':[('customer','=',False)]}" />
+						attrs="{'invisible':['|','|',
+                                                       ('is_diver','=',True),
+                                                       ('is_customs_point','=',True),
+                                                       ('is_depot','=',True)]}"/>
 					<field name="is_notify"
-						attrs="{'invisible':[('customer','=',False)]}" />
+						 attrs="{'invisible':['|','|',
+                                                       ('is_diver','=',True),
+                                                       ('is_customs_point','=',True),
+                                                       ('is_depot','=',True)]}"/>
 					<field name="is_agent"
-						attrs="{'invisible':['|',('customer','=',False),('supplier','=',False)]}" />
-					<field name="is_diver" />
+						 attrs="{'invisible':['|','|',
+                                                       ('is_diver','=',True),
+                                                       ('is_customs_point','=',True),
+                                                       ('is_depot','=',True)]}"/>
+					<field name="is_diver" 
+					       attrs="{'invisible':['|','|','|','|','|','|','|','|','|','|','|',
+					                                   ('customer','=',True),
+					                                   ('supplier','=',True),
+					                                   ('is_shipper','=',True),
+					                                   ('is_consignee','=',True),
+					                                   ('is_notify','=',True),
+					                                   ('is_sea_line','=',True),
+					                                   ('is_air_line','=',True),
+					                                   ('is_clearance_company','=',True),
+					                                   ('is_transporter_company','=',True),
+					                                   ('is_insurance_company','=',True),
+					                                   ('is_depot','=',True),
+					                                   ('is_customs_point','=',True)]}"/>
 					<!-- <field name="driver_id" /> -->
 					<field name="is_customs_point"
-						attrs="{'invisible':[('customer','=',True)]}" />
-					<field name="is_competitor" />
+						attrs="{'invisible':['|','|','|','|','|','|','|','|','|','|','|',
+						                         ('customer','=',True),
+						                         ('supplier','=',True),
+						                         ('is_shipper','=',True),
+						                         ('is_consignee','=',True),
+						                         ('is_notify','=',True),
+						                         ('is_sea_line','=',True),
+						                         ('is_air_line','=',True),
+						                         ('is_clearance_company','=',True),
+						                         ('is_transporter_company','=',True),
+						                         ('is_insurance_company','=',True),
+						                         ('is_diver','=',True),
+						                         ('is_depot','=',True)]}" />
+					<field name="is_competitor" 
+					       attrs="{'invisible':['|','|','|','|','|','|','|','|','|','|','|','|',
+					                                    ('customer','=',True),
+					                                    ('supplier','=',True),
+					                                    ('is_shipper','=',True),
+					                                    ('is_consignee','=',True),
+					                                    ('is_notify','=',True),
+					                                    ('is_sea_line','=',True),
+					                                    ('is_air_line','=',True),
+					                                    ('is_clearance_company','=',True),
+					                                    ('is_transporter_company','=',True),
+					                                    ('is_insurance_company','=',True),
+					                                    ('is_diver','=',True),
+					                                    ('is_depot','=',True),
+					                                    ('is_customs_point','=',True)]}"/>
 					<field name="is_sea_line"
-						attrs="{'invisible':[('supplier','=',False)]}" />
+						attrs="{'invisible':['|','|','|','|','|','|','|','|','|','|',
+						                         ('supplier','=',True),
+						                         ('is_shipper','=',True),
+                                                 ('is_consignee','=',True),
+                                                 ('is_notify','=',True),
+                                                 ('is_air_line','=',True),
+                                                 ('is_clearance_company','=',True),
+                                                 ('is_transporter_company','=',True),
+                                                 ('is_insurance_company','=',True),
+                                                 ('is_diver','=',True),
+                                                 ('is_depot','=',True),
+                                                 ('is_customs_point','=',True)]}" />
 					<field name="is_air_line"
-						attrs="{'invisible':[('supplier','=',False)]}" />
+						attrs="{'invisible':['|','|','|','|','|','|','|','|','|','|',
+						                         ('supplier','=',True),
+						                         ('is_shipper','=',True),
+                                                 ('is_consignee','=',True),
+                                                 ('is_notify','=',True),
+                                                 ('is_sea_line','=',True),
+                                                 ('is_clearance_company','=',True),
+                                                 ('is_transporter_company','=',True),
+                                                 ('is_insurance_company','=',True),
+                                                 ('is_diver','=',True),
+                                                 ('is_depot','=',True),
+                                                 ('is_customs_point','=',True)]}" />
 					<field name="is_clearance_company"
-						attrs="{'invisible':[('supplier','=',False)]}" />
+						attrs="{'invisible':['|','|','|','|','|','|','|','|','|','|',
+						                         ('supplier','=',True),
+						                         ('is_shipper','=',True),
+                                                 ('is_consignee','=',True),
+                                                 ('is_notify','=',True),
+                                                 ('is_sea_line','=',True),
+                                                 ('is_air_line','=',True),
+                                                 ('is_transporter_company','=',True),
+                                                 ('is_insurance_company','=',True),
+                                                 ('is_diver','=',True),
+                                                 ('is_depot','=',True),
+                                                 ('is_customs_point','=',True)]}" />
 					<field name="is_transporter_company"
-						attrs="{'invisible':[('supplier','=',False)]}" />
+						attrs="{'invisible':['|','|','|','|','|','|','|','|','|','|',
+						                         ('supplier','=',True),
+						                         ('is_shipper','=',True),
+                                                 ('is_consignee','=',True),
+                                                 ('is_notify','=',True),
+                                                 ('is_sea_line','=',True),
+                                                 ('is_air_line','=',True),
+                                                 ('is_clearance_company','=',True),
+                                                 ('is_insurance_company','=',True),
+                                                 ('is_diver','=',True),
+                                                 ('is_depot','=',True),
+                                                 ('is_customs_point','=',True)]}" />
 					<field name="is_insurance_company"
-						attrs="{'invisible':[('supplier','=',False)]}" />
-					<field name="is_depot" />
+						attrs="{'invisible':['|','|','|','|','|','|','|','|','|','|',
+						                         ('supplier','=',True),
+						                         ('is_shipper','=',True),
+                                                 ('is_consignee','=',True),
+                                                 ('is_notify','=',True),
+                                                 ('is_sea_line','=',True),
+                                                 ('is_air_line','=',True),
+                                                 ('is_clearance_company','=',True),
+                                                 ('is_transporter_company','=',True),
+                                                 ('is_diver','=',True),
+                                                 ('is_depot','=',True),
+                                                 ('is_customs_point','=',True)]}" />
+					<field name="is_depot" 
+					       attrs="{'invisible':['|','|','|','|','|','|','|','|','|','|','|',
+					                                    ('customer','=',True),
+					                                    ('supplier','=',True),
+					                                    ('is_shipper','=',True),
+					                                    ('is_consignee','=',True),
+					                                    ('is_notify','=',True),
+					                                    ('is_sea_line','=',True),
+					                                    ('is_air_line','=',True),
+					                                    ('is_clearance_company','=',True),
+					                                    ('is_transporter_company','=',True),
+					                                    ('is_insurance_company','=',True),
+					                                    ('is_diver','=',True),
+					                                    ('is_customs_point','=',True)]}"/>
 				</xpath>
 
 				<xpath expr="//group[1]/group[2]" position="inside">
