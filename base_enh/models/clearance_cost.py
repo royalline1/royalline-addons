@@ -8,9 +8,9 @@ class ClearancelinsuCost(models.Model):
     
     from_truck = fields.Integer('From')
     to_truck = fields.Integer('To')
-    cost = fields.Float()
+    cost = fields.Monetary()
     cost_id = fields.Many2one('clearance.cost',ondelete='cascade')
-
+    currency_id = fields.Many2one('res.currency', string="Currency")
     @api.constrains('from_truck','to_truck')
     def _check_additional_cost(self):
         for rec in self:
@@ -33,13 +33,27 @@ class ClearanceCost(models.Model):
     partner_point_ids = fields.Many2many('res.partner',string="Point Contact",compute="_compute_partner_point_ids")
     customs_declaration_id = fields.Many2one('customs.declaration',string="Customs Declaration")
     date = fields.Date('Date')
-    price = fields.Float()
+    price = fields.Monetary()
     cost_line_ids = fields.One2many('clearance.cost.line','cost_id',string="Additional Cost")
-    total = fields.Float('Total', compute='_compute_total',store=True)
+    total = fields.Monetary('Total', compute='_compute_total',store=True)
     note = fields.Text()
     from_date = fields.Date('From Date')
     to_date = fields.Date('To Date')
+    currency_id = fields.Many2one('res.currency', string="Currency")
     active=fields.Boolean(default=True)
+    
+    @api.constrains('from_date','to_date')
+    def date_from_to(self):
+        """To date greater than From date"""
+        for rec in self:
+            if rec.from_date > rec.to_date:
+                raise Warning("'From Date' should be less or equal 'To date'!")
+    
+    @api.onchange('qut_number','partner_id')
+    def erse_price_trans(self):
+        """"Erase price once quotation OR Shipper changed"""
+        for rec in self:
+            rec.price=u''
     
     @api.multi
     @api.depends('to_date')

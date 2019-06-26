@@ -30,26 +30,32 @@
 					<sheet>
 						<group>
 							<group>
+							    <field name="partner_id"
+                                    options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
+                                    string="Clearance Company"/>
 								<field name="qut_number" />
-								<field name="is_next" />
-								<field name="from_date" />
-								<field name="to_date" />
-								<field name="is_expired" />
+                                <field name="date" 
+                                       string="Quotation Date"/>
+                                <field name="from_date" />
+                                <field name="to_date" />
+                                <field name="is_expired" />
+								<field name="is_next" readonly="1"/>
+								<field name="customs_id"
+                                    context="{'customs_filter':partner_id}"
+                                    options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+                                <field name="partner_point_ids" widget="many2many_tags" />
 								<field name="shipment_method" />
 								<field name="shipment_type" />
-								<field name="partner_id"
-									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-								<field name="customs_id"
-									context="{'customs_filter':partner_id}"
-									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-								<field name="partner_point_ids" widget="many2many_tags" />
 								<field name="customs_declaration_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 							</group>
 							<group>
 							    <field name="active"/>
-								<field name="date" />
-								<field name="price" />
+								<field name="price" 
+								       attrs="{'readonly': [('qut_number', '=', False),('partner_id', '=', False)]}"
+								       string="Rate"/>
+								<field name="currency_id"
+								       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
 							</group>
 						</group>
 						<group>
@@ -58,6 +64,8 @@
 									<field name="from_truck" />
 									<field name="to_truck" />
 									<field name="cost" />
+									<field name="currency_id" 
+									       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
 								</tree>
 								<form>
 									<field name="from_truck" />
