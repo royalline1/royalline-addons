@@ -47,10 +47,11 @@
                                 <field name="add_two_from" required="1"/>
                                      <label for="contact_person_from_ids" />
                                      <field name="contact_person_from_ids" nolabel='1'>
-                                      <tree editable="botton">
+                                      <tree >
                                             <field name="name" required="1"/>
                                             <field name="mobile" required="1"/>
                                         </tree>
+                                        <form></form>
                                      </field>
                             </group>
                             <group string="To"> 
@@ -75,6 +76,7 @@
                                                 <field name="name" required="1"/>
                                                 <field name="mobile" required="1"/>
                                             </tree>
+                                            <form></form>
                                          </field>
                             </group>
                         </group>
