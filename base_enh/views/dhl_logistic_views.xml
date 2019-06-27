@@ -31,52 +31,59 @@
                             <group string="From">
                                 <field name="company_from_id" 
                                        options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
-                                       string="Country From"/>
+                                       required="1"/>
                                 <field name="date_from" />
                                 <field name="country_from_id" 
-                                       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                                       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+                                       required="1"/>
                                 <field name="state_from_id" 
                                        options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
                                 <field name="city_from_id" 
-                                       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
-                                <field name="phone_from" />
-                                <field name="add_one_from" />
-                                <field name="add_two_from" />
+                                       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+                                       required="1"/>
+                                <field name="phone_from" 
+                                       required="1"/>
+                                <field name="add_one_from" required="1"/>
+                                <field name="add_two_from" required="1"/>
                                      <label for="contact_person_from_ids" />
                                      <field name="contact_person_from_ids" nolabel='1'>
                                       <tree editable="botton">
-                                            <field name="name" />
-                                            <field name="mobile" />
+                                            <field name="name" required="1"/>
+                                            <field name="mobile" required="1"/>
                                         </tree>
                                      </field>
                             </group>
                             <group string="To"> 
                                     <field name="company_to_id" 
-                                           options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                                           options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
+                                           required="1"/>
                                     <field name="country_to_id" 
-                                           options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                                           options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
+                                           required="1"/>
                                     <field name="state_to_id" 
                                            options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
                                     <field name="city_to_id" 
-                                           options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
-                                    <field name="phone_to" />
-                                    <field name="add_one_to" />
-                                    <field name="add_two_to" />
+                                           options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+                                           required="1"/>
+                                    <field name="phone_to" required="1"/>
+                                    <field name="add_one_to" required="1"/>
+                                    <field name="add_two_to" required="1"/>
+                                    <field name="space_btwn" readonly="1" string="     "/>
                                          <label for="contact_person_to_ids" />
                                          <field name="contact_person_to_ids" nolabel='1'>
                                           <tree editable="botton">
-                                                <field name="name" />
-                                                <field name="mobile" />
+                                                <field name="name" required="1"/>
+                                                <field name="mobile" required="1"/>
                                             </tree>
                                          </field>
                             </group>
                         </group>
                         <group string="Document Type"> 
-                            <field name="document_type_ids" nolabel="1">
+                            <field name="document_type_ids" nolabel="1" >
                                 <tree editable="botton">
-                                        <field name="qty" />
-                                        <field name="weight" string="Weight kg"/>
-                                        <field name="dimensions_cm" string="Dimensions cm"/>
+                                        <field name="qty" required="1"/>
+                                        <field name="weight" string="Weight kg" required="1"/>
+                                        <field name="dimensions_cm" string="Dimensions cm" required="1"/>
                                 </tree>
                             </field>
                         </group>
