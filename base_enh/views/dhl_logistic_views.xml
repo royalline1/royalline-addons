@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="dhl_logistic_list_view">
+            <field name="name">dhl.logistic</field>
+            <field name="model">dhl.logistic</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="company_from_id" />
+                    <field name="date_from" />
+                    <field name="country_from_id" />
+                    <field name="state_from_id" />
+                    <field name="city_from_id" />
+                    <field name="phone_from" />
+                    <field name="add_one_from" />
+                    <field name="add_two_from" />
+                    <field name="contact_person_from_ids" />
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="dhl_logistic_form_view">
+            <field name="name">dhl.logistic</field>
+            <field name="model">dhl.logistic</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group string="From">
+                                <field name="company_from_id" 
+                                       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+                                       string="Country From"/>
+                                <field name="date_from" />
+                                <field name="country_from_id" 
+                                       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                                <field name="state_from_id" 
+                                       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                                <field name="city_from_id" 
+                                       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                                <field name="phone_from" />
+                                <field name="add_one_from" />
+                                <field name="add_two_from" />
+                                     <label for="contact_person_from_ids" />
+                                     <field name="contact_person_from_ids" nolabel='1'>
+                                      <tree editable="botton">
+                                            <field name="name" />
+                                            <field name="mobile" />
+                                        </tree>
+                                     </field>
+                            </group>
+                            <group string="To"> 
+                                    <field name="company_to_id" 
+                                           options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                                    <field name="country_to_id" 
+                                           options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                                    <field name="state_to_id" 
+                                           options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                                    <field name="city_to_id" 
+                                           options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                                    <field name="phone_to" />
+                                    <field name="add_one_to" />
+                                    <field name="add_two_to" />
+                                         <label for="contact_person_to_ids" />
+                                         <field name="contact_person_to_ids" nolabel='1'>
+                                          <tree editable="botton">
+                                                <field name="name" />
+                                                <field name="mobile" />
+                                            </tree>
+                                         </field>
+                            </group>
+                        </group>
+                        <group string="Document Type"> 
+                            <field name="document_type_ids" nolabel="1">
+                                <tree editable="botton">
+                                        <field name="qty" />
+                                        <field name="weight" string="Weight kg"/>
+                                        <field name="dimensions_cm" string="Dimensions cm"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                 </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window"
+            id="dhl_logistic_action">
+            <field name="name">Courier</field>
+            <field name="res_model">dhl.logistic</field>
+            <field name="view_mode">kanban,tree,form</field>
+        </record>
+
+
+
+
+    </data>
+</odoo>

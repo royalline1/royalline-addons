@@ -7,6 +7,7 @@ encoding//base_enh/models/commodity.py=utf-8
 encoding//base_enh/models/container_size.py=utf-8
 encoding//base_enh/models/customer_class.py=utf-8
 encoding//base_enh/models/customs_declaration.py=utf-8
+encoding//base_enh/models/dhl_logistic.py=utf-8
 encoding//base_enh/models/driver_info.py=utf-8
 encoding//base_enh/models/followup.py=utf-8
 encoding//base_enh/models/hr_employee.py=utf-8

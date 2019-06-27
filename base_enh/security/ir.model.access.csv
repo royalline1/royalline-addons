@@ -55,4 +55,8 @@ job_position_access,job_position_access,model_job_position,base.group_user,1,1,1
 job_commodity_line,job_commodity_line,model_job_commodity_line,base.group_user,1,1,1,1
 diseases_medications,diseases_medications,model_diseases_medications,base.group_user,1,1,1,1
 route,route,model_route,base.group_user,1,1,1,1
+dhl_logistic,dhl_logistic,model_dhl_logistic,base.group_user,1,1,1,1
+document_type,document_type,model_document_type,base.group_user,1,1,1,1
+
+
 

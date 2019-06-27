@@ -167,7 +167,9 @@ class ResPartner(models.Model):
                                help="Check this box if this contact is a customer. It can be selected in sales orders.")
     street_number2 = fields.Char('P.O. Box', compute='_split_street', help="Door Number",
                                  inverse='_set_street', store=True)
-    
+#   DHL Logistic id  
+    dhl_log_id = fields.Many2one('dhl.logistic')
+    dhl_log_to_id = fields.Many2one('dhl.logistic')
     
     @api.multi
     def name_get(self):

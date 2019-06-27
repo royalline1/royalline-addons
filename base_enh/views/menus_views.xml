@@ -2,6 +2,7 @@
 <odoo>
     <data>
         
+        <menuitem id="menu_dhl_logistic" name="Courier" action="dhl_logistic_action"/>
         <menuitem id="menu_logistic_manag" name="Logistic" /> 
         <menuitem id="menu_bill_of_lading_manag" name="Bill of Lading" parent="menu_logistic_manag" sequence="3"/> 
         <menuitem id="menu_sale_inquiry" action="sale_inquiry_action" parent="menu_logistic_manag" sequence="1"/>
