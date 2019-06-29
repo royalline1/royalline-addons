@@ -439,17 +439,7 @@
 			action="individual_establishment_action" />
         
         
-        <record model="ir.ui.view" id="base_res_partner_form_view">
-			<field name="name">res.partner</field>
-			<field name="model">res.partner</field>
-			<field name="inherit_id" ref="base_enh.res_partner_form_view" />
-			<field name="arch" type="xml">
-			<xpath expr="//field[@name='cheek_name']" position="attributes">
-				<attribute name="invisible">1</attribute>
-				</xpath>
-			
-			</field>
-			</record>
+    
 			
 			
 		 <record model="ir.ui.view" id="view_res_partner_filter">
