@@ -693,9 +693,9 @@
 					                                    ('is_customs_point','=',True)]}"/>
 				</xpath>
 
-				<xpath expr="//group[1]/group[2]" position="inside">
+				<!-- <xpath expr="//group[1]/group[2]" position="inside">
 					<field name="cheek_name" />
-				</xpath>
+				</xpath> -->
 				<!-- google map -->
 				<xpath expr="//notebook" position="inside">
 					<page string="Map" name="partner_geo_map">

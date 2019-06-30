@@ -12,8 +12,8 @@ class SalePerson(models.Model):
     type = fields.Selection([('sale','Sales'),
                              ('operation','Operation'),
                              ('follow','Follow')],required=True,inverse="_inverse_sale_id")
-    from_date = fields.Date('From Date',required=True)
-    to_date = fields.Date('To Date',required=True)
+    from_date = fields.Date('From Date',required=True, default='2018-12-01')
+    to_date = fields.Date('To Date',required=True, default='2020-12-31')
     is_active = fields.Boolean('Active',inverse="_inverse_sale_id")
     partner_id = fields.Many2one('res.partner')
     
