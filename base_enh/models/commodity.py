@@ -21,4 +21,6 @@ class Commodity(models.Model):
     UN_No = fields.Char("UN No")
     IMCO_Class = fields.Char("IMCO Class")
     HS_Code = fields.Char("HS Code")
+    is_document = fields.Boolean("Is Document")
     active=fields.Boolean(default=True)
+    note = fields.Text('Note')

@@ -120,6 +120,7 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
     _description = "ResPartner"
 
+    is_courier = fields.Boolean('Is Courier')
     is_shipper = fields.Boolean('Is Shipper')
     is_consignee = fields.Boolean('Is Consignee')
     is_notify = fields.Boolean('Is notify Party')

@@ -41,9 +41,10 @@
                             <group>
                                 <field name="commodity_category" />
                                 <field name="active" />
+                                <field name="is_document" />
                             </group>
                         </group>
-                        <group string="Conditions" style="font-weight: bold">
+                        <group attrs="{'invisible':[('is_document','=',True)]}" string="Conditions" style="font-weight: bold">
 
                             <group>
                                 <field name="temperature" />
@@ -59,13 +60,16 @@
                                 <field name="other_condition_att" />
                             </group>
                         </group>
-                        <group string="Setup Codes" style="font-weight: bold">
+                        <group attrs="{'invisible':[('is_document','=',True)]}" string="Setup Codes" style="font-weight: bold">
                             <group>
                                 <field name="IMCO_Class" />
                                 <field name="UN_No" />
                                 <field name="HS_Code" />
                             </group>
                         </group>
+                        
+                      <label for="note"/> 
+                      <field name="note" />
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>

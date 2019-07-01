@@ -22,6 +22,7 @@ class SaleInquiryCondition(models.Model):
     name = fields.Char(required=True)
     inquiry_id = fields.Many2one('sale.inquiry', ondelete='cascade')
     job_id = fields.Many2one('job', ondelete='cascade')
+    job_one_id = fields.Many2one('job', ondelete='cascade')
 
     
 class SaleInquiryContainer(models.Model):

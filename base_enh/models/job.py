@@ -15,6 +15,7 @@ class JobCommodityLine(models.Model):
     volume = fields.Float()
     gross_weight = fields.Char()
     job_id = fields.Many2one('job')
+    job_one_id = fields.Many2one('job')
     
     
 
@@ -153,6 +154,8 @@ class Job(models.Model):
     c_year = fields.Char('Year', default=datetime.date.today().year, readonly=True)
     condition_ids = fields.One2many('sale.inquiry.condition', inverse_name='job_id', 
                                     related='sale_inquiry_id.condition_ids',string='Conditions')
+    condition_one_ids = fields.One2many('sale.inquiry.condition', inverse_name='job_one_id', 
+                                    string='Conditions')
     container_size_ids = fields.One2many('sale.inquiry.container', inverse_name='job_id',
                                          string= 'Container Price',related='sale_inquiry_id.container_size_ids')
     container_ids = fields.Many2many('container.size', related="sale_inquiry_id.container_ids")
@@ -216,6 +219,7 @@ class Job(models.Model):
     added_route = fields.Boolean()
     
     commodity_line_ids = fields.One2many('job.commodity.line','job_id')
+    commodity_line_one_ids = fields.One2many('job.commodity.line','job_one_id')
      
     
     @api.model_create_multi

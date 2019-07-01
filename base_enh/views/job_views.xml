@@ -120,6 +120,14 @@
                                         </tree>
                                         <form></form>
                                     </field>
+                                    <label for="condition_one_ids" style="font-weight: bold" />
+                                    <field name="condition_one_ids">
+                                        <tree editable="bottom">
+                                            <field name="name" />
+                                            <field name="write_date" readony="1" />
+                                        </tree>
+                                        <form></form>
+                                    </field>
 							     </page>
 							     <page string="Parties">
 							         <group>
@@ -512,6 +520,21 @@
         					           		<field name="package_name"/>
         					           		<field name="quantity"/>
         					           		<field name="operation"/>
+        					           		<field name="volume"/>
+        					           		<field name="gross_weight"/>
+        					           		</tree>
+        					           		<form></form>
+        					           		
+        					           
+        					           </field>
+        					       </group>
+        					       
+        					       <group>
+        					           <field name="commodity_line_one_ids">
+        					           		<tree editable="bottom">
+        					           		<field name="commodity_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+        					           		<field name="package_name"/>
+        					           		<field name="quantity"/>
         					           		<field name="volume"/>
         					           		<field name="gross_weight"/>
         					           		</tree>

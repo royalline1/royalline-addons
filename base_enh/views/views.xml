@@ -548,6 +548,8 @@
                 
 				<xpath expr="//notebook//page[3]//group[@name='purchase']"
 					position="inside">
+					
+					<field name="is_courier"/>
 					<field name="is_shipper"
 						 attrs="{'invisible':['|','|',
                                                        ('is_diver','=',True),
