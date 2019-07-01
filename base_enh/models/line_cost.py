@@ -55,15 +55,13 @@ class LineCostLine(models.Model):
             
     @api.model
     def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
-        print(self._context)
-        print(args)
         return super(LineCostLine, self)._search( args, offset=offset, limit=limit, order=order, count=count, access_rights_uid=access_rights_uid)
 
     @api.onchange('product_id') 
     def erase_value_discount(self):
         """Erase discount value if product name changed"""
         for rec in self:
-            rec.value=u''
+            rec.value=False
         
 
 class LineCost(models.Model):
@@ -111,14 +109,79 @@ class LineCost(models.Model):
     start_date = fields.Date('Start Date')
     expiry_date = fields.Date('Expiry Date')
     note = fields.Text('Notes')
-    expired_price = fields.Boolean(compute='_compute_is_expired')
-    next_price = fields.Boolean(compute='_compute_is_expired')
+    is_expired = fields.Boolean(compute='_compute_is_expired',search="_search_is_expired")
+    is_next = fields.Boolean(compute='_compute_is_next',search="_search_is_next")
     line_cost_ids = fields.One2many('line.cost.line','line_cost_id',string="Price")
     additional_cost_ids = fields.One2many('additional.cost','line_cost_id',string="Additional Cost")
     product_discount_id = fields.Many2one('product.product', string='Additional Discount' ,domain=[('is_discount', '=', True)])
     discount = fields.Monetary(default=0.0)
     active=fields.Boolean(default=True)
     currency_id = fields.Many2one('res.currency', string="Currency")
+    
+    
+    is_loading = fields.Boolean(compute="_compute_is_loading")
+    is_discharge = fields.Boolean(compute="_compute_is_discharge")
+    
+    @api.multi    
+    @api.depends('line_cost_ids','line_cost_ids.is_discharge')
+    def _compute_is_discharge(self):
+        for rec in self:
+            rec.is_discharge = any(rec.line_cost_ids.mapped('is_discharge'))
+            
+            
+    @api.multi    
+    @api.depends('line_cost_ids','line_cost_ids.is_loading')
+    def _compute_is_loading(self):
+        for rec in self:
+            rec.is_loading = any(rec.line_cost_ids.mapped('is_loading'))
+        
+    
+    
+    @api.multi
+    @api.depends('expiry_date')
+    def _compute_is_expired(self):
+        for rec in self:
+            if rec.expiry_date and rec.expiry_date < fields.Date.today():
+               rec.is_expired = True 
+            else:
+               rec.is_expired = False
+               
+    @api.multi
+    @api.depends('start_date')
+    def _compute_is_next(self):
+        for rec in self:
+            if rec.start_date and rec.start_date > fields.Date.today():
+               rec.is_next = True 
+            else:
+               rec.is_next = False
+               
+               
+    def _search_is_expired(self,op,val):
+        sql = """
+select id from line_cost where expiry_date <= '%s'
+"""%fields.Date.today()
+        self._cr.execute(sql)
+        ids = self._cr.fetchall()
+        ids = [id[0] for id in ids]
+        if val and op == '=' or not val and op == '!=':
+            domain = [('id','in', ids)]
+        else :
+            domain = [('id','not in', ids)]
+        return domain
+    
+    def _search_is_next(self,op,val):
+        sql = """
+select id from line_cost where start_date > '%s'
+"""%fields.Date.today()
+        self._cr.execute(sql)
+        ids = self._cr.fetchall()
+        ids = [id[0] for id in ids]
+        if val and op == '=' or not val and op == '!=':
+            domain = [('id','in', ids)]
+        else :
+            domain = [('id','not in', ids)]
+        return domain
+    
     @api.onchange('fak')
     def _onchange_fak(self):
         self.commodity_id = False
@@ -127,83 +190,72 @@ class LineCost(models.Model):
     #   loaded country related
     @api.onchange('country_loading_id')
     def erase_related_addr(self):
-        self.state_loading_id = u''
-        self.city_loading_id= u''
-        self.place_loading_id = u''
-        self.port_loading_id = u''
-        self.terminal_loading_id = u''
+        self.state_loading_id = False
+        self.city_loading_id= False
+        self.place_loading_id = False
+        self.port_loading_id = False
+        self.terminal_loading_id = False
     
     @api.onchange('state_loading_id')
     def erase_related_addr_three(self):
-        self.city_loading_id= u''
-        self.place_loading_id = u''
+        self.city_loading_id= False
+        self.place_loading_id = False
     
     @api.onchange('city_loading_id')
     def erase_related_addr_four(self): 
-        self.place_loading_id = u''
+        self.place_loading_id = False
         
     @api.onchange('port_loading_id')
     def erase_related_addr_six(self): 
-        self.terminal_loading_id = u''
+        self.terminal_loading_id = False
     
 #   Destination country related
     @api.onchange('country_dest_id')
     def erase_related_addr_des(self):
-        self.state_dest_id = u''
-        self.city_dest_id= u''
-        self.place_dest_id = u''
-        self.port_dest_id = u''
-        self.terminal_des_same_id = u''
-        self.delivery_place_id = u''
+        self.state_dest_id = False
+        self.city_dest_id= False
+        self.place_dest_id = False
+        self.port_dest_id = False
+        self.terminal_des_same_id = False
+        self.delivery_place_id = False
     
     @api.onchange('state_dest_id')
     def erase_related_addr_three_des(self):
-        self.city_dest_id= u''
-        self.place_dest_id = u''
+        self.city_dest_id= False
+        self.place_dest_id = False
     
     @api.onchange('city_dest_id')
     def erase_related_addr_four_des(self): 
-        self.place_dest_id = u''
+        self.place_dest_id = False
         
     @api.onchange('port_dest_id')
     def erase_related_addr_six_des(self): 
-        self.terminal_des_same_id = u''  
+        self.terminal_des_same_id = False  
     
     #   Last country related
     @api.onchange('country_diff_dest_id')
     def erase_related_addr_last(self):
-        self.state_diff_dest_id = u''
-        self.city_diff_dest_id= u''
-        self.place_diff_dest_id = u''
-        self.port_diff_id = u''
-        self.terminal_des_diff_id = u''
-        self.delivery_diff_place_id = u''
+        self.state_diff_dest_id = False
+        self.city_diff_dest_id= False
+        self.place_diff_dest_id = False
+        self.port_diff_id = False
+        self.terminal_des_diff_id = False
+        self.delivery_diff_place_id = False
     
     @api.onchange('state_diff_dest_id')
     def erase_related_addr_three_last(self):
-        self.city_diff_dest_id= u''
-        self.place_diff_dest_id = u''
+        self.city_diff_dest_id= False
+        self.place_diff_dest_id = False
     
     @api.onchange('city_diff_dest_id')
     def erase_related_addr_four_last(self): 
-        self.place_diff_dest_id = u''
+        self.place_diff_dest_id = False
         
     @api.onchange('port_diff_id')
     def erase_related_addr_six_last(self): 
-        self.terminal_des_diff_id = u''  
+        self.terminal_des_diff_id = False  
     
-    @api.multi
-    @api.depends('expiry_date','start_date')
-    def _compute_is_expired(self):
-        for rec in self:
-            if rec.expiry_date and rec.expiry_date < fields.Date.today():
-               rec.expired_price = True 
-            else:
-               rec.expired_price = False
-            if rec.start_date and rec.start_date > fields.Date.today():
-               rec.next_price = True 
-            else:
-               rec.next_price = False
+   
                
    
     @api.constrains('expiry_date','start_date')
@@ -227,7 +279,7 @@ class LineCost(models.Model):
     @api.onchange('product_discount_id')
     def erase_discount_value(self):
         for rec in self:
-            rec.discount=u''
+            rec.discount=False
                 
     
     
@@ -264,6 +316,10 @@ class LineCost(models.Model):
     @api.onchange('line_id')     
     def onchange_line_id(self):
         self.line_cost_ids = [(6,0,[])]
+        self.quot_number = False
+        self.date = False
+        self.cost_line_ids = False
+        self.condition_ids = False
     
     
     

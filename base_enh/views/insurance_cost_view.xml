@@ -64,6 +64,7 @@
 								<field name="from_date" />
 								<field name="to_date" />
 								<field name="is_expired" />
+								<field name="is_next" />
 								<field name="insurance_type_id"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 

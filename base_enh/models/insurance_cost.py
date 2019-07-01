@@ -47,18 +47,52 @@ class InsuranceCost(models.Model):
     condition_ids = fields.One2many('insurance.condition','cost_id',string="Condition")
     
     
-    is_expired = fields.Boolean('Is Expired Price',compute='_compute_is_expired')
+    is_expired = fields.Boolean('Is Expired Price',compute='_compute_is_expired',search="_search_is_expired")
+    is_next = fields.Boolean(compute='_compute_is_expired',search="_search_is_next")
     active=fields.Boolean(default=True)
     
     
+    
+    def _search_is_expired(self,op,val):
+        sql = """
+select id from insurance_cost where to_date <= '%s'
+"""%fields.Date.today()
+        self._cr.execute(sql)
+        ids = self._cr.fetchall()
+        ids = [id[0] for id in ids]
+        if val and op == '=' or not val and op == '!=':
+            domain = [('id','in', ids)]
+        else :
+            domain = [('id','not in', ids)]
+        return domain
+    
+    def _search_is_next(self,op,val):
+        sql = """
+select id from insurance_cost where from_date > '%s'
+"""%fields.Date.today()
+        self._cr.execute(sql)
+        ids = self._cr.fetchall()
+        ids = [id[0] for id in ids]
+        if val and op == '=' or not val and op == '!=':
+            domain = [('id','in', ids)]
+        else :
+            domain = [('id','not in', ids)]
+        return domain
+    
+    
+    
     @api.multi
-    @api.depends('to_date')
+    @api.depends('to_date','from_date')
     def _compute_is_expired(self):
         for rec in self:
             if rec.to_date and rec.to_date < fields.Date.today():
                rec.is_expired = True 
             else:
                rec.is_expired = False
+            if rec.from_date and rec.from_date > fields.Date.today():
+               rec.is_next = True 
+            else:
+               rec.is_next = False
     
     @api.depends('rate','cost_line_ids','cost_line_ids.cost')
     def _compute_total(self):

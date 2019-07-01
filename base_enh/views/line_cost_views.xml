@@ -24,8 +24,8 @@
 					<field name="delivery_place_id" />
 					<field name="start_date" />
 					<field name="expiry_date" />
-					<field name="expired_price" />
-					<field name="next_price" />
+					<field name="is_expired" />
+					<field name="is_next" />
 					<field name="active"/>
 				</tree>
 			</field>
@@ -37,6 +37,8 @@
 			<field name="model">line.cost</field>
 			<field name="arch" type="xml">
 				<form>
+				<field name="is_loading" invisible="1"/>
+				<field name="is_discharge" invisible="1"/>
 					<sheet>
 					<group>
 					   <group>
@@ -69,7 +71,7 @@
 									domain="[('country_id','=',country_loading_id),('city_id','=',city_loading_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
 									attrs="{'readonly':[('country_loading_id','=',False)]}"/>
-								<field name="transport_loading_id"
+								<field name="transport_loading_id" attrs="{'readonly':[('is_loading','!=',True)]}"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="port_loading_id"
 									domain="[('country_id','=',country_loading_id)]"
@@ -82,8 +84,8 @@
 								<field name="transt_time" required="1"/>
 								<field name="start_date" />
 								<field name="expiry_date" />
-								<field name="expired_price" />
-								<field name="next_price" />
+								<field name="is_expired" />
+								<field name="is_next" />
 								<field name="product_discount_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
 								<field name="discount" 
 								       attrs="{'readonly':[('product_discount_id','=',False)]}"/>
@@ -108,7 +110,7 @@
 									domain="[('country_id','=',country_dest_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
 									attrs="{'readonly':[('country_dest_id','=',False)]}"/>
-								<field name="transport_dest_id"
+								<field name="transport_dest_id" attrs="{'readonly':[('is_discharge','!=',True)]}"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="terminal_des_same_id"
                                         options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"

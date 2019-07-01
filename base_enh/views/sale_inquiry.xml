@@ -246,7 +246,8 @@
                                                 <field name="place_of_port_id" invisible="1" />
                                                 <field name="place_loading_id" invisible="1" />
                                                 <field name="line_cost_line_id"
-                                                    domain="[('line_cost_id.expired_price','=',False),
+                                                    domain="[('line_cost_id.is_expired','=',False),
+                                                    		('line_cost_id.is_next','=',False),
                                                             ('line_cost_id','=',line_id),
                                                             ('sea_lines_id.type','=',shipment_type),
                                                             ('line_cost_id.country_loading_id','=',country_loading_id),
@@ -308,7 +309,7 @@
                                         <!-- <field name="transport_rate" /> -->
                                     </group>
                                     <group string="Transporter Details">
-                                            <field name="transporter_cost_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+                                            <field name="transporter_cost_id" domain="[('is_next','=',False),('is_expired','=',False)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                             <field name="transporter_free_days"/>
                                             <field name="transporter_total"/>
                                             <field name="currency_id"/>
@@ -317,7 +318,7 @@
                                         <field name="customs_dec_id"
                                                 options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                         <field name="clearance_id"
-                                            domain="[('shipment_type','=',shipment_type),
+                                            domain="[('is_next','=',False),('is_expired','=',False),('shipment_type','=',shipment_type),
                                         ('customs_declaration_id','=',customs_dec_id)]"
                                             options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" string="Clearance ID"/>
                                         <label for="clearance_cost_ids" style="font-weight: bold" />

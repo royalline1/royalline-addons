@@ -229,7 +229,7 @@
                                                 <field name="place_of_port_id" invisible="1" />
                                                 <field name="place_loading_id" invisible="1" />
                                                 <field name="line_cost_line_id"
-                                                    domain="[('line_cost_id.expired_price','=',False),
+                                                    domain="[('line_cost_id.is_expired','=',False),
                                                             ('line_cost_id','=',line_id),
                                                             ('sea_lines_id.type','=',shipment_type),
                                                             ('line_cost_id.country_loading_id','=',country_loading_id),

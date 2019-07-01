@@ -26,7 +26,7 @@ class ClearanceCost(models.Model):
     
    
     qut_number =fields.Char('Quotation Number',required=True)
-    is_next = fields.Boolean('Is Next Price')
+    is_next = fields.Boolean('Is Next Price',compute="_compute_is_expired")
     is_expired = fields.Boolean('Is Expired Price',compute="_compute_is_expired")
     shipment_method = fields.Selection([('all_in', 'All In'), ('sea_freight', 'Sea freight'), ('land_freight', 'Land Freight'), ('air_freight', 'Air Freight'), ('clearance', 'Clearance')])
     shipment_type = fields.Selection([ ('import', 'Import'), ('export', 'Export')])
@@ -48,23 +48,38 @@ class ClearanceCost(models.Model):
     def date_from_to(self):
         """To date greater than From date"""
         for rec in self:
-            if rec.from_date > rec.to_date:
+            if rec.from_date and rec.to_date and rec.from_date > rec.to_date:
                 raise Warning("'From Date' should be less or equal 'To date'!")
     
-    @api.onchange('qut_number','partner_id')
+   
+    
+    @api.onchange('shipment_method')
+    def onchange_shipment_method(self):
+        self.shipment_type = False
+        self.customs_deceleration_id = False
+        
+        
+        
+    @api.onchange('partner_id')
     def erse_price_trans(self):
         """"Erase price once quotation OR Shipper changed"""
-        for rec in self:
-            rec.price=u''
+        self.price= 0
+        self.date = False
+        self.customs_id = False
+        self.cost_line_ids = False
     
     @api.multi
-    @api.depends('to_date')
+    @api.depends('to_date','from_date')
     def _compute_is_expired(self):
         for rec in self:
             if rec.to_date and rec.to_date < fields.Date.today():
                rec.is_expired = True 
             else:
                rec.is_expired = False
+            if rec.from_date and rec.from_date > fields.Date.today():
+               rec.is_next = True 
+            else:
+               rec.is_next = False
             
     @api.depends('customs_id')
     def _compute_partner_point_ids(self):

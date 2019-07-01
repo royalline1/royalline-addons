@@ -302,9 +302,7 @@ class SaleInquiry(models.Model):
     def _compute_clearance_cost_ids(self):
         for rec in self:
             cci_obj = self.env['sale.clearance.cost.line']
-            print(11)
             rec.clearance_cost_ids.unlink()
-            print(22)
             if rec.clearance_id:
                 for i in rec.container_size_ids:
                     total = 0.0
@@ -326,6 +324,7 @@ class SaleInquiry(models.Model):
        for rec in self:
             domain = [  ('country_loading_id', '=', rec.country_loading_id.id),
                         ('country_dest_id', '=', rec.country_dest_id.id),
+                        ('is_next','=',False),('is_expired','=',False)
                         ]
             domain = AND([domain, OR([[('city_loading_id', '=', rec.city_loading_id.id),
                                       ('city_dest_id', '=', rec.city_dest_id.id)],
@@ -355,7 +354,7 @@ class SaleInquiry(models.Model):
                         ('port_dest_id', '=', rec.port_dest_id.id),
                         ('country_dest_id', '=', rec.country_dest_id.id),
                         ('line_cost_ids.sea_lines_id.type', '=', rec.shipment_type),
-                        ('expired_price', '=', False)]
+                        ('is_expired', '=', False)]
             domain = AND([domain, OR([[('customer_id', '=', rec.partner_id.id)],[('customer_id', '=', False)]])])
            
             domain = AND([domain, OR([[('commodity_id', 'in', commodity_ids.ids)],[('fak', '=', False)]])])         

@@ -22,7 +22,6 @@ class SalePerson(models.Model):
     @api.multi
     def _inverse_sale_id(self):
         for rec in self:
-            print(rec.type,rec.is_active)
             if len(rec.partner_id.sale_person_ids.filtered(lambda x:x.is_active and x.type =='sale'))>1:
                 raise UserError("You Cannot has more than active sales person")
             if rec.type == 'sale' and rec.is_active:

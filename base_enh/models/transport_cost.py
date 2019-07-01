@@ -45,8 +45,9 @@ class TransportCost(models.Model):
     _rec_name = 'qut_number'
     _description = "TransportCost"
    
+    
     qut_number =fields.Char('Quotation Number')
-    is_next = fields.Boolean('Is Next Price')
+    is_next = fields.Boolean('Is Next Price',compute='_compute_is_next',search="_search_is_next")
     partner_id = fields.Many2one('res.partner',string="Transporter",domain=[('is_transporter_company', '=', True)])
     free_days = fields.Integer('Free Days')    
     country_loading_id = fields.Many2one('res.country', string="Country Of Loading", required=True)
@@ -64,33 +65,63 @@ class TransportCost(models.Model):
     price_line_ids = fields.One2many('transport.price.line','cost_id',string="Line Price")
     total = fields.Monetary('Total', compute='_compute_total',store=True)
     note = fields.Text()
-    is_expired = fields.Boolean('Is Expired Price',compute='_compute_is_expired')
+    is_expired = fields.Boolean('Is Expired Price',compute='_compute_is_expired',search="_search_is_expired")
     from_date = fields.Date('From Date')
     to_date = fields.Date('To Date')
     active=fields.Boolean(default=True)
     currency_id = fields.Many2one('res.currency', string="Currency")
     
-    @api.onchange('qut_number','partner_id')
+    def _search_is_expired(self,op,val):
+        sql = """
+select id from transport_cost where to_date <= '%s'
+"""%fields.Date.today()
+        self._cr.execute(sql)
+        ids = self._cr.fetchall()
+        ids = [id[0] for id in ids]
+        if val and op == '=' or not val and op == '!=':
+            domain = [('id','in', ids)]
+        else :
+            domain = [('id','not in', ids)]
+        return domain
+    
+    def _search_is_next(self,op,val):
+        sql = """
+select id from transport_cost where from_date > '%s'
+"""%fields.Date.today()
+        self._cr.execute(sql)
+        ids = self._cr.fetchall()
+        ids = [id[0] for id in ids]
+        if val and op == '=' or not val and op == '!=':
+            domain = [('id','in', ids)]
+        else :
+            domain = [('id','not in', ids)]
+        return domain
+            
+        
+        return []
+    @api.onchange('partner_id')
     def erse_price(self):
         """"Erase price once quotation OR Shipper changed"""
-        for rec in self:
-            rec.price=u''
+        self.price= 0
+        self.qut_number = False
+        self.date = False
+        self.price_line_ids = False
+        self.cost_line_ids = False
+        self.transport_line_price = 0
     
     @api.onchange('country_loading_id')
     def erse_loading_country_details(self):
         """"Erase state city and place once country changed"""
-        for rec in self:
-            rec.state_loading_id=u''
-            rec.city_loading_id=u''
-            rec.place_loading_id=u''
+        self.state_loading_id=False
+        self.city_loading_id=False
+        self.place_loading_id=False
             
     @api.onchange('country_dest_id')
     def erse_deliveiry_country_details(self):
         """"Erase state city and place once country changed"""
-        for rec in self:
-            rec.state_dest_id=u''
-            rec.city_dest_id=u''
-            rec.place_dest_id=u''
+        self.state_dest_id=False
+        self.city_dest_id=False
+        self.place_dest_id=False
     
     @api.multi
     @api.depends('to_date')
@@ -101,10 +132,20 @@ class TransportCost(models.Model):
             else:
                rec.is_expired = False
                
+    
+    api.multi
+    @api.depends('from_date')
+    def _compute_is_next(self):
+        for rec in self:
+            if rec.from_date and rec.from_date > fields.Date.today():
+               rec.is_next = True 
+            else:
+               rec.is_next = False
+               
     @api.constrains('from_date', 'to_date')
     def validity_date_constraint(self):
         for rec in self:
-            if rec.from_date > rec.to_date:  
+            if rec.from_date and rec.to_date and rec.from_date > rec.to_date:  
                 raise UserError("""The 'From Date' must be less than 'To Date'.""")    
     
 #     @api.constrains('is_port','place_dest_id')

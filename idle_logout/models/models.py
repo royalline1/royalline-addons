@@ -11,7 +11,6 @@ class IdleLlogout(models.TransientModel):
 
     @api.model
     def check_session(self,minutes):
-        print(33333333333333)
         dd = time.time() - minutes * 60
         for fname in os.listdir(session_store.path):
             path = os.path.join(session_store.path, fname)
