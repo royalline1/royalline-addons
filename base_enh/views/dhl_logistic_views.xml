@@ -28,6 +28,11 @@
                 <form>
                     <sheet>
                         <group>
+                            <group>
+                            <field name="name"/>
+                            </group>
+                        </group>
+                        <group>
                             <group string="From">
                                 <field name="company_from_id" 
                                        options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"

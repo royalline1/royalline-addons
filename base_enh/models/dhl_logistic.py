@@ -9,6 +9,7 @@ class DHLLogistic(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     
 #   Shipment from fields  
+    name = fields.Char(readonly=True)
     company_from_id = fields.Many2one('res.partner', string='Contact Name')
     date_from = fields.Datetime('Date Time Pick-Up')
     country_from_id = fields.Many2one('res.country', string="Country", related='company_from_id.country_id')
@@ -31,6 +32,19 @@ class DHLLogistic(models.Model):
     contact_person_to_ids = fields.One2many(comodel_name='res.partner',inverse_name='dhl_log_to_id', 
                                               related='company_to_id.child_ids')
     document_type_ids = fields.One2many(comodel_name='document.type', inverse_name='dhl_doc_id')
+    
+#     @api.multi
+#     def name_get(self):
+#         result = []
+#         for record in self:
+#             result.append((record.id, '%s | %s'%(record.company_from_id,record.country_from_id)))
+#         return result
+    @api.model_create_multi
+    @api.returns('self', lambda value:value.id)
+    def create(self, vals_list):
+        for val in vals_list:
+            val['name'] = self.env['ir.sequence'].next_by_code('courier.seq')
+        return super(DHLLogistic, self).create(vals_list)
     
                 
 class DocumentType(models.Model):
