@@ -7,6 +7,7 @@ import os
 session_store = root.session_store
 class IdleLlogout(models.TransientModel):
     _name = 'idle.logout'
+    _description = "IdleLlogout"
 
     @api.model
     def check_session(self,minutes):

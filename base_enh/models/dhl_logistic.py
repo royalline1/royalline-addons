@@ -10,18 +10,18 @@ class DHLLogistic(models.Model):
     
 #   Shipment from fields  
     name = fields.Char(readonly=True)
-    company_from_id = fields.Many2one('res.partner', string='Contact Name')
+    company_from_id = fields.Many2one('res.partner', string='Contact Name From')
     date_from = fields.Datetime('Date Time Pick-Up')
-    country_from_id = fields.Many2one('res.country', string="Country", related='company_from_id.country_id')
-    state_from_id = fields.Many2one('res.country.state', string="State", related='company_from_id.state_id')
-    city_from_id = fields.Many2one('res.city', string="City", related='company_from_id.city_id')
-    phone_from = fields.Char(string='Phone', related='company_from_id.phone')
-    add_one_from = fields.Char(string='Address (1)', related='company_from_id.street_name')
-    add_two_from = fields.Char(string='Address (2)', related='company_from_id.street2')
-    contact_person_from_ids = fields.One2many(comodel_name='res.partner',inverse_name='dhl_log_id', 
+    country_from_id = fields.Many2one('res.country', string="Country From", related='company_from_id.country_id')
+    state_from_id = fields.Many2one('res.country.state', string="State From", related='company_from_id.state_id')
+    city_from_id = fields.Many2one('res.city', string="City From", related='company_from_id.city_id')
+    phone_from = fields.Char(string='Phone From', related='company_from_id.phone')
+    add_one_from = fields.Char(string='Address (1) From', related='company_from_id.street_name')
+    add_two_from = fields.Char(string='Address (2) From', related='company_from_id.street2')
+    contact_person_from_ids = fields.One2many(comodel_name='res.partner', string="Contact Person From", inverse_name='dhl_log_id', 
                                               related='company_from_id.child_ids')
     
-    company_to_id = fields.Many2one('res.partner', string='Contact Name')
+    company_to_id = fields.Many2one('res.partner', string='Contact Name To')
     country_to_id = fields.Many2one('res.country', string="Country", related='company_to_id.country_id')
     state_to_id = fields.Many2one('res.country.state', string="State", related='company_to_id.state_id')
     city_to_id = fields.Many2one('res.city', string="City", related='company_to_id.city_id')

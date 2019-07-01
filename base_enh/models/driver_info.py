@@ -5,6 +5,7 @@ from odoo import models, fields, api
 
 class DriverInfo(models.Model):
     _name = 'driver.info'
+    _description = "DriverInfo"
     
     partner_id = fields.Many2one('res.partner')
     name = fields.Char(related='partner_id.name')

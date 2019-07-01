@@ -7,6 +7,7 @@ from odoo.osv import expression
 class PlaceOfDelivery(models.Model):
     _name = 'delivery.place'
     _rec_name = 'zip'
+    _description = "PlaceOfDelivery"
     
     zip = fields.Integer('ZIP Code',required=True)
     country_id = fields.Many2one('res.country',required=True)
@@ -27,6 +28,7 @@ class PlaceOfDelivery(models.Model):
 class PlaceOfLoading(models.Model):
     _name = 'loading.place'
     _rec_name = 'zip'
+    _description = "PlaceOfLoading"
     
     zip = fields.Integer('ZIP Code',required=True)
     country_id = fields.Many2one('res.country',required=True)

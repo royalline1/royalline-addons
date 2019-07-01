@@ -4,6 +4,7 @@ from odoo import models, fields, api
 
 class InsuranceCondition(models.Model):
     _name = 'insurance.condition'
+    _description = "InsuranceCondition"
     
     name = fields.Char(required=True)
     type = fields.Selection([('include','Include'),('exclude','Exclude')],required=True)
@@ -12,17 +13,19 @@ class InsuranceCondition(models.Model):
     
 class AdditionalInsuCost(models.Model):
     _name = 'insurance.cost.line'
+    _description = "AdditionalInsuCost"
     
     product_id = fields.Many2one('product.product', string='Additional Name', required=True,
                                  domain=[('is_add_cost', '=', True)] )
-    cost = fields.Monetary()
-    cost_id = fields.Many2one('line.cost',  required=True)
+    cost = fields.Monetary(string="Cost")
+    cost_id = fields.Many2one('line.cost',  required=True, string="Line Cost")
     currency_id = fields.Many2one('res.currency', string="Currency")
 
 class InsuranceCost(models.Model):
     _name = 'insurance.cost'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'qut_number'
+    _description = "InsuranceCost"
     
     partner_id = fields.Many2one('res.partner',string="Insurance Company",domain=[('is_insurance_company', '=', True)])
     qut_number =fields.Char('Quotation Number')

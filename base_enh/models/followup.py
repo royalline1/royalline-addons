@@ -4,6 +4,7 @@ from odoo import models, fields, api
 
 class Followup(models.Model):
     _name = 'followup'
+    _description = "Followup"
     
     is_load_from_depot = fields.Boolean('Is Loaded From Depot')
     depot_date = fields.Datetime('Loaded from Depot Datetime')

@@ -7,6 +7,7 @@ from odoo.exceptions import UserError
 class TransportlinsuPrice(models.Model):
     _name = 'transport.price.line'
     _rec_name = 'container_size_id'
+    _description = "TransportlinsuPrice"
     
     container_size_id = fields.Many2one('container.size', required=True)
     weight_type_id = fields.Many2one('weight.type')
@@ -26,14 +27,15 @@ class TransportlinsuPrice(models.Model):
 class TransportlinsuCost(models.Model):
     _name = 'transport.cost.line'
     _rec_name = 'container_size_id'
+    _description = "TransportlinsuCost"
     
     product_id = fields.Many2one('product.product', string='Transport Name', required=True, 
                                  domain=[('is_add_cost', '=', True)])
     container_size_id = fields.Many2one('container.size', required=True)
-    cost = fields.Monetary(required=True)
+    cost = fields.Monetary(required=True, string="Cost")
     currency_id = fields.Many2one('res.currency', string="Currency")
     per_quantity = fields.Boolean()
-    cost_id = fields.Many2one('transport.cost')
+    cost_id = fields.Many2one('transport.cost', string="Cost line")
     
 
 
@@ -41,6 +43,7 @@ class TransportCost(models.Model):
     _name = 'transport.cost'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'qut_number'
+    _description = "TransportCost"
    
     qut_number =fields.Char('Quotation Number')
     is_next = fields.Boolean('Is Next Price')
@@ -56,9 +59,9 @@ class TransportCost(models.Model):
     place_dest_id = fields.Many2one('res.place', string="Place Of Destination")
     is_port = fields.Boolean(related="place_dest_id.is_port",store=True)
     date = fields.Date('Date')
-    price = fields.Monetary()
+    price = fields.Monetary(string="Price")
     cost_line_ids = fields.One2many('transport.cost.line','cost_id',string="Additional Cost")
-    price_line_ids = fields.One2many('transport.price.line','cost_id',string="Price")
+    price_line_ids = fields.One2many('transport.price.line','cost_id',string="Line Price")
     total = fields.Monetary('Total', compute='_compute_total',store=True)
     note = fields.Text()
     is_expired = fields.Boolean('Is Expired Price',compute='_compute_is_expired')

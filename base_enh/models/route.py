@@ -4,6 +4,7 @@ from odoo import models, fields, api
 
 class Route(models.Model):
     _name = 'route'
+    _description = "Route"
     
     job_route_id = fields.Many2one ('job')
     shipment_method = fields.Selection([('clearance', 'Clearance'), 

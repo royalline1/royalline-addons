@@ -7,6 +7,7 @@ from odoo.osv.expression import AND , OR
 
 class InquiryAdditionalCost(models.Model):
     _name = 'inquiry.additional.cost'
+    _description = "InquiryAdditionalCost"
     
     product_id = fields.Many2one('product.product', string='Name', required=True)
     cost = fields.Float(required=True)
@@ -16,6 +17,7 @@ class InquiryAdditionalCost(models.Model):
 
 class SaleInquiryCondition(models.Model):
     _name = 'sale.inquiry.condition'
+    _description = "SaleInquiryCondition"
     
     name = fields.Char(required=True)
     inquiry_id = fields.Many2one('sale.inquiry', ondelete='cascade')
@@ -24,6 +26,7 @@ class SaleInquiryCondition(models.Model):
     
 class SaleInquiryContainer(models.Model):
     _name = 'sale.inquiry.container'
+    _description = "SaleInquiryContainer"
     
     line_cost_line_id = fields.Many2one('line.cost.line', string="Container", required=True)
     container_id = fields.Many2one('container.size',related="line_cost_line_id.sea_lines_id.container_size_id")
@@ -62,6 +65,7 @@ class SaleInquiryContainer(models.Model):
     
 class ClearanceCostLine(models.Model):
     _name = 'inquiry.clearance.cost'
+    _description = "ClearanceCostLine"
     
     customs_point_id = fields.Many2one('res.partner', 'Customs Point', required=True)
     customs_dec_id = fields.Many2one('customs.declaration', string="Customs Declaration")
@@ -72,17 +76,18 @@ class ClearanceCostLine(models.Model):
     
 class SaleInquiryLineShipment(models.Model):
     _name = 'sale.inquiry.line'
+    _description = "SaleInquiryLineShipment"
     
     product_id = fields.Many2one('product.product', required=True)
     temperature = fields.Float('Temperature', related="product_id.temperature")
     warehouse_condition = fields.Char('Warehouse condition', related="product_id.warehouse_condition")
-    warehouse_condition_att = fields.Binary(attachment=True, string="Attachment", related="product_id.warehouse_condition_att")
+    warehouse_condition_att = fields.Binary(attachment=True, string="Attachment Ware", related="product_id.warehouse_condition_att")
     transport_condition = fields.Char('Transport condition', related="product_id.transport_condition")
-    transport_condition_att = fields.Binary(attachment=True, string="Attachment", related="product_id.transport_condition_att")
+    transport_condition_att = fields.Binary(attachment=True, string="Attachment Trans", related="product_id.transport_condition_att")
     port_condition = fields.Char('Port condition', related="product_id.port_condition")
-    port_condition_att = fields.Binary(attachment=True, string="Attachment", related="product_id.port_condition_att")
+    port_condition_att = fields.Binary(attachment=True, string="Attachment Port", related="product_id.port_condition_att")
     other_condition = fields.Char('Other condition', related="product_id.other_condition")
-    other_condition_att = fields.Binary(attachment=True, string="Attachment", related="product_id.other_condition_att")
+    other_condition_att = fields.Binary(attachment=True, string="Attachment Other", related="product_id.other_condition_att")
     inquiry_id = fields.Many2one('sale.inquiry')
     job_id = fields.Many2one('job')
     
@@ -91,6 +96,7 @@ class SaleInquiryLineShipment(models.Model):
 class SaleInquiry(models.Model):
     _name = 'sale.inquiry'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _description = "SaleInquiry"
     
     name = fields.Char(readonly=True)
     from_validity_date = fields.Date()
@@ -167,9 +173,9 @@ class SaleInquiry(models.Model):
     
     agreement_method_id = fields.Many2one('agreement.method')
     customs_dec_id = fields.Many2one('customs.declaration', string="Customs Declaration")
-    shipping_line_id = fields.Many2one('line.cost')
-    shipping_line_ids = fields.Many2many('line.cost', compute="_shipping_line_ids")
-    partner_shipping_line_id = fields.Many2one('res.partner', related="shipping_line_id.line_id")
+    shipping_line_id = fields.Many2one('line.cost', string="Shipping Line")
+    shipping_line_ids = fields.Many2many('line.cost', compute="_shipping_line_ids", string="Shipping Lines")
+    partner_shipping_line_id = fields.Many2one('res.partner', related="shipping_line_id.line_id", string="Partner Shipping Line")
     
     free_days = fields.Integer()
     vessel_id = fields.Many2one('vessel')
@@ -193,7 +199,7 @@ class SaleInquiry(models.Model):
 
     sea_rate = fields.Float('Sea Rate #######')
     insurance_cost_id = fields.Many2one('insurance.cost', 'Insurance Cost') 
-    insurance_cost_ids = fields.Many2many('insurance.cost', compute="_insurance_cost_ids")
+    insurance_cost_ids = fields.Many2many('insurance.cost', compute="_insurance_cost_ids", string="Insurance Costs")
     insurance_rate = fields.Monetary(related="insurance_cost_id.total",readonly=True)
     transport_rate = fields.Float(compute='_compute_transport_rate')
     clearance_id = fields.Many2one('clearance.cost','Clearance')
@@ -503,6 +509,7 @@ class SaleInquiry(models.Model):
                    
 class SaleClearanceCostLine(models.Model):
     _name = 'sale.clearance.cost.line'
+    _description = "SaleClearanceCostLine"
     
     container_id = fields.Many2one('container.size')
     cost = fields.Float()

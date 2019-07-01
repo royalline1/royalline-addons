@@ -5,11 +5,12 @@ from odoo.exceptions import Warning
 
 class ClearancelinsuCost(models.Model):
     _name = 'clearance.cost.line'
+    _description = "ClearancelinsuCost"
     
     from_truck = fields.Integer('From')
     to_truck = fields.Integer('To')
-    cost = fields.Monetary()
-    cost_id = fields.Many2one('clearance.cost',ondelete='cascade')
+    cost = fields.Monetary(string="Cost")
+    cost_id = fields.Many2one('clearance.cost',ondelete='cascade', string="Clearance Cost")
     currency_id = fields.Many2one('res.currency', string="Currency")
     @api.constrains('from_truck','to_truck')
     def _check_additional_cost(self):
@@ -21,6 +22,7 @@ class ClearanceCost(models.Model):
     _name = 'clearance.cost'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'qut_number'
+    _description = "ClearanceCost"
     
    
     qut_number =fields.Char('Quotation Number',required=True)

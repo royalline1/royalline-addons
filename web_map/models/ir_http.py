@@ -12,6 +12,7 @@ from odoo.http import request
 
 class Http(models.AbstractModel):
     _inherit = 'ir.http'
+    _description = "Http"
 
     def webclient_rendering_context(self):
         rendering_context = super(Http, self).webclient_rendering_context()

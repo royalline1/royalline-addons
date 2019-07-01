@@ -6,6 +6,7 @@ from odoo.osv.expression import AND , OR
 
 class JobCommodityLine(models.Model):
     _name = 'job.commodity.line'
+    _description = "JobCommodityLine"
     
     commodity_id = fields.Many2one('commodity',String='Commodity',required=True)
     package_name = fields.Char()
@@ -20,6 +21,7 @@ class JobCommodityLine(models.Model):
 class Job(models.Model):
     _name = 'job'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _description = "Job"
     
     name = fields.Char(readonly=True)
     sale_inquiry_id = fields.Many2one('sale.inquiry',store=True)

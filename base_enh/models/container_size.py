@@ -8,6 +8,7 @@ class ContainerSize(models.Model):
     _name = 'container.size'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = "size"
+    _description = "ContainerSize"
     
     size = fields.Char('Size',required=True)
     container_no = fields.Char('No')

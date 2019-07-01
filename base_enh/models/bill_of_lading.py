@@ -5,6 +5,7 @@ from odoo import models, fields, api
 
 class AgreementMethod(models.Model):
     _name = 'bill.of.lading'
+    _description = "AgreementMethod"
     
     shipping_line_id = fields.Many2one('line.cost')
     bill_lading_no = fields.Char (string='Bill Of Lading No.')
@@ -26,6 +27,7 @@ class AgreementMethod(models.Model):
     
 class ExternalBillOfLoading(models.Model):
     _name = 'external.bill.of.lading'
+    _description = "ExternalBillOfLoading"
     
     shipping_line_id = fields.Many2one('line.cost')
     bill_lading_no = fields.Char (string='Bill Of Lading No.')

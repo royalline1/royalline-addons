@@ -6,7 +6,7 @@ from odoo.exceptions import UserError
 
 class AdditionalCost(models.Model):
     _name = 'additional.cost'
-    
+    _description = "AdditionalCost"
     
     product_id = fields.Many2one('product.product', string='Additional Name', required=True ,domain=[('is_add_cost', '=', True)])
     cost = fields.Monetary(required=True)
@@ -26,6 +26,7 @@ class AdditionalCost(models.Model):
 class LineCostLine(models.Model):
     _name = 'line.cost.line'
     _rec_name = "sea_lines_id"
+    _description = "LineCostLine"
     
     sea_lines_id = fields.Many2one('sea.lines', 'Container', required=True)
     partner_id = fields.Many2one('res.partner',related="line_cost_id.line_id")
@@ -69,6 +70,7 @@ class LineCost(models.Model):
     _name = 'line.cost'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'line_id'
+    _description = "LineCost"
     
     line_id = fields.Many2one('res.partner', string="Shipping Line", required=True,domain=[('company_type', '=', 'company'),('is_sea_line', '=', True)])
     quot_number = fields.Char(string="Quotation Number", required=True)

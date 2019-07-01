@@ -6,6 +6,7 @@ from odoo.osv.expression import AND , OR
 
 class Seal(models.Model):
     _name = 'seal'
+    _description = "Seal"
     
     seal_no = fields.Char('Seal No')
     seal_owner = fields.Selection([('shipper','Shipper'),

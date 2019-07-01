@@ -6,6 +6,7 @@ from odoo import models, fields, api
 class vessel(models.Model):
     _name = 'vessel'
     _inherit = [ 'mail.thread']
+    _description = "vessel"
     
     sea_line_id = fields.Many2one('res.partner',string="Shipping",domain=[('is_sea_line','=',True)],required=True)
     name = fields.Char('Name',required=True)
@@ -21,6 +22,7 @@ class vessel(models.Model):
 class VoyagesDetail(models.Model):
     _name = "voyages.detail"
     _rec_name = "voyage_number"
+    _description = "VoyagesDetail"
     
     vessel_id = fields.Many2one('vessel')
     voyage_number  = fields.Char('Voyage Number')

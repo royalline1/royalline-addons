@@ -7,6 +7,7 @@ from os import linesep
 
 class SalePerson(models.Model):
     _name = "sale.person"
+    _description = "SalePerson"
     
     user_id = fields.Many2one('res.users',required=True,inverse="_inverse_sale_id")
     type = fields.Selection([('sale','Sales'),
@@ -43,6 +44,7 @@ class ResPlace(models.Model):
     _name = 'res.place'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'address'
+    _description = "ResPlace"
     
     country_id = fields.Many2one('res.country',required=True)
     city_id = fields.Many2one('res.city',required=True)
@@ -72,6 +74,7 @@ class ResPlace(models.Model):
 class Port(models.Model):
     _name = 'port'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _description = "Port"
 
     name = fields.Char(string='Name',required=True)
     code = fields.Char(string='Code')
@@ -97,21 +100,26 @@ class Port(models.Model):
     
 class PortType(models.Model):
     _name = 'port.type'
+    _description = "PortType"
      
     name = fields.Char('Name')
     
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
+    _description = "HrEmployee"
     
     local_name = fields.Char("Local Name")
 
 class ResCity(models.Model):
     _inherit="res.city"
+    _description = "ResCity"
+    
     code = fields.Char("Code")
     local_name = fields.Char("Local Name")
     
 class ResPartner(models.Model):
     _inherit = 'res.partner'
+    _description = "ResPartner"
 
     is_shipper = fields.Boolean('Is Shipper')
     is_consignee = fields.Boolean('Is Consignee')
@@ -232,6 +240,7 @@ class ResPartner(models.Model):
     
 class ResPhone(models.Model):
     _name = 'res.phone'
+    _description = "ResPhone"
     
     name = fields.Char('Number',required=True)
     note = fields.Char('Note')  
@@ -240,7 +249,7 @@ class ResPhone(models.Model):
     
 class SeaLines(models.Model):
     _name="sea.lines"
-    
+    _description = "SeaLines"
     
     container_size_id = fields.Many2one('container.size',string="Container Size")
     name = fields.Char(related="container_size_id.size")
@@ -276,7 +285,7 @@ class SeaLines(models.Model):
 
 class ResUsers(models.Model):
     _inherit = 'res.users'
-    
+    _description = "ResUsers"
     
     @api.model
     def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
@@ -291,6 +300,7 @@ class ResUsers(models.Model):
 class ExtraServices(models.Model):
     _name = 'extra.services'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _description = "ExtraServices"
     
     name = fields.Char('Name')
     code = fields.Char('Code')
@@ -300,6 +310,7 @@ class ExtraServices(models.Model):
 class WareHouse (models.Model):
     _name = 'ware.house'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _description = "WareHouse"
     
     name = fields.Char('Name')
     code = fields.Char('Code')
@@ -313,7 +324,8 @@ class WareHouse (models.Model):
     
 class MITCompanies (models.Model):
     _name = 'mit.companies'
-
+    _description = "MITCompanies"
+    
     company_No = fields.Char ('Company No.')
     name = fields.Char ('name')
     type = fields.Selection([('1','ذات مسؤولية محدودة'),
@@ -370,6 +382,8 @@ class MITCompanies (models.Model):
             
 class TradeName (models.Model):
     _name = 'trade.name'
+    _description = "TradeName"
+    
     
     trade_No = fields.Char ('Trade No.')
     city_id = fields.Many2one('res.city',required=True)
@@ -399,6 +413,8 @@ class TradeName (models.Model):
 
 class ImporterCard (models.Model): 
     _name = 'importer.card'
+    _description = "ImporterCard"
+    
     
     card_No = fields.Char ('Card No.')
     name = fields.Char ('Name')
@@ -408,6 +424,8 @@ class ImporterCard (models.Model):
     
 class IndividualEstablishment (models.Model):
     _name = 'individual.establishment'
+    _description = "IndividualEstablishment"
+    
     
     ind_No = fields.Char ('Indiv Estab No.')
     city_id = fields.Many2one('res.city',required=True)
