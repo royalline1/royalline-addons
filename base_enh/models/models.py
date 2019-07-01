@@ -14,7 +14,7 @@ class SalePerson(models.Model):
                              ('follow','Follow')],required=True,inverse="_inverse_sale_id")
     from_date = fields.Date('From Date',required=True, default='2018-12-01')
     to_date = fields.Date('To Date',required=True, default='2020-12-31')
-    is_active = fields.Boolean('Active',inverse="_inverse_sale_id")
+    is_active = fields.Boolean('Active',inverse="_inverse_sale_id", default=True)
     partner_id = fields.Many2one('res.partner')
     
     
@@ -257,9 +257,9 @@ class SeaLines(models.Model):
     third_demurrage_to = fields.Integer('Third Way Demurrage To')
     third_rate =  fields.Float('Third Way Demurrage Rate')
     delivery_order = fields.Float('Delivery Order')
-    agency = fields.Float('Agency')
+    agency = fields.Monetary('Agency')
     partner_id = fields.Many2one('res.partner')
-    
+    currency_id = fields.Many2one('res.currency', string="Currency")
     
     @api.multi
     def name_get(self):

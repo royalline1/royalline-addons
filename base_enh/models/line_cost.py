@@ -9,8 +9,16 @@ class AdditionalCost(models.Model):
     
     
     product_id = fields.Many2one('product.product', string='Additional Name', required=True ,domain=[('is_add_cost', '=', True)])
-    cost = fields.Float(required=True)
+    cost = fields.Monetary(required=True)
     line_cost_id = fields.Many2one('line.cost' ,required=True)
+    currency_id = fields.Many2one('res.currency', string="Currency")
+    
+    @api.constrains('cost')
+    def check_cost_value(self):
+        """cost value greater than 0"""
+        for rec in self:
+            if rec.cost == 0 or rec.cost < 0:
+                raise UserError("'Cost' value should be greater than 0")
     
 #     _sql_constraints = [('check_additional_cost_cost', 'CHECK(cost > 0)', 'The additional cost must be greater than zero.')]
     
@@ -22,9 +30,9 @@ class LineCostLine(models.Model):
     sea_lines_id = fields.Many2one('sea.lines', 'Container', required=True)
     partner_id = fields.Many2one('res.partner',related="line_cost_id.line_id")
     min_qty = fields.Integer('Minimum Quantity', required=True)
-    agency = fields.Float('Agency', related="sea_lines_id.agency",store=True)
-    transport_loading_price = fields.Float()
-    transport_discharge_price = fields.Float()
+    agency = fields.Monetary('Agency', related="sea_lines_id.agency",store=True)
+    transport_loading_price = fields.Monetary()
+    transport_discharge_price = fields.Monetary()
     insurance_price = fields.Float()
     clearance_price = fields.Float()
     is_loading = fields.Boolean()
@@ -33,10 +41,11 @@ class LineCostLine(models.Model):
     is_insurance_cost = fields.Boolean()
     type = fields.Selection([('loading','Loading'),('discharg','Discharg')])
     product_id = fields.Many2one('product.product', string='Name Of Discount', domain=[('is_discount', '=', True)])
-    value = fields.Float('Discount Value')
-    rate = fields.Float('Rate')
+    value = fields.Monetary('Discount Value')
+    rate = fields.Monetary('Rate')
     line_cost_id = fields.Many2one('line.cost', required=True)
-    total = fields.Float('Total',compute='_compute_total')
+    total = fields.Monetary('Total',compute='_compute_total')
+    currency_id = fields.Many2one('res.currency', string="Currency")
     
     @api.depends('agency','transport_loading_price','value','rate','transport_discharge_price','clearance_price','insurance_price')
     def _compute_total(self):
@@ -90,7 +99,7 @@ class LineCost(models.Model):
     port_dest_id = fields.Many2one('port', string="POD")
     transport_dest_id = fields.Many2one('transport.type', string="Transport Type Of Destination")
     delivery_place_id = fields.Many2one('res.place', 'Place Of Delivery')
-    bill_fees = fields.Float('Bill fees',compute='_compute_bill_fees',store=True)
+    bill_fees = fields.Monetary('Bill fees',compute='_compute_bill_fees',store=True)
     free_demurrage_and_detention = fields.Integer()
     transt_time = fields.Integer()
     customer_id = fields.Many2one('res.partner',stirng='Named Account')
@@ -105,8 +114,9 @@ class LineCost(models.Model):
     line_cost_ids = fields.One2many('line.cost.line','line_cost_id',string="Price")
     additional_cost_ids = fields.One2many('additional.cost','line_cost_id',string="Additional Cost")
     product_discount_id = fields.Many2one('product.product', string='Additional Discount' ,domain=[('is_discount', '=', True)])
-    discount = fields.Float(default=0.0)
+    discount = fields.Monetary(default=0.0)
     active=fields.Boolean(default=True)
+    currency_id = fields.Many2one('res.currency', string="Currency")
     @api.onchange('fak')
     def _onchange_fak(self):
         self.commodity_id = False

@@ -164,7 +164,7 @@ class Job(models.Model):
     insurance_cost_id = fields.Many2one('insurance.cost', string='Insurance Cost',
                                         related="sale_inquiry_id.insurance_cost_id")
     insurance_cost_ids = fields.Many2many('insurance.cost', related="sale_inquiry_id.insurance_cost_ids")
-    insurance_rate = fields.Float(related="sale_inquiry_id.insurance_rate")
+    insurance_rate = fields.Monetary(related="sale_inquiry_id.insurance_rate")
     transport_rate = fields.Float(related="sale_inquiry_id.transport_rate")
     clearance_id = fields.Many2one('clearance.cost',string='Clearance',
                                    related="sale_inquiry_id.clearance_id")

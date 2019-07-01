@@ -15,8 +15,9 @@ class AdditionalInsuCost(models.Model):
     
     product_id = fields.Many2one('product.product', string='Additional Name', required=True,
                                  domain=[('is_add_cost', '=', True)] )
-    cost = fields.Float()
+    cost = fields.Monetary()
     cost_id = fields.Many2one('line.cost',  required=True)
+    currency_id = fields.Many2one('res.currency', string="Currency")
 
 class InsuranceCost(models.Model):
     _name = 'insurance.cost'
@@ -35,9 +36,10 @@ class InsuranceCost(models.Model):
     from_date = fields.Date('From Date')
     to_date = fields.Date('To Date')
     insurance_type_id = fields.Many2one('insurance.type',string="Insurance Type")
-    rate = fields.Float()
+    rate = fields.Monetary()
+    currency_id = fields.Many2one('res.currency', string="Currency")
     note = fields.Text()
-    total = fields.Float(compute="_compute_total")
+    total = fields.Monetary(compute="_compute_total")
     cost_line_ids = fields.One2many('insurance.cost.line','cost_id',string="Additional Cost")
     condition_ids = fields.One2many('insurance.condition','cost_id',string="Condition")
     

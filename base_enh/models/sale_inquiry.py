@@ -194,7 +194,7 @@ class SaleInquiry(models.Model):
     sea_rate = fields.Float('Sea Rate #######')
     insurance_cost_id = fields.Many2one('insurance.cost', 'Insurance Cost') 
     insurance_cost_ids = fields.Many2many('insurance.cost', compute="_insurance_cost_ids")
-    insurance_rate = fields.Float(related="insurance_cost_id.total",readonly=True)
+    insurance_rate = fields.Monetary(related="insurance_cost_id.total",readonly=True)
     transport_rate = fields.Float(compute='_compute_transport_rate')
     clearance_id = fields.Many2one('clearance.cost','Clearance')
     clearance_cost_ids = fields.One2many('sale.clearance.cost.line', 'inquiry_id', 'Clearance Cost',readonly=True)
