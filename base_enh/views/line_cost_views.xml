@@ -18,7 +18,6 @@
 					<field name="country_dest_id" />
 					<field name="state_dest_id" />
 					<field name="city_dest_id" />
-					<field name="place_dest_id" />
 					<field name="port_dest_id" />
 					<field name="transport_dest_id" />
 					<field name="delivery_place_id" />
@@ -70,9 +69,11 @@
 								<field name="place_loading_id"
 									domain="[('country_id','=',country_loading_id),('city_id','=',city_loading_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
-									attrs="{'readonly':[('country_loading_id','=',False)]}"/>
-								<field name="transport_loading_id" attrs="{'readonly':[('is_loading','!=',True)]}"
-									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+									attrs="{'readonly':[('city_loading_id','=',False)],'required':[('city_loading_id','!=',False)]}"/>
+								<field name="transport_loading_id"
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+									attrs="{'readonly':[('place_loading_id','=',False)],'required':[('place_loading_id','!=',False)]}"/>
+									
 								<field name="port_loading_id"
 									domain="[('country_id','=',country_loading_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
@@ -80,15 +81,13 @@
 								<field name="terminal_loading_id"
 								       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
 								       domain="[('country_id','=',country_loading_id),('is_port','=',True),('port_id','=',port_loading_id)]"
-								       attrs="{'readonly':[('country_loading_id','=',False)]}"/>
-								<field name="transt_time" required="1"/>
-								<field name="start_date" />
-								<field name="expiry_date" />
+								       attrs="{'readonly':[('port_loading_id','=',False)],'required':[('port_loading_id','!=',False)]}"/>
+								<field name="transt_time" attrs="{'readonly':[('terminal_loading_id','=',False)]}" />
+								<field name="start_date"  attrs="{'readonly':[('terminal_loading_id','=',False)]}"/>
+								<field name="expiry_date" attrs="{'readonly':[('terminal_loading_id','=',False)]}"/>
 								<field name="is_expired" />
 								<field name="is_next" />
-								<field name="product_discount_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
-								<field name="discount" 
-								       attrs="{'readonly':[('product_discount_id','=',False)]}"/>
+								
 								
 							</group>
 							<group>
@@ -102,20 +101,16 @@
 									domain="[('country_id','=',country_dest_id),'|',('state_id','=',state_dest_id),('state_id','=',False)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
 									attrs="{'readonly':[('country_dest_id','=',False)]}"/>
-								<field name="place_dest_id"
-									domain="[('country_id','=',country_dest_id),('city_id','=',city_dest_id)]"
-									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
-									attrs="{'readonly':[('country_dest_id','=',False)]}"/>
 								<field name="port_dest_id"
 									domain="[('country_id','=',country_dest_id)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
 									attrs="{'readonly':[('country_dest_id','=',False)]}"/>
-								<field name="transport_dest_id" attrs="{'readonly':[('is_discharge','!=',True)]}"
+								<field name="transport_dest_id" attrs="{'readonly':[('delivery_place_id','=',False)],'required':[('delivery_place_id','!=',False)]}"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="terminal_des_same_id"
                                         options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
                                        domain="[('country_id','=',country_dest_id),('port_id','=',port_dest_id),('is_port','=',True)]"
-                                       attrs="{'readonly':[('country_dest_id','=',False)]}"/>
+                                       attrs="{'readonly':[('port_dest_id','=',False)]}"/>
 								<field name="delivery_place_id"
 									domain="[('country_id','=',country_dest_id),('city_id','=',city_dest_id),('is_delivery_place','=',True)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
@@ -123,21 +118,22 @@
 								<field name="bill_fees"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="currency_id"/>
-								<field name="customer_id"
+								<field name="customer_id" attrs="{'readonly':[('terminal_des_same_id','=',False)]}"
 									domain="[('customer','=',True),('is_company','=',True)]"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-								<field name="fak" />
+								<field name="fak"  attrs="{'readonly':[('terminal_des_same_id','=',False)]}"/>
 								<field name="commodity_id"
-									attrs="{'invisible':[('fak','=',True)]}"
+									attrs="{'invisible':[('fak','=',True)],'required':[('fak','=',True)]}"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 							</group>
 						</group>
 						<group string="Last Delivery">
-    						<field name="is_same_country"/>
+    						<field name="is_same_country" attrs="{'readonly':[('terminal_des_same_id','=',False)]}"/>
 						</group>
 						<group>
 						<group attrs="{'invisible':[('is_same_country','=',True)]}">
                                 <field name="country_diff_dest_id" 
+                                attrs="{'required':[('is_same_country','!=',True)]}"
                                        options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
                                 <field name="state_diff_dest_id"
                                        domain="[('country_id','=',country_diff_dest_id)]"
@@ -146,22 +142,14 @@
                                 <field name="city_diff_dest_id"
                                        domain="[('country_id','=',country_diff_dest_id),'|',('state_id','=',state_diff_dest_id),('state_id','=',False)]"
                                        options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
-                                       attrs="{'readonly':[('country_diff_dest_id','=',False)]}"/>
+                                       attrs="{'readonly':[('country_diff_dest_id','=',False)],'required':[('country_diff_dest_id','=',False)]}"/>
                                 <field name="delivery_diff_place_id" 
                                        domain="[('country_id','=',country_diff_dest_id),('is_delivery_place','=',True),'|',('state_id','=',state_diff_dest_id),('state_id','=',False),'|',('city_id','=',city_diff_dest_id),('city_id','=',False)]"
                                        options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
-                                       attrs="{'readonly':[('country_diff_dest_id','=',False)]}"/>
+                                       attrs="{'readonly':[('city_diff_dest_id','=',False)],'required':[('city_diff_dest_id','!=',False)]}"/>
                                 <field name="place_diff_dest_id" 
                                        domain="[('country_id','=',country_diff_dest_id)]"
                                        options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
-                                       attrs="{'readonly':[('country_diff_dest_id','=',False)]}"/>
-                                <field name="port_diff_id" 
-                                       domain="[('country_id','=',country_diff_dest_id)]"
-                                       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
-                                       attrs="{'readonly':[('country_diff_dest_id','=',False)]}"/>
-                                <field name="terminal_des_diff_id"
-                                       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
-                                       domain="[('country_id','=',country_diff_dest_id),('is_port','=',True),('port_id','=',port_diff_id)]"
                                        attrs="{'readonly':[('country_diff_dest_id','=',False)]}"/>
                             </group>
                             </group>
@@ -194,6 +182,9 @@
 
 								</tree>
 							</field>
+							<field name="product_discount_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+								<field name="discount" 
+								       attrs="{'readonly':[('product_discount_id','=',False)]}"/>
 						</group>
 						</page>
 						<page string="Additional Cost">
