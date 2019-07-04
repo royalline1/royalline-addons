@@ -138,10 +138,10 @@ class ResPartner(models.Model):
     phone_ids = fields.One2many('res.phone','partner_id', string='Phones Number')
     
     sea_ids = fields.One2many('sea.lines','partner_id')
-    bill_fees = fields.Float('Bill Fees')
-    release_to_bill = fields.Float('Release To Bill')
-    amendment_fees = fields.Float('Amendment Fees')
-    late_payment = fields.Float('Late Payment')
+    bill_fees = fields.Monetary('Bill Fees')
+    release_to_bill = fields.Monetary('Bill of Lading To Release')
+    amendment_fees = fields.Monetary('Amendment Fees')
+    late_payment = fields.Monetary('Late Payment')
     
     customs_id = fields.Many2one('res.partner',string="Customs point",domain=[('is_customs_point','=',True)])
     customer_class_id = fields.Many2one('customer.class')
@@ -175,6 +175,9 @@ class ResPartner(models.Model):
                                help="Check this box if this contact is a customer. It can be selected in sales orders.")
     street_number2 = fields.Char('P.O. Box', compute='_split_street', help="Door Number",
                                  inverse='_set_street', store=True)
+    street_number = fields.Char(string='Building No.')
+    street_name = fields.Char(required=True)
+    street2 = fields.Char(required=True)
 #   DHL Logistic id  
     dhl_log_id = fields.Many2one('dhl.logistic')
     dhl_log_to_id = fields.Many2one('dhl.logistic')
@@ -256,20 +259,55 @@ class SeaLines(models.Model):
    
     type = fields.Selection([('import','Import'),('export','Export'),('cross','Cross')])
     free_days = fields.Integer('Free Days')
-    first_demurrage_from = fields.Integer('First Way Demurrage From')
-    first_demurrage_to = fields.Integer('First Way Demurrage To')
-    first_rate =  fields.Float('First Way Demurrage Rate') 
-    second_demurrage_from = fields.Integer('Second Way Demurrage From')
+    first_demurrage_from = fields.Integer('First Way Demurrage From', default='1', readonly=True)
+    first_demurrage_to = fields.Integer('First Way Demurrage To', default='2')
+    first_rate =  fields.Monetary('First Way Demurrage Rate') 
+    second_demurrage_from = fields.Integer('Second Way Demurrage From', 
+                                           readonly=True, 
+                                           compute='_value_second_way')
     second_demurrage_to = fields.Integer('Second Way Demurrage To')
-    second_rate =  fields.Float('Second Way Demurrage Rate')
-    third_demurrage_from = fields.Integer('Third Way Demurrage From')
-    third_demurrage_to = fields.Integer('Third Way Demurrage To')
-    third_rate =  fields.Float('Third Way Demurrage Rate')
-    delivery_order = fields.Float('Delivery Order')
+    second_rate =  fields.Monetary('Second Way Demurrage Rate')
+    third_demurrage_from = fields.Integer('Third Way Demurrage From',
+                                           readonly=True, 
+                                           compute='_value_second_way')
+    third_demurrage_to = fields.Integer('Third Way Demurrage To',
+                                         default='1095')
+    third_rate =  fields.Monetary('Third Way Demurrage Rate')
+    delivery_order = fields.Monetary('Delivery Order')
     agency = fields.Monetary('Agency')
     partner_id = fields.Many2one('res.partner')
-    currency_id = fields.Many2one('res.currency', string="Currency")
+    currency_id = fields.Many2one('res.currency', string="Currency", related='partner_id.currency_id', readonly=True)
     
+    @api.constrains('first_demurrage_from','first_rate',
+                    'second_demurrage_from','second_rate')
+    def check_first_dem_from(self):
+        for rec in self:
+            if rec.first_demurrage_to <= rec.first_demurrage_from:
+                raise UserError("'First Way Demurrage To' should be greater than 'First Way Demurrage From'!")
+            if rec.type in ['export', 'import']:
+                if rec.first_rate <= 0:
+                    raise UserError("'First Way Demurrage Rate' should be not '0'!")
+            if rec.second_demurrage_to <= rec.second_demurrage_from:
+                raise UserError("'Second Way Demurrage To' should be greater than 'Second Way Demurrage From'!")
+            if rec.type in ['export', 'import']:
+                if rec.second_demurrage_to <= 0:
+                    raise UserError("'Second Way Demurrage To' should be not '0'!")
+            if rec.type in ['export', 'import']:
+                if rec.second_rate <= 0:
+                    raise UserError("'Second Way Demurrage Rate' should be not '0'!")
+            if rec.third_demurrage_to <= rec.third_demurrage_from:
+                raise UserError("'Third Way Demurrage To' should be greater than 'Third Way Demurrage From'!")
+            if rec.type in ['export', 'import']:
+                if rec.third_rate <=0:
+                    raise UserError("'Third Way Demurrage Rate' should be greater than '0'")
+    
+    @api.depends('first_demurrage_to','second_demurrage_to')
+    def _value_second_way(self):
+        for rec in self:
+            rec.second_demurrage_from = rec.first_demurrage_to + 1
+        for rec in self:
+            rec.third_demurrage_from = rec.second_demurrage_to + 1
+
     @api.multi
     def name_get(self):
         lines = []

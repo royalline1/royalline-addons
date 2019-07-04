@@ -150,7 +150,15 @@ class LineCost(models.Model):
     type = fields.Selection([('import','Import'),('export','Export'),('cross','Cross')],compute="_compute_type")
     
     
-    
+    @api.onchange('is_same_country')
+    def erase_last_des_related(self):
+        for rec in self:
+            if rec.is_same_country == True:
+                rec.country_diff_dest_id = u''
+                rec.state_diff_dest_id = u''
+                rec.city_diff_dest_id = u''
+                rec.place_diff_dest_id = u''
+                rec.delivery_diff_place_id = u''
     @api.multi
     @api.depends('country_diff_dest_id','country_dest_id','country_loading_id')
     def _compute_type(self):

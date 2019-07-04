@@ -478,9 +478,6 @@
 				<attribute name="placeholder">ZIP/Postal Code</attribute>
 				</xpath>
 				
-				
-				
-
 				<xpath expr="//field[@name='city']" position="after">
 					<field name="country_enforce_cities" invisible="1" />
 					<field name='city_id' placeholder="City"
@@ -490,9 +487,22 @@
                               'default_zipcode': zip,
                               'default_state_id': state_id}"
 						domain="[('country_id', '=', country_id),'|',('state_id','=',state_id),('state_id','=',False)]"
-						attrs="{'invisible': [('country_enforce_cities', '=', False)]}" />
+						attrs="{'invisible': [('country_enforce_cities', '=', False)]}" 
+                        options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
 				</xpath>
-
+                
+                <xpath
+                    expr="//field[@name='category_id']"
+                    position="attributes">
+                    <attribute name="options">{'no_create_edit': True, 'no_create': True, 'no_open': True}
+                    </attribute>
+                </xpath>
+                <xpath
+                    expr="//field[@name='state_id']"
+                    position="attributes">
+                    <attribute name="options">{'no_create_edit': True, 'no_create': True, 'no_open': True}
+                    </attribute>
+                </xpath>
 				<xpath expr="//field[@name='vat']" position="before">
 					<field name="local_name" />
 				</xpath>
@@ -743,16 +753,21 @@
 								<field name="type" />
 								<field name="free_days" />
 								<field name="first_demurrage_from" />
-								<field name="first_demurrage_to" />
-								<field name="first_rate" />
+								<field name="first_demurrage_to" 
+								       attrs="{'required': [('type', 'in', ['import','export'])]}"/>
+								<field name="first_rate" 
+								       attrs="{'required': [('type', 'in', ['import','export'])]}"/>
 								<field name="second_demurrage_from" />
-								<field name="second_demurrage_to" />
-								<field name="second_rate" />
+								<field name="second_demurrage_to" 
+								       attrs="{'required': [('type', 'in', ['import','export'])]}"/>
+								<field name="second_rate" 
+								       attrs="{'required': [('type', 'in', ['import','export'])]}"/>
 								<field name="third_demurrage_from" />
 								<field name="third_demurrage_to" />
-								<field name="third_rate" />
+								<field name="third_rate" attrs="{'required': [('type', 'in', ['import','export'])]}"/>
 								<field name="delivery_order" />
 								<field name="agency" />
+								<field name="currency_id" />
 							</tree>
 						</field>
 
