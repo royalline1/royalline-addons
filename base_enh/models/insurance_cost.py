@@ -18,7 +18,7 @@ class AdditionalInsuCost(models.Model):
     product_id = fields.Many2one('product.product', string='Additional Name', required=True,
                                  domain=[('is_add_cost', '=', True)] )
     cost = fields.Monetary(string="Cost")
-    cost_id = fields.Many2one('line.cost',  required=True, string="Line Cost")
+    cost_id = fields.Many2one('insurance.cost', string="Line Cost")
     currency_id = fields.Many2one('res.currency', string="Currency")
 
 class InsuranceCost(models.Model):
