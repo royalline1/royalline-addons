@@ -325,7 +325,7 @@ class SaleInquiry(models.Model):
        for rec in self:
             domain = [  ('country_loading_id', '=', rec.country_loading_id.id),
                         ('country_dest_id', '=', rec.country_dest_id.id),
-                        ('is_next','=',False),('is_expired','=',False)
+                        ('is_expired','!=',True)
                         ]
             domain = AND([domain, OR([[('city_loading_id', '=', rec.city_loading_id.id),
                                       ('city_dest_id', '=', rec.city_dest_id.id)],

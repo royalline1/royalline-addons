@@ -309,7 +309,7 @@
                                         <!-- <field name="transport_rate" /> -->
                                     </group>
                                     <group string="Transporter Details">
-                                            <field name="transporter_cost_id" domain="[('is_next','=',False),('is_expired','=',False)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+                                            <field name="transporter_cost_id" domain="[('is_expired','!=',True)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                             <field name="transporter_free_days"/>
                                             <field name="transporter_total"/>
                                             <field name="currency_id"/>
