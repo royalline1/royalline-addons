@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
+from odoo.exceptions import UserError
 
 class InsuranceCondition(models.Model):
     _name = 'insurance.condition'
@@ -52,7 +53,13 @@ class InsuranceCost(models.Model):
     active=fields.Boolean(default=True)
     
     
-    
+    @api.constrains('to_date','from_date')
+    def check_date(self):
+        """From date should be <= to date"""
+        for rec in self:
+            if rec.from_date > rec.to_date:
+                raise UserError("'From date' should be less than or equal 'To date'")
+            
     def _search_is_expired(self,op,val):
         sql = """
 select id from insurance_cost where to_date <= '%s'

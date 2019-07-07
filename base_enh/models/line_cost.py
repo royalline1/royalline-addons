@@ -149,7 +149,39 @@ class LineCost(models.Model):
     currency_id = fields.Many2one('res.currency', string="Currency", required=True)
     type = fields.Selection([('import','Import'),('export','Export'),('cross','Cross')],compute="_compute_type")
     
+    @api.onchange('place_des_id')
+    def erase_related_data_loading(self):
+        """erase data of Transport type, country related, and fees"""
+        for rec in self:
+            rec.transport_des_id=u''
+            rec.delivery_place_id=u''
+            rec.bill_fees=u''
+            rec.currency_id=u''
+            rec.transt_time=u''
+            rec.start_date=u''
+            rec.expiry_date=u''
+            rec.country_diff_dest_id=u''
+            
+    @api.multi
+    @api.onchange('transport_loading_id')
+    def clear_trans_load_pri(self):
+        """clear data of transport loading price once transport type of loading changed"""
+        for rec in self:
+            n = rec.line_cost_ids
+            for l in n:
+                l.transport_loading_price =u''
+            
     
+    @api.multi
+    @api.onchange('transport_dest_id')
+    def clear_trans_discharge_pri(self):
+        """clear data of transport discharge price once transport type of delivery changed"""
+        for rec in self:
+            n = rec.line_cost_ids
+            for k in n:
+                k.transport_discharge_price=u''
+    
+    @api.multi
     @api.onchange('is_same_country')
     def erase_last_des_related(self):
         for rec in self:
