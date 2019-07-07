@@ -47,7 +47,7 @@ class LineCostLine(models.Model):
     line_cost_id = fields.Many2one('line.cost', required=True)
     total = fields.Monetary('Total',compute='_compute_total')
     currency_id = fields.Many2one('res.currency', string="Currency",required=True)
-    line_type = fields.Selection(related="line_cost_id.type")
+    line_type = fields.Selection(related="line_cost_id.type", string='Line Cost Type')
     transport_loading_id = fields.Many2one('transport.type',related="line_cost_id.transport_loading_id")
     transport_dest_id = fields.Many2one('transport.type',related="line_cost_id.transport_dest_id")
     

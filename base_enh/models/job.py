@@ -155,7 +155,7 @@ class Job(models.Model):
     condition_ids = fields.One2many('sale.inquiry.condition', inverse_name='job_id', 
                                     related='sale_inquiry_id.condition_ids',string='Conditions')
     condition_one_ids = fields.One2many('sale.inquiry.condition', inverse_name='job_one_id', 
-                                    string='Conditions')
+                                    string='Conditions Table')
     container_size_ids = fields.One2many('sale.inquiry.container', inverse_name='job_id',
                                          string= 'Container Price',related='sale_inquiry_id.container_size_ids')
     container_ids = fields.Many2many('container.size', related="sale_inquiry_id.container_ids")
