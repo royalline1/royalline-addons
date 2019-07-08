@@ -83,7 +83,7 @@ class LineCostLine(models.Model):
                 for i in rec.line_cost_id.additional_cost_ids:
                     total_add += i.currency_id._convert(i.cost,rec.line_cost_id.currency_id,self.env.user.company_id,fields.Date.today())
                     
-                rec.total = total_add + value + rec.line_cost_id.bill_fees
+                rec.total = total_add + value + rec.line_cost_id.bill_fees - rec.line_cost_id.discount
             
     @api.model
     def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
@@ -380,8 +380,21 @@ select id from line_cost where start_date > '%s'
                 rec.bill_fees  = self.env.user.company_id.currency_id._convert(rec.line_id.bill_fees,rec.currency_id,self.env.user.company_id,fields.Date.today())
             else:
                 rec.bill_fees = 0.0
-                
-                
+#     @api.multi            
+#     @api.onchange('additional_cost_ids','additional_cost_ids.cost','discount')
+#     def _compute_total_line_cost(self):
+#         """Discount all totals + line cost total - discount"""
+#         for rec in self:
+#             f=rec.line_cost_ids
+#             for i in f:
+#                 f.total = f.total + sum(rec.additional_cost_ids.mapped('cost')+[0]) - rec.discount
+    
+#     @api.depends('price','cost_line_ids','cost_line_ids.cost')
+#     def _compute_total(self):
+#         for rec in self:
+#             rec.total = rec.price + sum(rec.cost_line_ids.mapped('cost')+[0])
+            
+                   
             
     @api.onchange('line_id')     
     def onchange_line_id(self):
