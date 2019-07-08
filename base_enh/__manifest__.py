@@ -2,10 +2,12 @@
 {
     'name': "Logistics Management",
     'summary': """
-        Summary""",
+        Logistic module developed based on odoo 12 enterprise, it helps logistics companies 
+        to manage their shipments and documentations.""",
 
     'description': """
-        description
+        Logistic module developed based on odoo 12 enterprise, it helps logistics companies 
+        to manage their shipments and documentations.
     """,
 
     'author': "Codesk Company",
