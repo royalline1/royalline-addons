@@ -52,7 +52,47 @@ class InsuranceCost(models.Model):
     is_next = fields.Boolean(compute='_compute_is_expired',search="_search_is_next")
     active=fields.Boolean(default=True)
     
+    @api.onchange('partner_id')
+    def clear_insurance_company_related(self):
+        """
+        Clear qut_number,country_loading_id,rate,currency_id
+        country_dest_id,from_date,to_date,insurance_type_id
+        cost_line_ids,condition_ids
+        """
+        for rec in self:
+            rec.qut_number=u''
+            rec.country_loading_id=u''
+            rec.rate=u''
+            rec.currency_id=u''
+            rec.country_dest_id=u''
+            rec.from_date=u''
+            rec.to_date=u''
+            rec.insurance_type_id=u''
+        for l in self.cost_line_ids:
+            l.unlink()
+        for n in self.condition_ids:
+            n.unlink()
     
+    @api.onchange('country_loading_id')
+    def clear_country_loading_related(self):
+        """
+        Clear state_loading_id, ciity_loading_id once 
+        country_loading_id changed or cleared.
+        """
+        for rec in self:
+            rec.state_loading_id=u''
+            rec.city_loading_id=u''
+    
+    @api.onchange('country_dest_id')
+    def clear_country_destination_related(self):
+        """
+        Clear state_dest_id, ciity_dest_id once 
+        country_dest_id changed or cleared.
+        """
+        for rec in self:
+            rec.state_dest_id=u''
+            rec.city_dest_id=u''
+            
     @api.constrains('to_date','from_date')
     def check_date(self):
         """From date should be <= to date"""

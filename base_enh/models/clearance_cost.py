@@ -44,6 +44,21 @@ class ClearanceCost(models.Model):
     currency_id = fields.Many2one('res.currency', string="Currency")
     active=fields.Boolean(default=True)
     
+    @api.onchange('partner_id')
+    def clear_company_related_data(self):
+        """
+        Clear custom_declaration_id, from_date, to_date, 
+        shipment_type,qut_number once partner_id changed 
+        or erased.
+        """
+        for rec in self:
+            rec.qut_number=u''
+            rec.shipment_type=u''
+            rec.from_date=u''
+            rec.to_date=u''
+            rec.customs_declaration_id=u''
+    
+    
     @api.constrains('from_date','to_date')
     def date_from_to(self):
         """To date greater than From date"""
