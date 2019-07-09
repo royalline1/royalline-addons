@@ -358,7 +358,7 @@ class SaleInquiry(models.Model):
                         ('is_expired', '=', False)]
             domain = AND([domain, OR([[('customer_id', '=', rec.partner_id.id)],[('customer_id', '=', False)]])])
            
-            domain = AND([domain, OR([[('commodity_id', 'in', commodity_ids.ids)],[('fak', '=', False)]])])         
+            domain = AND([domain, OR([[('commodity_id', 'in', commodity_ids.ids)],[('fak', '=', True)]])])         
                         
             if rec.is_loading:
                 domain = AND([domain,
