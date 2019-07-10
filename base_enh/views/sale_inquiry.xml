@@ -67,8 +67,8 @@
                         <group>
                               <table style='width:100%;'>
                                 <tr>
-                                  <th style='width:7%;'><label for="shipment_method" string='Shipment Method' style="font-weight:bold;"/></th>
-                                  <td style='width:15%;'><field name="shipment_method" widget="radio" /></td>
+                                  <th style='width:7%;' ><label for="shipment_method" string='Shipment Method' style="font-weight:bold;"/></th>
+                                  <td style='width:15%;' ><field name="shipment_method" widget="radio" /></td>
                                   <th style='width:3%;' attrs="{'invisible': [('shipment_method', 'not in',['clearance','sea_freight','land_freight','air_freight'])]}"><label for="shipment_type" string='Shipment Type' style="font-weight:bold;"/></th>
                                   <td style='width:20%;'  attrs="{'invisible': [('shipment_method', 'not in',['clearance','sea_freight','land_freight','air_freight'])]}" ><field name="shipment_type"  widget="radio" /></td>
                                   <th style='width:7%;' attrs="{'invisible': [('shipment_type', 'not in',['import','export','cross','internal'])]}"><label for="shipment_logic" string='Shipment logic' style="font-weight:bold;"/></th>

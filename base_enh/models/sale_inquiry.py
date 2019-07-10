@@ -216,6 +216,7 @@ class SaleInquiry(models.Model):
 #   Commodity key
     commodity_ids = fields.Many2many('commodity')  
     issue_bill_lading_to = fields.Many2one ('res.partner', string='Issue Bill of lading To')
+
 #   loaded country related
     @api.onchange('country_loading_id')
     def erase_related_addr(self):

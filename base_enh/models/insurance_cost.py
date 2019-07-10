@@ -52,6 +52,15 @@ class InsuranceCost(models.Model):
     is_next = fields.Boolean(compute='_compute_is_expired',search="_search_is_next")
     active=fields.Boolean(default=True)
     
+    
+    @api.constrains('rate')
+    def rate_value(self):
+        """
+        Rate must be more than 0
+        """
+        for rec in self:
+            if rec.rate <= 0:
+                raise UserError("'Rate' value should be more than 0.")
         #Smart buttons
     @api.multi  
     def call_job(self):  
