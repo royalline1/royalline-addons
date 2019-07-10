@@ -71,6 +71,46 @@ class TransportCost(models.Model):
     active=fields.Boolean(default=True)
     currency_id = fields.Many2one('res.currency', string="Currency")
     
+    #Smart buttons
+    @api.multi  
+    def call_job(self):  
+        mod_obj = self.env['ir.model.data']
+        try:
+            tree_res = mod_obj.get_object_reference('job', 'view_job__tree')[1]
+            form_res = mod_obj.get_object_reference('job', 'view_job_form')[1]
+        except ValueError:
+            form_res = tree_res = search_res = False
+        return {  
+            'name': ('job'),  
+            'type': 'ir.actions.act_window',  
+            'view_type': 'form',  
+            'view_mode': "[tree,form]",  
+            'res_model': 'job',  
+            'view_id': False,  
+            'views': [(tree_res, 'tree'),(form_res, 'form')], 
+            'domain': [('transporter_cost_id.id', '=', self.id)], 
+            'target': 'current',  
+               }      
+    @api.multi  
+    def call_sale_inquiry(self):  
+        mod_obj = self.env['ir.model.data']
+        try:
+            tree_res = mod_obj.get_object_reference('sale.inquiry', 'view_inquiry_tree')[1]
+            form_res = mod_obj.get_object_reference('sale.inquiry', 'view_inquiry_form')[1]
+        except ValueError:
+            form_res = tree_res = search_res = False
+        return {  
+            'name': ('sale.inquiry'),  
+            'type': 'ir.actions.act_window',  
+            'view_type': 'form',  
+            'view_mode': "[tree,form]",  
+            'res_model': 'sale.inquiry',  
+            'view_id': False,  
+            'views': [(tree_res, 'tree'),(form_res, 'form')], 
+            'domain': [('transporter_cost_id.id', '=', self.id)], 
+            'target': 'current',  
+               }
+    
     def _search_is_expired(self,op,val):
         sql = """
 select id from transport_cost where to_date <= '%s'

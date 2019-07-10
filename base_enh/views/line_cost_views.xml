@@ -38,6 +38,18 @@
 				<form>
 				<field name="type" invisible="1"/>
 					<sheet>
+					<div class="oe_button_box" name="button_box">  
+                            <button name="call_job" type="object"  
+                            class="oe_stat_button" icon="fa-pencil-square-o" string="Job">  
+                                 <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
+                            string="You String Name" />   -->
+                           </button> 
+                           <button name="call_sale_inquiry" type="object"  
+                            class="oe_stat_button" icon="fa-pencil-square-o" string="Sale Inquiry">  
+                                 <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
+                            string="You String Name" />   -->
+                           </button>
+                       </div>
 					<group>
 					   <group>
 					       <field name="line_id"
