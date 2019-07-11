@@ -51,7 +51,8 @@ class InsuranceCost(models.Model):
     is_expired = fields.Boolean('Is Expired Price',compute='_compute_is_expired',search="_search_is_expired")
     is_next = fields.Boolean(compute='_compute_is_expired',search="_search_is_next")
     active=fields.Boolean(default=True)
-    
+    payment_term_id = fields.Many2one('account.payment.term', string="Payment Terms", 
+                                      related='partner_id.property_supplier_payment_term_id')
     
     @api.constrains('rate')
     def rate_value(self):

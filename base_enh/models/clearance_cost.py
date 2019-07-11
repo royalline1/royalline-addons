@@ -43,8 +43,9 @@ class ClearanceCost(models.Model):
     to_date = fields.Date('To Date')
     currency_id = fields.Many2one('res.currency', string="Currency")
     active=fields.Boolean(default=True)
-    
-        #Smart buttons
+    payment_term_id = fields.Many2one('account.payment.term', string="Payment Terms",
+                                      related='partner_id.property_supplier_payment_term_id')
+    #Smart buttons
     @api.multi  
     def call_job(self):  
         mod_obj = self.env['ir.model.data']

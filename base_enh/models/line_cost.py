@@ -135,7 +135,7 @@ class LineCost(models.Model):
     customer_id = fields.Many2one('res.partner',stirng='Named Account')
     fak = fields.Boolean('FAK',default=True)
     product_id = fields.Many2one('product.product')
-    commodity_id = fields.Many2one('commodity')
+    commodity_id = fields.Many2many('commodity', related='customer_id.commodity_ids')
     start_date = fields.Date('Start Date')
     expiry_date = fields.Date('Expiry Date')
     note = fields.Text('Notes')
@@ -148,6 +148,9 @@ class LineCost(models.Model):
     active=fields.Boolean(default=True)
     currency_id = fields.Many2one('res.currency', string="Currency", required=True)
     type = fields.Selection([('import','Import'),('export','Export'),('cross','Cross')],compute="_compute_type")
+    payment_term_id = fields.Many2one('account.payment.term', string="Payment Terms", 
+                                      related='line_id.property_supplier_payment_term_id')
+    
     
     #Smart buttons
     @api.multi  
@@ -296,7 +299,15 @@ select id from line_cost where start_date > '%s'
     def _onchange_fak(self):
         self.commodity_id = False
         
-        
+    @api.onchange('place_loading_id')
+    def place_loading_id_related(self):
+        for rec in self:
+            rec.transt_time=u''
+            rec.start_date=u''
+            rec.expiry_date=u''
+            rec.transport_loading_id=u''
+            rec.country_diff_dest_id=u''
+         
     #   loaded country related
     @api.onchange('country_loading_id')
     def erase_related_addr(self):
@@ -328,6 +339,12 @@ select id from line_cost where start_date > '%s'
         self.port_dest_id = False
         self.terminal_des_same_id = False
         self.delivery_place_id = False
+    
+    @api.onchange('place_dest_id')
+    def place_dest_id_related(self):
+        for rec in self:
+            rec.transport_dest_id=u''
+            rec.customer_id=u''
     
     @api.onchange('state_dest_id')
     def erase_related_addr_three_des(self):

@@ -68,6 +68,7 @@
 								       string="Rate"/>
 								<field name="currency_id"
 								       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+								<field name="payment_term_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
 							</group>
 						</group>
 						<group>

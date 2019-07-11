@@ -134,7 +134,8 @@
 								<field name="fak"  attrs="{'readonly':[('terminal_des_same_id','=',False)]}"/>
 								<field name="commodity_id"
 									attrs="{'invisible':[('fak','=',True)],'required':[('fak','!=',True)]}"
-									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
+									widget="many2many_tags" edit="1"/>
 							</group>
 						</group>
 						<group string="Last Delivery">
@@ -197,7 +198,8 @@
 								       attrs="{'readonly':[('product_discount_id','=',False)]}"/>
 								<field name="bill_fees"
                                     options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-                                <field name="currency_id" string="Main Currency"/>
+                                <field name="currency_id" string="Main Currency" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                                <field name="payment_term_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
 						</group></group></page>
 						<page string="Additional Cost">
 						<group>

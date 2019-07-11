@@ -70,7 +70,9 @@ class TransportCost(models.Model):
     to_date = fields.Date('To Date')
     active=fields.Boolean(default=True)
     currency_id = fields.Many2one('res.currency', string="Currency")
-    
+    payment_term_id = fields.Many2one('account.payment.term', string="Payment Terms", 
+                                      related='partner_id.property_supplier_payment_term_id',
+                                      readonly=True)
     #Smart buttons
     @api.multi  
     def call_job(self):  
