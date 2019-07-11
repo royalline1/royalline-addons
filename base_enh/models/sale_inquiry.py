@@ -112,14 +112,14 @@ class SaleInquiry(models.Model):
     shipment_method = fields.Selection([('clearance', 'Clearance'), 
                                         ('sea_freight', 'Sea freight'), 
                                         ('land_freight', 'Land Freight'), 
-                                        ('air_freight', 'Air Freight')],string="Shipment Method")
+                                        ('air_freight', 'Air Freight')],string="Shipment Method", store=True)
     shipment_type = fields.Selection([('import', 'Import'), 
                                         ('export', 'Export'), 
                                         ('cross', 'Cross'), 
-                                        ('internal', 'internal')],string="Shipment Type")  
+                                        ('internal', 'internal')],string="Shipment Type",store=True)  
     shipment_logic = fields.Selection([('fcl', 'FCL'), 
                                         ('lcl', 'LCL'), 
-                                        ('roro', 'RORO')],string="Shipment logic")
+                                        ('roro', 'RORO')],string="Shipment logic",store=True)
     customer_ref = fields.Char('Customer Reference')
     shipper_ref = fields.Char('Shipper Reference')
     consignee_ref = fields.Char('Consignee Reference') 
@@ -216,7 +216,7 @@ class SaleInquiry(models.Model):
 #   Commodity key
     commodity_ids = fields.Many2many('commodity')  
     issue_bill_lading_to = fields.Many2one ('res.partner', string='Issue Bill of lading To')
-
+    
 #   loaded country related
     @api.onchange('country_loading_id')
     def erase_related_addr(self):
