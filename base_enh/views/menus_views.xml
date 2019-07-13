@@ -94,6 +94,9 @@
             parent="menu_config" action="agreement_method_action" sequence="11"/>
         <menuitem  id="transport_type_menu"
             parent="menu_config" action="transport_type_action" sequence="12"/>
+        <menuitem  id="truck_type_selections_menu"
+            parent="menu_config" name="Truck Type Selections" 
+            action="truck_type_selections_action" sequence="13"/>
         
                   
 

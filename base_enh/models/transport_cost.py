@@ -4,6 +4,15 @@ from odoo import models, fields, api
 from odoo.exceptions import UserError
 
 
+class TrasporterCostNote(models.Model):
+    _name = 'transport.cost.note'
+    _description = "Transport Cost Note / Log"
+
+    note=fields.Text('Note')
+    user_id = fields.Many2one('res.users', string='Created By')
+    create_datetime=fields.Datetime('Created On')
+    cost_id=fields.Many2one('transport.cost')
+
 class TransportlinsuPrice(models.Model):
     _name = 'transport.price.line'
     _rec_name = 'container_size_id'
@@ -15,6 +24,9 @@ class TransportlinsuPrice(models.Model):
     price = fields.Monetary(required=True)
     currency_id = fields.Many2one('res.currency', string="Currency")
     cost_id = fields.Many2one('transport.cost')
+    free_at_loading = fields.Float('Free at loading')
+    free_at_customs = fields.Float('Free at Customs')
+    free_at_discharge = fields.Float('Free at Discharge')
     
     @api.multi
     def name_get(self):
@@ -73,6 +85,9 @@ class TransportCost(models.Model):
     payment_term_id = fields.Many2one('account.payment.term', string="Payment Terms", 
                                       related='partner_id.property_supplier_payment_term_id',
                                       readonly=True)
+    traport_cost_note_ids = fields.One2many('transport.cost.note', 'cost_id')
+    terminal_loading_id=fields.Many2one('res.place', 'Terminal of Loading')
+    terminal_discharge_id=fields.Many2one('res.place', 'Terminal of Discharge')
     #Smart buttons
     @api.multi  
     def call_job(self):  
