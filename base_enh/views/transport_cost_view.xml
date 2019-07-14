@@ -124,6 +124,7 @@
                                         <field name="currency_id" 
                                                options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
                                         <field name="price" string="Rate"/>
+                                        <field name="total"/>
                                     </tree>
                                     <form></form>
                                 </field>
@@ -131,24 +132,27 @@
                                 <field name="cost_line_ids" nolabel="1">
                                     <tree editable="botton">
                                         <field name="product_id"
-                                            options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+                                            options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
+                                            domain="[('is_add_cost','=',True)]"/>
                                         <field name="container_size_id"
-                                            options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+                                            options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
                                         <field name="per_quantity" string="Per Equipment"/>
                                         <field name="currency_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
                                         <field name="cost" string="Rate"/>
                                     </tree>
                                     <form>
                                         <field name="product_id"
-                                            options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+                                            options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
+                                            domain="[('is_add_cost','=',True)]"/>
                                         <field name="cost" string="Rate"/>
                                     </form>
                                 </field>
-                                <label for="cost_line_ids" string='Additional Discount'/>
-                                <field name="cost_line_ids" nolabel="1">
+                                <!-- <label for="cost_line_discount_ids" string='Additional Discount'/>
+                                <field name="cost_line_discount_ids" nolabel="1">
                                     <tree editable="botton">
                                         <field name="product_id"
-                                            options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+                                            options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
+                                            domain="[('is_discount','=',True)]"/>
                                         <field name="container_size_id"
                                             options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                         <field name="per_quantity" string="Per Equipment"/>
@@ -157,10 +161,11 @@
                                     </tree>
                                     <form>
                                         <field name="product_id"
-                                            options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+                                            options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
+                                            domain="[('is_discount','=',True)]"/>
                                         <field name="cost" string="Rate"/>
                                     </form>
-                                </field>
+                                </field> -->
 						  </page>
 						  <page string="Notes">
 						      <!-- <label for="traport_cost_note_ids" string='No/> -->

@@ -20,11 +20,27 @@ class TransportlinsuPrice(models.Model):
     weight_type_id = fields.Many2one('weight.type')
     truck_type_id = fields.Many2one('truck.type')
     price = fields.Monetary(required=True)
-    currency_id = fields.Many2one('res.currency', string="Currency")
+    currency_id = fields.Many2one('res.currency', string="Currency",required=True)
     cost_id = fields.Many2one('transport.cost')
     free_at_loading = fields.Float('Free at loading')
     free_at_customs = fields.Float('Free at Customs')
     free_at_discharge = fields.Float('Free at Discharge')
+    total=fields.Monetary(compute='_compute_total')
+    
+    @api.depends()
+    def _compute_total(self):
+        for rec in self:
+            total_add = 0.0
+            for i in rec.cost_id.cost_line_ids:
+                if i.per_quantity:
+                    total_add += i.currency_id._convert(i.cost,rec.currency_id,self.env.user.company_id,fields.Date.today())
+                else:
+                    if rec.container_size_id.id == i.container_size_id.id:
+                        total_add += i.currency_id._convert(i.cost,rec.currency_id,self.env.user.company_id,fields.Date.today())
+                    else:
+                        total_add+=0.0
+            rec.total = total_add + rec.price 
+                
     
     @api.multi
     def name_get(self):
@@ -47,8 +63,6 @@ class TransportlinsuCost(models.Model):
     per_quantity = fields.Boolean()
     cost_id = fields.Many2one('transport.cost', string="Cost line")
     
-
-
 class TransportCost(models.Model):
     _name = 'transport.cost'
     _inherit = ['mail.thread', 'mail.activity.mixin']
@@ -72,6 +86,7 @@ class TransportCost(models.Model):
     date = fields.Date('Date')
     price = fields.Monetary(string="Price")
     cost_line_ids = fields.One2many('transport.cost.line','cost_id',string="Additional Cost")
+#     cost_line_discount_ids = fields.One2many('transport.cost.line','cost_id',string="Additional Discount")
     price_line_ids = fields.One2many('transport.price.line','cost_id',string="Line Price")
     total = fields.Monetary('Total', compute='_compute_total',store=True)
     note = fields.Text()
