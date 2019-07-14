@@ -59,5 +59,5 @@ dhl_logistic,dhl_logistic,model_dhl_logistic,base.group_user,1,1,1,1
 document_type,document_type,model_document_type,base.group_user,1,1,1,1
 truck_type_selections,truck_type_selections,model_truck_type_selections,base.group_user,1,1,1,1
 transport_cost_note,transport_cost_note,model_transport_cost_note,base.group_user,1,1,1,1
-
+line_cost_note,line_cost_note,model_line_cost_note,base.group_user,1,1,1,1
 

@@ -94,7 +94,13 @@ class LineCostLine(models.Model):
         """Erase discount value if product name changed"""
         for rec in self:
             rec.value=False
-        
+
+class LineCostNote(models.Model):
+    _name='line.cost.note' 
+    _description='line cost note table'
+    
+    note=fields.Text()
+    cost_id=fields.Many2one('line.cost')
 
 class LineCost(models.Model):
     _name = 'line.cost'
@@ -150,7 +156,7 @@ class LineCost(models.Model):
     type = fields.Selection([('import','Import'),('export','Export'),('cross','Cross')],compute="_compute_type")
     payment_term_id = fields.Many2one('account.payment.term', string="Payment Terms", 
                                       related='line_id.property_supplier_payment_term_id')
-    
+    line_cost_note_ids=fields.One2many('line.cost.note','cost_id')
     
     #Smart buttons
     @api.multi  
@@ -345,6 +351,9 @@ select id from line_cost where start_date > '%s'
         for rec in self:
             rec.transport_dest_id=u''
             rec.customer_id=u''
+            rec.start_date=u''
+            rec.expiry_date=u''
+            rec.country_diff_dest_id=u''
     
     @api.onchange('state_dest_id')
     def erase_related_addr_three_des(self):

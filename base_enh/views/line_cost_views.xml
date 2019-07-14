@@ -125,7 +125,7 @@
 								<field name="terminal_des_same_id"
                                         options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
                                        domain="[('country_id','=',country_dest_id),('port_id','=',port_dest_id),('is_port','=',True)]"
-                                       attrs="{'readonly':[('port_dest_id','=',False)]}"/>
+                                       attrs="{'readonly':[('port_dest_id','=',False)]}" required="1"/>
 								<field name="transport_dest_id" attrs="{'readonly':[('delivery_place_id','=',False)],'required':[('delivery_place_id','!=',False)]}"
                                     options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="customer_id" attrs="{'readonly':[('terminal_des_same_id','=',False)]}"
@@ -214,9 +214,15 @@
 						</group>
                         </page>
                         <page string="Notes">
-						<group>
-							<field name="note" />
-						</group>
+    						<field name="line_cost_note_ids">
+    						  <tree editable="botton">
+    							<field name="note" />
+    							<field name="create_uid"/>
+    							<field name="create_date"/>
+    							<field name="write_uid"/>
+    							<field name="write_date"/>
+    						  </tree>
+    						</field>
 						</page>
 					</notebook>
 					</sheet>

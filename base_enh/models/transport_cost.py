@@ -9,8 +9,6 @@ class TrasporterCostNote(models.Model):
     _description = "Transport Cost Note / Log"
 
     note=fields.Text('Note')
-    user_id = fields.Many2one('res.users', string='Created By')
-    create_datetime=fields.Datetime('Created On')
     cost_id=fields.Many2one('transport.cost')
 
 class TransportlinsuPrice(models.Model):
