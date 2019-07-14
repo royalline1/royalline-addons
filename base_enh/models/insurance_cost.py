@@ -22,6 +22,13 @@ class AdditionalInsuCost(models.Model):
     cost_id = fields.Many2one('insurance.cost', string="Line Cost")
     currency_id = fields.Many2one('res.currency', string="Currency")
 
+class InsuranceCostNote(models.Model):
+    _name='insurance.cost.note'
+    _description='insurance.cost.note'
+    
+    note=fields.Text()
+    insurance_id=fields.Many2one('insurance.cost')
+
 class InsuranceCost(models.Model):
     _name = 'insurance.cost'
     _inherit = ['mail.thread', 'mail.activity.mixin']
@@ -53,6 +60,7 @@ class InsuranceCost(models.Model):
     active=fields.Boolean(default=True)
     payment_term_id = fields.Many2one('account.payment.term', string="Payment Terms", 
                                       related='partner_id.property_supplier_payment_term_id')
+    insur_cost_note_ids=fields.One2many('insurance.cost.note', 'insurance_id')
     
     @api.constrains('rate')
     def rate_value(self):

@@ -50,32 +50,12 @@
 								<field name="qut_number" 
 								       required="True"/>
 								<field name="date" />
-								<field name="country_loading_id"
-									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-								<field name="state_loading_id"
-									domain="[('country_id','=',country_loading_id)]"
-									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-								<field name="city_loading_id"
-									domain="[('country_id','=',country_loading_id),'|',('state_id','=',state_loading_id),('state_id','=',False)]"
-									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
 								<field name="rate" 
 								       required="True"
 								       attrs="{'invisible': ['|',('partner_id', '=',False),('qut_number','=','')]}"/>
-								<field name="currency_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>	
-								<field name="payment_term_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
 							</group>
 							<group>
 							    <field name="active"/>
-								<field name="country_dest_id"
-									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-								<field name="state_dest_id"
-									domain="[('country_id','=',country_dest_id)]"
-									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-								<field name="city_dest_id"
-									domain="[('country_id','=',country_dest_id),'|',('state_id','=',state_dest_id),('state_id','=',False)]"
-									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-								<field name="from_date" />
-								<field name="to_date" />
 								<field name="is_expired" />
 								<field name="is_next" />
 								<field name="insurance_type_id"
@@ -83,38 +63,72 @@
 
 							</group>
 						</group>
-						<group>
-							<field name="cost_line_ids">
-								<tree editable="botton">
-									<field name="product_id"
-										options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
-									<field name="cost" />
+						<notebook>
+						  <page string="General Info">
+						  <group>
+						      <group>
+					            <field name="country_loading_id"
+                                    options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+                                <field name="state_loading_id"
+                                    domain="[('country_id','=',country_loading_id)]"
+                                    options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+                                <field name="city_loading_id"
+                                    domain="[('country_id','=',country_loading_id),'|',('state_id','=',state_loading_id),('state_id','=',False)]"
+                                    options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+                                <field name="from_date" />
+                                <field name="to_date" />
+						      </group>
+						      <group>
+						          <field name="country_dest_id"
+                                    options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+                                <field name="state_dest_id"
+                                    domain="[('country_id','=',country_dest_id)]"
+                                    options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+                                <field name="city_dest_id"
+                                    domain="[('country_id','=',country_dest_id),'|',('state_id','=',state_dest_id),('state_id','=',False)]"
+                                    options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+						      </group>
+						  </group>
+						  </page>
+						  <page string="Costs">
+						      <field name="cost_line_ids">
+                                <tree editable="botton">
+                                    <field name="product_id"
+                                        options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                     <field name="currency_id" />
-								</tree>
-
-							</field>
-
-						</group>
-						<group>
-							<field name="condition_ids">
-								<tree editable="botton">
-									<field name="name" />
-									<field name="type" />
-
-								</tree>
-
-							</field>
-
-						</group>
-						<group>
-							<group>
-								<field name="total" />
-							</group>
-						</group>
-						<group>
-							<field name="note" />
-
-						</group>
+                                    <field name="cost" />
+                                </tree>
+                            </field>
+                            <group>
+                                <field name="currency_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>  
+                                <field name="payment_term_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+						    </group>
+						  </page>
+						  <page string="Conditions">
+                            <field name="condition_ids">
+                                <tree editable="botton">
+                                    <field name="name" />
+                                    <field name="type" />
+                                </tree>
+                            </field>
+						  </page>
+						  <page string="notes">
+                            <field name="insur_cost_note_ids">
+                                <tree>
+                                    <field name="note"/>
+                                    <field name="create_uid"/>
+                                    <field name="create_date"/>
+                                    <field name="write_uid"/>
+                                    <field name="write_date"/>
+                                </tree>
+                            </field>						  
+						  </page>
+						</notebook>
+                       <group>
+                            <group>
+                                <field name="total" />
+                            </group>
+                        </group>
 					</sheet>
 					<div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>

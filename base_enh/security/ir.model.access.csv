@@ -60,4 +60,5 @@ document_type,document_type,model_document_type,base.group_user,1,1,1,1
 truck_type_selections,truck_type_selections,model_truck_type_selections,base.group_user,1,1,1,1
 transport_cost_note,transport_cost_note,model_transport_cost_note,base.group_user,1,1,1,1
 line_cost_note,line_cost_note,model_line_cost_note,base.group_user,1,1,1,1
+insurance_cost_note,insurance_cost_note,model_insurance_cost_note,base.group_user,1,1,1,1
 
