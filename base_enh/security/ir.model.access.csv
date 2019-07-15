@@ -41,6 +41,7 @@ inquiry_clearance_cost,inquiry_clearance_cost,model_inquiry_clearance_cost,base.
 sale_person,sale_person,model_sale_person,base.group_user,1,1,1,1
 sale_clearance_cost_line,sale_clearance_cost_line,model_sale_clearance_cost_line,base.group_user,1,1,1,1
 transport_price_line,transport_price_line,model_transport_price_line,base.group_user,1,1,1,1
+transport_cost_discount,transport_cost_discount,model_transport_cost_discount,base.group_user,1,1,1,1
 sale_inquiry,sale_inquiry,model_sale_inquiry,base.group_user,1,1,1,1
 job_access,job_access,model_job,base.group_user,1,1,1,1
 commodity_access,commodity_access,model_commodity,base.group_user,1,1,1,1

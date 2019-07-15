@@ -29,6 +29,14 @@ class TransportlinsuPrice(models.Model):
     
     @api.depends()
     def _compute_total(self):
+        """
+        1. convert discount and additional currencies the same as Rate currency.
+        2. total (rate) = (Rate(rate) + rate(additional)) - rate(discount)
+        - If per equipment in both discount and additional is/are True then no 
+        need to match the container size with rate(container_size) and plus or 
+        minus the value.
+        - If not per equipment then container size must match.
+        """
         for rec in self:
             total_add = 0.0
             for i in rec.cost_id.cost_line_ids:
@@ -39,6 +47,14 @@ class TransportlinsuPrice(models.Model):
                         total_add += i.currency_id._convert(i.cost,rec.currency_id,self.env.user.company_id,fields.Date.today())
                     else:
                         total_add+=0.0
+            for l in rec.cost_id.cost_line_discount_ids:
+                if l.per_quantity:
+                    total_add -= l.currency_id._convert(l.cost,rec.currency_id,self.env.user.company_id,fields.Date.today())
+                else:
+                    if rec.container_size_id.id == l.container_size_id.id:
+                        total_add -= l.currency_id._convert(l.cost,rec.currency_id,self.env.user.company_id,fields.Date.today())
+                    else:
+                        total_add -=0.0
             rec.total = total_add + rec.price 
                 
     
@@ -53,7 +69,7 @@ class TransportlinsuPrice(models.Model):
 class TransportlinsuCost(models.Model):
     _name = 'transport.cost.line'
     _rec_name = 'container_size_id'
-    _description = "TransportlinsuCost"
+    _description = "Transport Cost Additional"
     
     product_id = fields.Many2one('product.product', string='Transport Name', required=True, 
                                  domain=[('is_add_cost', '=', True)])
@@ -62,7 +78,20 @@ class TransportlinsuCost(models.Model):
     currency_id = fields.Many2one('res.currency', string="Currency")
     per_quantity = fields.Boolean()
     cost_id = fields.Many2one('transport.cost', string="Cost line")
+
+class TransportCostDiscount(models.Model):
+    _name = 'transport.cost.discount'
+    _rec_name = 'container_size_id'
+    _description = "TransportCostDiscount"
     
+    product_id = fields.Many2one('product.product', string='Transport Name', required=True, 
+                                 domain=[('is_discount', '=', True)])
+    container_size_id = fields.Many2one('container.size', required=True)
+    cost = fields.Monetary(required=True, string="Cost")
+    currency_id = fields.Many2one('res.currency', string="Currency")
+    per_quantity = fields.Boolean()
+    cost_id = fields.Many2one('transport.cost', string="Cost line")
+
 class TransportCost(models.Model):
     _name = 'transport.cost'
     _inherit = ['mail.thread', 'mail.activity.mixin']
@@ -86,7 +115,7 @@ class TransportCost(models.Model):
     date = fields.Date('Date')
     price = fields.Monetary(string="Price")
     cost_line_ids = fields.One2many('transport.cost.line','cost_id',string="Additional Cost")
-#     cost_line_discount_ids = fields.One2many('transport.cost.line','cost_id',string="Additional Discount")
+    cost_line_discount_ids = fields.One2many('transport.cost.discount','cost_id',string="Additional Discount")
     price_line_ids = fields.One2many('transport.price.line','cost_id',string="Line Price")
     total = fields.Monetary('Total', compute='_compute_total',store=True)
     note = fields.Text()
