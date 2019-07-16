@@ -50,12 +50,12 @@
                            <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
                             string="You String Name" />    -->
                            </button> 
-                           <!-- <button name="get_trade_name" type="object"  
-                            class="oe_stat_button" icon="fa-pencil" string="Sale Order">  
-                          (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
-                            string="You String Name" />   
+                           <button name="call_tickets" type="object"  
+                            class="oe_stat_button" icon="fa-life-ring" string="Call Tickets">  
+                          <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
+                            string="You String Name" />    -->
                            </button> 
-                           <button name="get_trade_name" type="object"  
+                           <!-- <button name="get_trade_name" type="object"  
                             class="oe_stat_button" icon="fa-pencil" string="Purchase Order">  
                                 (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
                             string="You String Name" />   

@@ -242,6 +242,28 @@ class Job(models.Model):
             'domain': [('folder_id.name','=',self.name)], 
             'target': 'current',  
                } 
+    
+    @api.multi  
+    def call_tickets(self):  
+        mod_obj = self.env['ir.model.data']
+        try:
+            kanban_res = mod_obj.get_object_reference('helpdesk', 'helpdesk_ticket_view_kanban')[1]
+            tree_res = mod_obj.get_object_reference('helpdesk', 'helpdesk_tickets_view_tree')[1]
+            form_res = mod_obj.get_object_reference('helpdesk', 'helpdesk_ticket_view_form')[1]
+            search_res = mod_obj.get_object_reference('helpdesk', 'helpdesk_tickets_view_search')[1]
+        except ValueError:
+            form_res = tree_res = search_res = False
+        return {  
+            'name': ('helpdesk.ticket.form'),  
+            'type': 'ir.actions.act_window',  
+            'view_type': 'form',  
+            'view_mode': "[kanban,tree,form,search]",  
+            'res_model': 'helpdesk.ticket',  
+            'view_id': False,  
+            'views': [(kanban_res, 'kanban'),(tree_res, 'tree'),(form_res, 'form'),(search_res, 'search')], 
+            'domain': [('job_id','=',self.id)], 
+            'target': 'current',  
+               } 
         
     @api.multi
     def add_job_folder(self):

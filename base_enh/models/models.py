@@ -95,7 +95,12 @@ class Port(models.Model):
         """erase related fields to state once empty or changed"""
         for rec in self:
             rec.city_id=u''
-        
+
+class HelpdeskTicket(models.Model):
+    _inherit="helpdesk.ticket"
+    _description="helpdesk.ticket"
+     
+    job_id=fields.Many2one('job')       
     
 class PortType(models.Model):
     _name = 'port.type'
