@@ -100,7 +100,8 @@ class HelpdeskTicket(models.Model):
     _inherit="helpdesk.ticket"
     _description="helpdesk.ticket"
      
-    job_id=fields.Many2one('job')       
+    job_id=fields.Many2one('job')  
+    partner_id=fields.Many2one('res.partner', related='job_id.partner_id', store=True)     
     
 class PortType(models.Model):
     _name = 'port.type'
