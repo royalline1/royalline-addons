@@ -43,7 +43,7 @@
                              </group>
                         </group>
                         <group>
-                            <group string="From1">
+                            <group string="From">
                                 <field name="company_from_id"  domain="[('is_courier','=',True)]"
                                        options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
                                        required="1"/>
