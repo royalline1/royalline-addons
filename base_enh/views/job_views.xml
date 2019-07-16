@@ -31,6 +31,10 @@
                                     string="Add Route" class="oe_highlight"
                                     attrs="{'invisible': [('added_route', '=', True)]}"
                                     confirm="Are you sure you want to add 'route'?" />
+                            <button name="add_job_folder" type="object"
+                                    string="Add Document Folder" class="oe_highlight"
+                                    attrs="{'invisible': [('added_doc', '=', True)]}"
+                                    confirm="Are you sure you want to add 'Jobs/JobName'?" />
                            <!-- <button name="approve_acct_mgr" type="object" 
                                    string="Account Manger Approval" class="oe_highlight" states="Progress"/>
                            <button name="approve_gm" type="object" 
@@ -40,28 +44,28 @@
                            <field name="stage" widget="statusbar" statusbar_visible="New,Progress,Confirmed,Cancelled,Job" /> -->
                     </header>
 					<sheet>
-					    <!-- <div class="oe_button_box" name="button_box">  
-                        <button name="get_trade_name" type="object"  
-                        class="oe_stat_button" icon="fa-pencil" string="Job">  
-                       (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
-                        string="You String Name" />   
-                       </button> 
-                       <button name="get_trade_name" type="object"  
-                        class="oe_stat_button" icon="fa-pencil" string="Sale Order">  
-                      (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
-                        string="You String Name" />   
-                       </button> 
-                       <button name="get_trade_name" type="object"  
-                        class="oe_stat_button" icon="fa-pencil" string="Purchase Order">  
-                            (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
-                        string="You String Name" />   
-                       </button> 
-                       <button name="get_trade_name" type="object"  
-                        class="oe_stat_button" icon="fa-pencil" string="Invoices">  
-                             (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
-                        string="You String Name" />   
-                       </button> 
-                       </div> -->
+					    <div class="oe_button_box" name="button_box">  
+                            <button name="call_doc" type="object"  
+                            class="oe_stat_button" icon="fa-paperclip" string="Call Document">  
+                           <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
+                            string="You String Name" />    -->
+                           </button> 
+                           <!-- <button name="get_trade_name" type="object"  
+                            class="oe_stat_button" icon="fa-pencil" string="Sale Order">  
+                          (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
+                            string="You String Name" />   
+                           </button> 
+                           <button name="get_trade_name" type="object"  
+                            class="oe_stat_button" icon="fa-pencil" string="Purchase Order">  
+                                (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
+                            string="You String Name" />   
+                           </button> 
+                           <button name="get_trade_name" type="object"  
+                            class="oe_stat_button" icon="fa-pencil" string="Invoices">  
+                                 (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
+                            string="You String Name" />    -->
+                           <!-- </button>  -->
+                       </div>
                         <group>
                               <table style='width:100%;'>
                                 <tr>
@@ -84,6 +88,7 @@
 							<group>
 								<field name="from_validity_date" readonly="1"/>
 								<field name="to_validity_date" readonly="1"/>
+								<field name="added_doc" invisible="1"/>
 							</group>
 						</group>
 							<notebook>

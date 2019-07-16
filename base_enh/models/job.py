@@ -217,10 +217,49 @@ class Job(models.Model):
 
     added_con = fields.Boolean()
     added_route = fields.Boolean()
+    added_doc = fields.Boolean()
     
     commodity_line_ids = fields.One2many('job.commodity.line','job_id')
     commodity_line_one_ids = fields.One2many('job.commodity.line','job_one_id')
-     
+    
+    @api.multi  
+    def call_doc(self):  
+        mod_obj = self.env['ir.model.data']
+        try:
+            tree_res = mod_obj.get_object_reference('documents', 'documents_view_list')[1]
+            form_res = mod_obj.get_object_reference('documents', 'documents_view_form')[1]
+            search_res = mod_obj.get_object_reference('base', 'view_attachment_search')[1]
+        except ValueError:
+            form_res = tree_res = search_res = False
+        return {  
+            'name': ('attachments form'),  
+            'type': 'ir.actions.act_window',  
+            'view_type': 'form',  
+            'view_mode': "[tree,form,search]",  
+            'res_model': 'ir.attachment',  
+            'view_id': False,  
+            'views': [(tree_res, 'tree'),(form_res, 'form'),(search_res, 'search')], 
+            'domain': [('folder_id.name','=',self.name)], 
+            'target': 'current',  
+               } 
+        
+    @api.multi
+    def add_job_folder(self):
+        """
+        Check if there is Jobs dir at document.
+        Create subfolder inside the Jobs folder.
+        """
+        for rec in self:
+            doc_obj = self.env['documents.folder']
+            l=doc_obj.search([('name','=','Jobs')])
+            if not l:
+                raise UserError('Please add Jobs directory at document first.')
+            else:
+                rec.ensure_one()
+                doc_obj.create({'name':rec.name,
+                                'parent_folder_id':l.id})
+                rec.write({'added_doc':True})
+
     
     @api.model_create_multi
     @api.returns('self', lambda value:value.id)
