@@ -182,7 +182,7 @@ class ResPartner(models.Model):
     street_number2 = fields.Char('P.O. Box', compute='_split_street', help="Door Number",
                                  inverse='_set_street', store=True)
     street_number = fields.Char(string='Building No.')
-    street_name = fields.Char(required=True)
+    street_name = fields.Char()
     street2 = fields.Char(required=True)
 #   DHL Logistic id  
     dhl_log_id = fields.Many2one('dhl.logistic')

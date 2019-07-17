@@ -218,9 +218,106 @@ class Job(models.Model):
     added_con = fields.Boolean()
     added_route = fields.Boolean()
     added_doc = fields.Boolean()
+    added_ana_acct = fields.Boolean()
+    added_po = fields.Boolean()
     
     commodity_line_ids = fields.One2many('job.commodity.line','job_id')
     commodity_line_one_ids = fields.One2many('job.commodity.line','job_one_id')
+    
+    @api.multi
+    def add_analytic_acct(self):
+        for rec in self:
+            if not rec.analytic_account:
+                rec.ensure_one()
+                rec.analytic_account.create({'name':rec.name,
+                                             'code':rec.name})
+                ana_acct_obj = rec.env['account.analytic.account'].search([('name','=',rec.name)])
+                rec.write({'analytic_account':ana_acct_obj.id,
+                           'added_ana_acct':True})
+            else:
+                raise UserError("This 'Job' is already assigned to an 'Analytic account'.")
+    
+    @api.multi
+    def add_po(self):
+        for rec in self:
+            if not rec.analytic_account:
+                raise UserError("Please add 'Analytic Account' first.")
+            else:
+                if rec.analytic_account and rec.customs_dec_id and rec.clearance_id:
+                    product_job_obj=rec.env['product.product'].search([('name','=','Clearance Services')])
+                    if not product_job_obj:
+                        rec.ensure_one()
+                        product_obj=rec.env['product.product']
+                        product_cat_obj=rec.env['product.category'].search([('name','=','All')])
+                        product_obj.create({'name':'Clearance Services',
+                                            'sale_ok':True,
+                                            'purchase_ok':True,
+                                            'type':'service',
+                                            'categ_id':product_cat_obj.id})
+                        product_job_obj=rec.env['product.product'].search([('name','=','Clearance Services')])
+                        product_unit_mesure_obj=rec.env['uom.uom'].search([('name','=','Unit(s)')])
+                        po_obj=rec.env['purchase.order']
+                        po_obj.create({'partner_id':rec.clearance_id.partner_id.id,
+                                       'partner_ref':rec.clearance_id.qut_number,
+                                       'currency_id':rec.clearance_id.currency_id.id,
+                                       'payment_term_id':rec.clearance_id.payment_term_id.id,
+                                       'order_line':[(0,0, {'product_id':product_job_obj.id,
+                                                            'name':product_job_obj.name,
+                                                            'sale_ok':True,
+                                                            'purchase_ok':True,
+                                                            'type':'service',
+                                                            'product_qty':1,
+                                                            'product_uom':product_unit_mesure_obj.id,
+                                                            'date_planned': rec.create_date,
+                                                            'account_analytic_id':rec.analytic_account.id,
+                                                            'price_unit':sum(rec.clearance_cost_ids.mapped('cost')+[0])})]
+                                                            })
+                        rec.write({'added_po':True})
+                    else:
+                        product_job_obj=rec.env['product.product'].search([('name','=','Clearance Services')])
+                        if product_job_obj:
+                            product_job_obj=rec.env['product.product'].search([('name','=','Clearance Services')])
+                            product_unit_mesure_obj=rec.env['uom.uom'].search([('name','=','Unit(s)')])
+                            po_obj=rec.env['purchase.order']
+                            po_obj.create({'partner_id':rec.clearance_id.partner_id.id,
+                                           'partner_ref':rec.clearance_id.qut_number,
+                                           'currency_id':rec.clearance_id.currency_id.id,
+                                           'payment_term_id':rec.clearance_id.payment_term_id.id,
+                                           'order_line':[(0,0, {'product_id':product_job_obj.id,
+                                                                'name':product_job_obj.name,
+                                                                'sale_ok':True,
+                                                                'purchase_ok':True,
+                                                                'type':'service',
+                                                                'product_qty':1,
+                                                                'product_uom':product_unit_mesure_obj.id,
+                                                                'date_planned': rec.create_date,
+                                                                'account_analytic_id':rec.analytic_account.id,
+                                                                'price_unit':sum(rec.clearance_cost_ids.mapped('cost')+[0])})]
+                                                                })
+                            rec.write({'added_po':True})
+                        
+
+    @api.multi  
+    def call_purchase(self):  
+        mod_obj = self.env['ir.model.data']
+        try:
+            kanban_res = mod_obj.get_object_reference('purchase_order', 'view_purchase_order_kanban')[1]
+            tree_res = mod_obj.get_object_reference('purchase_order', 'purchase_order_tree')[1]
+            form_res = mod_obj.get_object_reference('purchase_order', 'purchase_order_tree')[1]
+#             search_res = mod_obj.get_object_reference('trade_name', 'view_trade_tran_search1')[1]
+        except ValueError:
+            form_res = tree_res = kanban_res= False
+        return {  
+            'name': ('purchase.order.form'),  
+            'type': 'ir.actions.act_window',  
+            'view_type': 'form',  
+            'view_mode': "[kanban,tree,form]",  
+            'res_model': 'purchase.order',  
+            'view_id': False,  
+            'views': [(tree_res, 'tree'), (form_res, 'form'), (kanban_res, 'kanban')], 
+            'domain': [('partner_ref','=',self.clearance_id.qut_number)], 
+            'target': 'current',  
+               }
     
     @api.multi  
     def call_doc(self):  

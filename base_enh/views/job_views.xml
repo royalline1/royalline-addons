@@ -35,11 +35,15 @@
                                     string="Add Document Folder" class="oe_highlight"
                                     attrs="{'invisible': [('added_doc', '=', True)]}"
                                     confirm="Are you sure you want to add 'Jobs/JobName'?" />
-                           <!-- <button name="approve_acct_mgr" type="object" 
-                                   string="Account Manger Approval" class="oe_highlight" states="Progress"/>
-                           <button name="approve_gm" type="object" 
-                                   string="General Manger Approval" class="oe_highlight" states="Confirmed"/>
-                           <button name="cancel_gm" type="object" string="Cancel" class="oe_highlight" states="Confirmed"/>
+                           <button name="add_analytic_acct" type="object" 
+                                   string="Add Analytic Account" 
+                                   attrs="{'invisible': [('added_ana_acct', '=', True)]}"
+                                   class="oe_highlight"
+                                   confirm="Are you sure you want to add 'Analatic Account'?"/>
+                           <!-- <button name="add_po" type="object" 
+                                   string="Add PO" class="oe_highlight"
+                                   confirm="Are you sure you want to add 'Purchase Order'?"/> -->
+                           <!-- <button name="cancel_gm" type="object" string="Cancel" class="oe_highlight" states="Confirmed"/>
                            <button name="set_new_gm" type="object" string="Set to New" class="oe_highlight" states="Cancelled"/>
                            <field name="stage" widget="statusbar" statusbar_visible="New,Progress,Confirmed,Cancelled,Job" /> -->
                     </header>
@@ -55,12 +59,12 @@
                           <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
                             string="You String Name" />    -->
                            </button> 
-                           <!-- <button name="get_trade_name" type="object"  
-                            class="oe_stat_button" icon="fa-pencil" string="Purchase Order">  
-                                (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
-                            string="You String Name" />   
+                           <button name="call_purchase" type="object"  
+                            class="oe_stat_button" icon="fa-globe" string="Clearance PO">  
+                                <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
+                            string="You String Name" />    -->
                            </button> 
-                           <button name="get_trade_name" type="object"  
+                           <!-- <button name="get_trade_name" type="object"  
                             class="oe_stat_button" icon="fa-pencil" string="Invoices">  
                                  (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
                             string="You String Name" />    -->
@@ -89,6 +93,7 @@
 								<field name="from_validity_date" readonly="1"/>
 								<field name="to_validity_date" readonly="1"/>
 								<field name="added_doc" invisible="1"/>
+								<field name="added_ana_acct" invisible="1"/>
 							</group>
 						</group>
 							<notebook>
@@ -422,21 +427,32 @@
                                             <field name="currency_id" readonly="1"/>
                                     </group>
                                     <group string="Clearance Details">
-                                        <field name="customs_dec_id"
-                                                options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" readonly="1"/>
-                                        <field name="clearance_id"
-                                            domain="[('shipment_type','=',shipment_type),
-                                        ('customs_declaration_id','=',customs_dec_id)]"
-                                            options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
-                                            string="Clearance ID" readonly="1"/>
-                                        <!-- <label for="clearance_cost_ids" style="font-weight: bold" /> -->
-                                        <field name="clearance_cost_ids" force_save="1" readonly="1">
-                                            <tree create="false" delete="false" edit="false" editable="false">
-                                                <field name="container_id" />
-                                                <field name="cost" />
-                                            </tree>
-                                            <form></form>
-                                        </field>
+                                        <group>
+                                            <group>
+                                                <field name="customs_dec_id"
+                                                        options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" readonly="1"/>
+                                                <field name="clearance_id"
+                                                    domain="[('shipment_type','=',shipment_type),
+                                                ('customs_declaration_id','=',customs_dec_id)]"
+                                                    options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+                                                    string="Clearance ID" readonly="1"/>
+                                            </group>
+                                            <group>
+                                                <button name="add_po" type="object" 
+                                                       string="Add Clearance PO" class="oe_highlight"
+                                                       confirm="Are you sure you want to add 'Purchase Order'?"
+                                                       attrs="{'invisible': [('added_po', '=', True)]}"/>
+                                                <field name="added_po" invisible="1"/>
+                                            </group>
+                                        </group>
+                                            <label for="clearance_cost_ids" style="font-weight: bold" />
+                                            <field name="clearance_cost_ids" force_save="1" readonly="1">
+                                                <tree create="false" delete="false" edit="false" editable="false">
+                                                    <field name="container_id" />
+                                                    <field name="cost" />
+                                                </tree>
+                                                <form></form>
+                                            </field>
                                     </group>
                                 </page>
                                 <page string="Additional Cost">
@@ -466,7 +482,8 @@
                                                   domain="[('is_depot','=',True)]"
                                                   options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
                                            <field name="analytic_account" 
-                                                  options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                                                  options="{'no_create_edit': True, 'no_create': True}"
+                                                  readonly="1"/>
                                            <field name="Bill_Lading_No" />
                                        </group>
         					       </group>
