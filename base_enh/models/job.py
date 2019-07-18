@@ -382,7 +382,7 @@ class Job(models.Model):
             'res_model': 'purchase.order',  
             'view_id': False,  
             'views': [(tree_res, 'tree'), (form_res, 'form'), (kanban_res, 'kanban')], 
-            'domain': [('partner_ref','=',self.clearance_id.qut_number)], 
+            'domain': [('order_line.account_analytic_id.id','=',self.analytic_account.id)], 
             'target': 'current',  
                }
     
@@ -404,7 +404,7 @@ class Job(models.Model):
             'res_model': 'purchase.order',  
             'view_id': False,  
             'views': [(tree_res, 'tree'), (form_res, 'form'), (kanban_res, 'kanban')], 
-            'domain': [('partner_ref','=',self.insurance_cost_id.qut_number)], 
+            'domain': [('order_line.account_analytic_id.id','=',self.analytic_account.id)], 
             'target': 'current',  
                }
     

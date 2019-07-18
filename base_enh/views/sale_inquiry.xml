@@ -263,7 +263,6 @@
                                                     domain="[('container_size_id','=',container_id),
                                                         ('cost_id.place_dest_id','=',place_of_port_id),
                                                         ('cost_id.place_loading_id','=',place_loading_id),
-                                                        ('cost_id.is_next','=',False),
                                                         ('cost_id.is_expired','=',False)]"
                                                     options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                                 <field name="weight_type_id"
