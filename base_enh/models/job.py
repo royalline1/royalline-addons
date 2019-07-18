@@ -220,6 +220,7 @@ class Job(models.Model):
     added_doc = fields.Boolean()
     added_ana_acct = fields.Boolean()
     added_po = fields.Boolean()
+    added_po_ins = fields.Boolean()
     
     commodity_line_ids = fields.One2many('job.commodity.line','job_id')
     commodity_line_one_ids = fields.One2many('job.commodity.line','job_one_id')
@@ -234,6 +235,7 @@ class Job(models.Model):
                 ana_acct_obj = rec.env['account.analytic.account'].search([('name','=',rec.name)])
                 rec.write({'analytic_account':ana_acct_obj.id,
                            'added_ana_acct':True})
+                rec.message_post(body="Analytic account has been added")
             else:
                 raise UserError("This 'Job' is already assigned to an 'Analytic account'.")
     
@@ -273,6 +275,7 @@ class Job(models.Model):
                                                             'price_unit':sum(rec.clearance_cost_ids.mapped('cost')+[0])})]
                                                             })
                         rec.write({'added_po':True})
+                        rec.message_post(body="Clearance Purchase order has been added")
                     else:
                         product_job_obj=rec.env['product.product'].search([('name','=','Clearance Services')])
                         if product_job_obj:
@@ -295,7 +298,71 @@ class Job(models.Model):
                                                                 'price_unit':sum(rec.clearance_cost_ids.mapped('cost')+[0])})]
                                                                 })
                             rec.write({'added_po':True})
-                        
+                            rec.message_post(body="Clearance Purchase order has been added")
+    
+    @api.multi
+    def add_po_insurance(self):
+        for rec in self:
+            if not rec.analytic_account:
+                raise UserError("Please add 'Analytic Account' first.")
+            else:
+                if rec.analytic_account and rec.insurance_cost_id and rec.insurance_rate:
+                    product_job_obj=rec.env['product.product'].search([('name','=','Insurance Policy Fees')])
+                    if not product_job_obj:
+                        rec.ensure_one()
+                        product_obj=rec.env['product.product']
+                        product_cat_obj=rec.env['product.category'].search([('name','=','All')])
+                        product_obj.create({'name':'Insurance Policy Fees',
+                                            'sale_ok':True,
+                                            'purchase_ok':True,
+                                            'type':'service',
+                                            'categ_id':product_cat_obj.id})
+                        product_job_obj=rec.env['product.product'].search([('name','=','Insurance Policy Fees')])
+                        product_unit_mesure_obj=rec.env['uom.uom'].search([('name','=','Unit(s)')])
+                        po_obj=rec.env['purchase.order']
+                        po_obj.create({'partner_id':rec.insurance_cost_id.partner_id.id,
+                                       'partner_ref':rec.insurance_cost_id.qut_number,
+                                       'currency_id':rec.insurance_cost_id.currency_id.id,
+                                       'payment_term_id':rec.insurance_cost_id.payment_term_id.id,
+                                       'order_line':[(0,0, {'product_id':product_job_obj.id,
+                                                            'name':product_job_obj.name,
+                                                            'sale_ok':True,
+                                                            'purchase_ok':True,
+                                                            'type':'service',
+                                                            'product_qty':1,
+                                                            'product_uom':product_unit_mesure_obj.id,
+                                                            'date_planned': rec.create_date,
+                                                            'account_analytic_id':rec.analytic_account.id,
+                                                            'price_unit':rec.insurance_rate})]
+                                                            })
+                        rec.write({'added_po_ins':True})
+                        rec.message_post(body="Insurance Policy Purchase order has been added")
+                    else:
+                        product_job_obj=rec.env['product.product'].search([('name','=','Insurance Policy Fees')])
+                        if product_job_obj:
+                           product_job_obj=rec.env['product.product'].search([('name','=','Insurance Policy Fees')])
+                           product_unit_mesure_obj=rec.env['uom.uom'].search([('name','=','Unit(s)')])
+                           po_obj=rec.env['purchase.order']
+                           po_obj.create({'partner_id':rec.insurance_cost_id.partner_id.id,
+                                           'partner_ref':rec.insurance_cost_id.qut_number,
+                                           'currency_id':rec.insurance_cost_id.currency_id.id,
+                                           'payment_term_id':rec.insurance_cost_id.payment_term_id.id,
+                                           'order_line':[(0,0, {'product_id':product_job_obj.id,
+                                                                'name':product_job_obj.name,
+                                                                'sale_ok':True,
+                                                                'purchase_ok':True,
+                                                                'type':'service',
+                                                                'product_qty':1,
+                                                                'product_uom':product_unit_mesure_obj.id,
+                                                                'date_planned': rec.create_date,
+                                                                'account_analytic_id':rec.analytic_account.id,
+                                                                'price_unit':rec.insurance_rate})]
+                                                                })
+                           rec.write({'added_po_ins':True})
+                           rec.message_post(body="Insurance Policy Purchase order has been added")
+                    
+            
+                     
 
     @api.multi  
     def call_purchase(self):  
@@ -316,6 +383,28 @@ class Job(models.Model):
             'view_id': False,  
             'views': [(tree_res, 'tree'), (form_res, 'form'), (kanban_res, 'kanban')], 
             'domain': [('partner_ref','=',self.clearance_id.qut_number)], 
+            'target': 'current',  
+               }
+    
+    @api.multi  
+    def call_insurance_smart(self):  
+        mod_obj = self.env['ir.model.data']
+        try:
+            kanban_res = mod_obj.get_object_reference('purchase_order', 'view_purchase_order_kanban')[1]
+            tree_res = mod_obj.get_object_reference('purchase_order', 'purchase_order_tree')[1]
+            form_res = mod_obj.get_object_reference('purchase_order', 'purchase_order_tree')[1]
+#             search_res = mod_obj.get_object_reference('trade_name', 'view_trade_tran_search1')[1]
+        except ValueError:
+            form_res = tree_res = kanban_res= False
+        return {  
+            'name': ('purchase.order.form'),  
+            'type': 'ir.actions.act_window',  
+            'view_type': 'form',  
+            'view_mode': "[kanban,tree,form]",  
+            'res_model': 'purchase.order',  
+            'view_id': False,  
+            'views': [(tree_res, 'tree'), (form_res, 'form'), (kanban_res, 'kanban')], 
+            'domain': [('partner_ref','=',self.insurance_cost_id.qut_number)], 
             'target': 'current',  
                }
     

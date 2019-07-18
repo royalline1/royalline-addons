@@ -41,7 +41,7 @@
 
                        <div class="oe_button_box" name="button_box">  
                             <button name="call_job" type="object"  
-                            class="oe_stat_button" icon="fa-pencil-square-o" string="Job">  
+                            class="oe_stat_button" icon="fas fa-file-invoice-dollar" string="Job">  
                                  <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
                             string="You String Name" />   -->
                            </button> 

@@ -64,11 +64,11 @@
                                 <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
                             string="You String Name" />    -->
                            </button> 
-                           <!-- <button name="get_trade_name" type="object"  
-                            class="oe_stat_button" icon="fa-pencil" string="Invoices">  
-                                 (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
+                           <button name="call_insurance_smart" type="object"  
+                            class="oe_stat_button" icon="fa-shield" string="Insurance PO">  
+                                 <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
                             string="You String Name" />    -->
-                           <!-- </button>  -->
+                           </button> 
                        </div>
                         <group>
                               <table style='width:100%;'>
@@ -410,14 +410,23 @@
                                 </page> -->
                                 <page string="Vendors">
                                     <group string="Insurance Details">
-                                        <field name="insurance_cost_ids" invisible="1" />
-                                        <field name="insurance_cost_id"
-                                            domain="[('id','in',insurance_cost_ids)]"
-                                            options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
-                                            string="Insurance ID" readonly="1"/>
-                                        <field name="insurance_rate" readonly="1"/>
-                                        <field name="container_ids" invisible="1" />
-                                        <!-- <field name="transport_rate" /> -->
+                                            <group>
+                                                <field name="insurance_cost_ids" invisible="1" />
+                                                <field name="insurance_cost_id"
+                                                    domain="[('id','in',insurance_cost_ids)]"
+                                                    options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
+                                                    string="Insurance ID" readonly="1"/>
+                                                <field name="insurance_rate" readonly="1"/>
+                                                <field name="container_ids" invisible="1" />
+                                            </group>
+                                            <group>
+                                                <button name="add_po_insurance" type="object" 
+                                                               string="Add Insurance Policy PO" class="oe_highlight"
+                                                               confirm="Are you sure you want to add 'Insurance Policy Purchase Order'?"
+                                                               attrs="{'invisible': [('added_po_ins', '=', True)]}"/>
+                                                <field name="added_po_ins" invisible="1"/>
+                                                <!-- <field name="transport_rate" /> -->
+                                            </group>
                                     </group>
                                     <group string="Transporter Details">
                                             <field name="transporter_cost_id" 
