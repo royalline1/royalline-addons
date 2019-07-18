@@ -41,25 +41,25 @@
 
                        <div class="oe_button_box" name="button_box">  
                             <button name="call_job" type="object"  
-                            class="oe_stat_button" icon="fas fa-file-invoice-dollar" string="Job">  
+                            class="oe_stat_button" icon="fa-list-alt" string="Job">  
                                  <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
                             string="You String Name" />   -->
                            </button> 
-                           <button name="call_sale" type="object"  
+                           <!-- <button name="call_sale" type="object"  
                             class="oe_stat_button" icon="fa-pencil-square-o" string="Sale Order">  
-                                 <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
-                            string="You String Name" />   -->
+                                 (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
+                            string="You String Name" />  
                            </button> 
                            <button name="call_purchase" type="object"  
                             class="oe_stat_button" icon="fa-pencil-square-o" string="Purchase Order">  
-                                 <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
-                            string="You String Name" />   -->
+                                 (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
+                            string="You String Name" />  
                            </button> 
                            <button name="call_invoice" type="object"  
                             class="oe_stat_button" icon="fa-pencil-square-o" string="Invoices">  
-                                 <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
-                            string="You String Name" />   -->
-                           </button> 
+                                 (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
+                            string="You String Name" />  
+                           </button>  -->
                            <!-- <button name="create_job" type="object"  
                             class="oe_stat_button" icon="fa-pencil-square-o" string="Create Job">  
                            </button>  -->
