@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+         <record model="ir.ui.view" id="view_account_invoice_inher">
+            <field name="name">account.invoice</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_invoice_open'][1]" position="attributes">
+                    <attribute name="groups">account.group_account_manager,account.group_account_user</attribute>
+                </xpath>
+            </field>
+         </record>
+         
+         <record model="ir.ui.view" id="purchase_order_view_form_inherit">
+            <field name="name">purchase.order</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase_stock.purchase_order_view_form_inherit" />
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_view_picking'][1]" position="attributes">
+                    <attribute name="groups">stock.group_stock_manager</attribute>
+                </xpath>
+            </field>
+         </record>
+            
+    </data>
+</odoo>
