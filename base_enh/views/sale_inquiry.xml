@@ -96,7 +96,7 @@
                                                     options="{'no_create_edit': True, 'no_create': True}" 
                                                     string="Partner / Customer"
                                                     domain="[('customer','=',True)]"/>
-
+                                            <field name="commodity_domain_ids" widget="many2many_tags" invisible="True"/>
                                             <field name="customer_class_id"
                                                     options="{'no_create_edit': True, 'no_create': True}" 
                                                     attrs="{'readonly': [('partner_id', '=',False)]}"/>
@@ -292,7 +292,7 @@
     							         </group>
 							         </group>
 							         <label for="commodity_ids" style="font-weight: bold" />
-							         <field name="commodity_ids">
+							         <field name="commodity_ids" domain="[('id','in',commodity_domain_ids)]">
                                       <tree >
                                             <field name="name" />
                                         </tree>

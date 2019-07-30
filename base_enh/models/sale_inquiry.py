@@ -215,7 +215,8 @@ class SaleInquiry(models.Model):
     transporter_total = fields.Monetary(related='transporter_cost_id.total', string='Transport Total')
     currency_id = fields.Many2one('res.currency', related="transporter_cost_id.currency_id" ,string="Currency")
 #   Commodity key
-    commodity_ids = fields.Many2many('commodity')  
+    commodity_ids = fields.Many2many('commodity') 
+    commodity_domain_ids = fields.Many2many('commodity', related='partner_id.commodity_ids') 
     issue_bill_lading_to = fields.Many2one ('res.partner', string='Issue Bill of lading To')
     payment_term_id = fields.Many2one('account.payment.term', string="Payment Terms",
                                       related='partner_id.property_payment_term_id')

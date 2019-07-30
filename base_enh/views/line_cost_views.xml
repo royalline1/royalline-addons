@@ -135,7 +135,9 @@
 								<field name="commodity_id"
 									attrs="{'invisible':[('fak','=',True)],'required':[('fak','!=',True)]}"
 									options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
-									widget="many2many_tags" edit="1"/>
+									widget="many2many_tags"
+									domain="[('id','in',commodity_domain_ids)]"/>
+								<field name="commodity_domain_ids" widget="many2many_tags" invisible="True"/>
 							</group>
 						</group>
 						<group string="Last Delivery">
