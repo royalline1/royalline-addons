@@ -63,6 +63,11 @@ class ResPlace(models.Model):
         self.zip_code=u''
         self.port_id=u''
     
+    @api.onchange('is_port')
+    def port_erase(self):
+        for rec in self:
+            self.port_id=u''
+        
     @api.onchange('state_id')
     def erase_state_related(self):
         for rec in self:
@@ -365,6 +370,36 @@ class WareHouse (models.Model):
     image = fields.Binary(attachment=True)
     active = fields.Boolean('Active',default=True)
     image_attachment = fields.Binary(attachment=True,string="Image Attachment")
+    country_id = fields.Many2one('res.country', string="Country")
+    state_id = fields.Many2one('res.country.state', string="State")
+    city_id = fields.Many2one('res.city', 'City')
+    place_id = fields.Many2one('res.place','Place')
+    port_id = fields.Many2one('port', 'Port')
+    terminal_id = fields.Many2one('res.place', 'Terminal', domain=[('is_port','=',True)])
+    
+    @api.onchange('country_id')
+    def erase_country_re(self):
+        for rec in self:
+            rec.state_id=u''
+            rec.city_id=u''
+            rec.place_id=u''
+            rec.port_id=u''
+            rec.terminal_id=u''
+    
+    @api.onchange('state_id')
+    def erase_state_re(self):
+        for rec in self:
+            rec.city_id=u''
+    
+    @api.onchange('city_id')
+    def erase_city_re(self):
+        for rec in self:
+            rec.place_id=u''
+    
+    @api.onchange('port_id')
+    def erase_port_re(self):
+        for rec in self:
+            rec.terminal_id=u''
     
 class MITCompanies (models.Model):
     _name = 'mit.companies'
