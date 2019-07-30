@@ -159,6 +159,12 @@ class LineCost(models.Model):
                                       related='line_id.property_supplier_payment_term_id')
     line_cost_note_ids=fields.One2many('line.cost.note','cost_id')
     
+    @api.onchange('customer_id')
+    def erase_customer_related(self):
+        for rec in self:
+            rec.commodity_id=u''
+            
+    
     #Smart buttons
     @api.multi  
     def call_job(self):  

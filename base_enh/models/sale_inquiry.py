@@ -269,7 +269,10 @@ class SaleInquiry(models.Model):
     @api.onchange('partner_id')
     def partner_onchange(self):
         """ erase customer reference if customer 'Partner' field is empty"""
-        self.customer_ref=u''
+        for rec in self:
+            rec.customer_ref=u''
+            rec.commodity_ids=u''
+        
     
     @api.onchange('shipper_id')
     def shipper_onchange(self):
