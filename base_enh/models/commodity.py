@@ -24,3 +24,5 @@ class Commodity(models.Model):
     is_document = fields.Boolean("Is Document")
     active=fields.Boolean(default=True)
     note = fields.Text('Note')
+    is_category = fields.Boolean("Is Category")
+    package_ids=fields.Many2many('packaging',string='Package')
