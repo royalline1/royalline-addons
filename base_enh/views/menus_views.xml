@@ -12,8 +12,6 @@
         
         <!-- Top bar menue location -->
         <menuitem id="menu_location" parent="menu_logistic_manag" name="Locations" sequence="3"/>
-        
-        <!-- location / port -->
         <menuitem name="Ports" id="menu_port" 
                   parent="menu_location"
                   action="port_action" 
@@ -23,14 +21,22 @@
                    action="res_place_action" 
                    name="Places" 
                    sequence="2"/>
-        <menuitem  id="route_menu"
-            parent="menu_location" action="route_action" sequence="3"/>
-        <!-- <menuitem  id="driver_line_menu"
+        <menuitem  id="countries_view_menu"
                    parent="menu_location" 
-                   action="driver_info_action" 
-                   name="Driver Line" 
-                   sequence="3"/> -->
-        
+                   action="base.action_country" 
+                   name="Countries" 
+                   sequence="3"/>   
+        <menuitem  id="states_view_menu"
+                   parent="menu_location" 
+                   action="base.action_country_state" 
+                   name="States" 
+                   sequence="4"/>
+        <menuitem  id="cities_view_menu"
+                   parent="menu_location" 
+                   action="base_address_city.action_res_city_tree" 
+                   name="Cities" 
+                   sequence="5"/>
+                   
         <!-- top bar menue - cost -->
         <menuitem id="menu_costs" 
                   parent="menu_logistic_manag" 
