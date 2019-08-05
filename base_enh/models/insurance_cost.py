@@ -61,7 +61,12 @@ class InsuranceCost(models.Model):
     payment_term_id = fields.Many2one('account.payment.term', string="Payment Terms", 
                                       related='partner_id.property_supplier_payment_term_id')
     insur_cost_note_ids=fields.One2many('insurance.cost.note', 'insurance_id')
-    
+    transport_type=fields.Many2many('transport.type', string='Transport Type')
+    cif_type=fields.Selection([('percentage','Percentage'),('amount','Amount')],string='CIF Type')
+    cif_perc=fields.Float('CIF')
+    cif_amount=fields.Monetary('CIF')
+    voyage_from=fields.Many2one('port',string='Voyage From')
+    voyage_to=fields.Many2one('port',string='Voyage To')
     @api.constrains('rate')
     def rate_value(self):
         """

@@ -87,6 +87,11 @@
                                 <field name="city_dest_id"
                                     domain="[('country_id','=',country_dest_id),'|',('state_id','=',state_dest_id),('state_id','=',False)]"
                                     options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+                                    <field name="transport_type" widget="many2many_tags"/>
+                                <field name="voyage_from"
+                                       options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                                <field name="voyage_to"
+                                        options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
 						      </group>
 						  </group>
 						  </page>
@@ -102,6 +107,15 @@
                             <group>
                                 <field name="currency_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>  
                                 <field name="payment_term_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+						        <field name="cif_type" widget="radio"/>
+						        <label for="cif_perc" attrs="{'invisible': [('cif_type', 'not in',['percentage'])]}"/>
+                                <div name="cif_perc" attrs="{'invisible': [('cif_type', 'not in',['percentage'])]}">
+                                    <field name="cif_perc"
+                                           attrs="{'invisible': [('cif_type', 'not in',['percentage'])]}" 
+                                           class="oe_inline"/> %
+                                </div>
+						        <field name="cif_amount"
+                                       attrs="{'invisible': [('cif_type', 'not in',['amount'])]}"/>
 						    </group>
 						  </page>
 						  <page string="Conditions">

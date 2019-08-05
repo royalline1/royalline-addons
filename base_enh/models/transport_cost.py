@@ -78,6 +78,7 @@ class TransportlinsuCost(models.Model):
     currency_id = fields.Many2one('res.currency', string="Currency")
     per_quantity = fields.Boolean()
     cost_id = fields.Many2one('transport.cost', string="Cost line")
+    
 
 class TransportCostDiscount(models.Model):
     _name = 'transport.cost.discount'

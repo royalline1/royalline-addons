@@ -26,3 +26,8 @@ class Commodity(models.Model):
     note = fields.Text('Note')
     is_category = fields.Boolean("Is Category")
     package_ids=fields.Many2many('packaging',string='Package')
+
+    @api.onchange('is_category')
+    def erase_commodity_category(self):
+        for rec in self:
+            rec.commodity_category=u''
