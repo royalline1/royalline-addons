@@ -140,7 +140,13 @@ class ResPartner(models.Model):
     is_customs_point = fields.Boolean('Is Customs point')
     is_competitor = fields.Boolean('Is Competitor')
     is_sea_line = fields.Boolean('Is Sea Line')
+#   airline details  
     is_air_line = fields.Boolean('Is Air Line')
+    iata_code=fields.Char('IATA Code')
+    cass_code=fields.Char('CASS Code')
+    icao_code=fields.Char('ICAO Code')
+#   airline details end here
+  
     is_clearance_company= fields.Boolean('Is Clearance Company')
     is_transporter_company= fields.Boolean('Is Transporter Company')
     is_insurance_company= fields.Boolean('Is Insurance Company')

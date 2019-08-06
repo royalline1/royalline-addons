@@ -59,9 +59,13 @@
             action="clearance_cost_action" 
             name="Clearance Costs"
             sequence="4"/>
+        <menuitem id="air_line_cost_menu" parent="menu_costs"
+            action="air_line_cost_action" 
+            name="Airline Costs"
+            sequence="5"/>
                 <!-- products -->
         <menuitem id="menu_product_is_discount" name="Products" parent="menu_costs" 
-                  action="sale.product_template_action" sequence="5"/>
+                  action="sale.product_template_action" sequence="6"/>
         
         <record model="ir.actions.act_window"
                 id="sale.product_template_action">

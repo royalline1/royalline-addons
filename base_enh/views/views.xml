@@ -739,6 +739,17 @@
 					</page>
 				</xpath>
 				<xpath expr="//notebook" position="inside">
+				    <page string="Airline" attrs="{'invisible':[('is_air_line','=',False)]}">
+    				    <group>
+        				    <group>
+        				        <field name="iata_code"/>
+        				        <field name="cass_code"/>
+        				        <field name="icao_code"/>
+        				    </group>
+    				    </group>
+				    </page>
+				</xpath>
+				<xpath expr="//notebook" position="inside">
 
 					<!-- <page string="Products"> <field name="product_ids"> <tree> <field 
 						name="display_name" /> </tree> </field> </page> -->

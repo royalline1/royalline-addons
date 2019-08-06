@@ -37,6 +37,7 @@
        'views/insurance_cost_view.xml',
        'views/transport_cost_view.xml',
        'views/clearance_cost_view.xml',
+       'views/air_line_cost.xml',
        'views/sale_inquiry.xml',
        'data/data.xml',
        'views/invoice_charges.xml',

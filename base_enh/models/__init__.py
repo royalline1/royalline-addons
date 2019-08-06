@@ -27,3 +27,4 @@ from . import hr_employee
 from . import job_position
 from . import route
 from . import dhl_logistic
+from . import air_line_cost

@@ -62,4 +62,12 @@ truck_type_selections,truck_type_selections,model_truck_type_selections,base.gro
 transport_cost_note,transport_cost_note,model_transport_cost_note,base.group_user,1,1,1,1
 line_cost_note,line_cost_note,model_line_cost_note,base.group_user,1,1,1,1
 insurance_cost_note,insurance_cost_note,model_insurance_cost_note,base.group_user,1,1,1,1
+air_line_cost,air_line_cost,model_air_line_cost,base.group_user,1,1,1,1
+air_line_cost_line,air_line_cost_line,model_air_line_cost_line,base.group_user,1,1,1,1
+air_line_addit_cost,air_line_addit_cost,model_air_line_addit_cost,base.group_user,1,1,1,1
+air_line_note,air_line_note,model_air_line_note,base.group_user,1,1,1,1
+
+
+
+
 
