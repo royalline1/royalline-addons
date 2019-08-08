@@ -23,7 +23,7 @@
 					<sheet>
 					<div class="oe_button_box" name="button_box">  
                             <button name="call_truck_type_selection" type="object"  
-                            class="oe_stat_button" icon="fa-truck" string="Truck Type">  
+                            class="oe_stat_button" icon="fa-truck" string="Truck Type Selections">  
                            <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
                             string="You String Name" />    -->
                            </button> 

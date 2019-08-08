@@ -17,7 +17,7 @@ class Commodity(models.Model):
     port_condition_att = fields.Binary(attachment=True,string="Attachment Port")
     other_condition = fields.Char('Other condition')
     other_condition_att = fields.Binary(attachment=True,string="Attachment Other")
-    commodity_category = fields.Many2one('commodity', string='Commodity Category')
+    commodity_category = fields.Many2one('commodity', string='Commodity Category', domain=[('is_category','=',True)])
     UN_No = fields.Char("UN No")
     IMCO_Class = fields.Char("IMCO Class")
     HS_Code = fields.Char("HS Code")

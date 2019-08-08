@@ -220,6 +220,10 @@ class SaleInquiry(models.Model):
     issue_bill_lading_to = fields.Many2one ('res.partner', string='Issue Bill of lading To')
     payment_term_id = fields.Many2one('account.payment.term', string="Payment Terms",
                                       related='partner_id.property_payment_term_id')
+    air_line_id = fields.Many2one('air.line.cost', string='AirLine', domain=[('is_expired','!=',True)])
+    payment_term_id = fields.Many2one('account.payment.term', string="Payment Terms", 
+                                      related='air_line_id.payment_term_id')
+    air_line_cost_line_ds =fields.One2many('air.line.cost.line','air_line_cost_id' ,related='air_line_id.air_line_cost_line_ds')
 #   loaded country related
     @api.onchange('country_loading_id')
     def erase_related_addr(self):

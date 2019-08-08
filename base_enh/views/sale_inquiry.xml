@@ -330,6 +330,20 @@
                                             <form></form>
                                         </field>
                                     </group>
+                                    <group string="AirLine">
+                                        <field name='air_line_id' options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                                        <field name='payment_term_id'/>
+                                         <label for="air_line_cost_line_ds" style="font-weight: bold" />
+                                        <field name="air_line_cost_line_ds" force_save="1" nolabel="1">
+                                            <tree>
+                                                <field name="commodity_id" />
+                                                <field name="package_id"/>
+                                                <field name="currency_id" />
+                                                <field name="total" />
+                                            </tree>
+                                            <form></form>
+                                        </field>
+                                    </group>
                                 </page>
                                 <page string="Additional Cost">
         							<!-- <label for="additional_cost_ids" style="font-weight: bold" /> -->

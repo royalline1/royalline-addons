@@ -36,6 +36,11 @@
                    action="base_address_city.action_res_city_tree" 
                    name="Cities" 
                    sequence="5"/>
+        <menuitem  id="country_group_view_menu"
+                   parent="menu_location" 
+                   action="base.action_country_group" 
+                   name="Country Group" 
+                   sequence="6"/>
                    
         <!-- top bar menue - cost -->
         <menuitem id="menu_costs" 
@@ -104,9 +109,9 @@
             parent="menu_config" action="agreement_method_action" sequence="11"/>
         <menuitem  id="transport_type_menu"
             parent="menu_config" action="transport_type_action" sequence="12"/>
-        <menuitem  id="truck_type_selections_menu"
+        <!-- <menuitem  id="truck_type_selections_menu"
             parent="menu_config" name="Truck Type Selections" 
-            action="truck_type_selections_action" sequence="13"/>
+            action="truck_type_selections_action" sequence="13"/> -->
         
                   
 

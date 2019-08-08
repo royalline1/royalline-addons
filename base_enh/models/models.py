@@ -54,6 +54,7 @@ class ResPlace(models.Model):
     is_delivery_place = fields.Boolean('Is Delivery Place') 
     zip_code = fields.Integer('ZIP Code')
     active=fields.Boolean(default=True)
+    
     @api.onchange('country_id')
     def place_erase(self):
         """Erase data from City, state, address, zipcode and Port"""

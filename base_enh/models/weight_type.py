@@ -19,5 +19,6 @@ class WeightType(models.Model):
     weight_from=fields.Float(string='Weight From', default=0.0)
     weight_to=fields.Float(string='Weight To', default=0.0)
     uom_id=fields.Many2one('uom.uom', 
-                           default=lambda self: self.env['uom.uom'].search([('name', '=', 'kg')], limit=1))
-    
+                           default=lambda self: self.env['uom.uom'].search([('name', '=', 'kg')], limit=1),readonly=True)
+    uom_tow_id=fields.Many2one('uom.uom', 
+                           default=lambda self: self.env['uom.uom'].search([('name', '=', 'kg')], limit=1),readonly=True)
