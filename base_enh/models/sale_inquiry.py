@@ -224,6 +224,14 @@ class SaleInquiry(models.Model):
     payment_term_id = fields.Many2one('account.payment.term', string="Payment Terms", 
                                       related='air_line_id.payment_term_id')
     air_line_cost_line_ds =fields.One2many('air.line.cost.line','air_line_cost_id' ,related='air_line_id.air_line_cost_line_ds')
+    
+#     @api.multi
+#     def action_send_email(self):
+#         for rec in self:
+#             rec.ensure_one()
+#             template = rec.env.ref('base_enh.send_email_sale_inquiry')
+#             rec.env['mail.template'].browse(template.id).send_mail(self.id,force_send=True)
+    
 #   loaded country related
     @api.onchange('country_loading_id')
     def erase_related_addr(self):

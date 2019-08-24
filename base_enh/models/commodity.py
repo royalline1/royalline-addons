@@ -31,3 +31,4 @@ class Commodity(models.Model):
     def erase_commodity_category(self):
         for rec in self:
             rec.commodity_category=u''
+            rec.package_ids=u''

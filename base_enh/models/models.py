@@ -368,7 +368,7 @@ class WareHouse (models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = "WareHouse"
     
-    name = fields.Char('Name')
+    name = fields.Char('Name', required=True)
     code = fields.Char('Code')
     note = fields.Text('Note')
     type = fields.Selection([('terminal','Terminal'),('bonded','Bonded'),('others','Others')],  default='terminal', string='Type')
@@ -402,6 +402,7 @@ class WareHouse (models.Model):
     def erase_city_re(self):
         for rec in self:
             rec.place_id=u''
+            rec.terminal_id=u''
     
     @api.onchange('port_id')
     def erase_port_re(self):

@@ -8,7 +8,7 @@ class InsuranceCondition(models.Model):
     _description = "InsuranceCondition"
     
     name = fields.Char(required=True)
-    type = fields.Selection([('include','Include'),('exclude','Exclude')],required=True)
+    type = fields.Many2one('insurance.items',required=True)
     cost_id = fields.Many2one('insurance.cost',ondelete='cascade')
     
     
@@ -28,7 +28,17 @@ class InsuranceCostNote(models.Model):
     
     note=fields.Text()
     insurance_id=fields.Many2one('insurance.cost')
-
+    
+class InsuranceItems(models.Model):
+    _name = 'insurance.items'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _rec_name = 'name'
+    _description = "InsuranceItems"
+    
+    name=fields.Char('Name')
+    note=fields.Text('Note')
+    active=fields.Boolean(default=True)
+    
 class InsuranceCost(models.Model):
     _name = 'insurance.cost'
     _inherit = ['mail.thread', 'mail.activity.mixin']
@@ -67,6 +77,8 @@ class InsuranceCost(models.Model):
     cif_amount=fields.Monetary('CIF')
     voyage_from=fields.Many2one('port',string='Voyage From')
     voyage_to=fields.Many2one('port',string='Voyage To')
+    beneficiary=fields.Selection([('royal_line','Royal line'),('partner','Partner')
+                                  ,('bank','Bank'),('others','Others')], string='Beneficiary')
     @api.constrains('rate')
     def rate_value(self):
         """

@@ -35,6 +35,7 @@
                                    confirm="Are you sure you want to 'Cancel' this Sale Inquiry?"/>
                            <button name="set_new_gm" type="object" string="Set to New" class="oe_highlight" states="Cancelled" 
                                    confirm="Are you sure you want to ' Set To New ' this Sale Inquiry?"/>
+                           <!-- <button name="action_send_email" type="object" string="Send E-mail" class="oe_highlight" /> -->
                            <field name="stage" widget="statusbar" statusbar_visible="New,Progress,Confirmed,Cancelled,Job" />
                     </header>
 					<sheet>
@@ -330,15 +331,21 @@
                                             <form></form>
                                         </field>
                                     </group>
-                                    <group string="AirLine">
+                                    <group string="Airline">
                                         <field name='air_line_id' options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
                                         <field name='payment_term_id'/>
-                                         <label for="air_line_cost_line_ds" style="font-weight: bold" />
+                                         <label for="air_line_cost_line_ds" string="Airline Cost" style="font-weight: bold" />
                                         <field name="air_line_cost_line_ds" force_save="1" nolabel="1">
                                             <tree>
                                                 <field name="commodity_id" />
                                                 <field name="package_id"/>
+                                                <field name="product_id"/>
+                                                <field name="quantity"/>
+                                                <field name="operation"/>
+                                                <field name="volume"/>
+                                                <field name="chargeable_weight"/>
                                                 <field name="currency_id" />
+                                                <field name="cost"/>
                                                 <field name="total" />
                                             </tree>
                                             <form></form>

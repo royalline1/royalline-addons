@@ -15,18 +15,19 @@
 
     'category': 'Uncategorized',
     'version': '12.0.1.0',
-    'depends': ['base','contacts','sale','base_address_city','product','hr','documents','account','base_address_city','hr_attendance','helpdesk','base_address_extended'],
+    'depends': ['base','mail','contacts','sale','base_address_city','product','hr','documents','account','base_address_city','hr_attendance','helpdesk','base_address_extended'],
 
     'data': [
        'security/ir.model.access.csv',
        'views/views.xml',
-#        'views/delivery_place_view.xml',
+#        'data/email_templates.xml',
        'views/container_size_view.xml',
        'views/agreement_method_view.xml',
        'views/custoemr_class_view.xml',
        'report/sale_report.xml',
        'views/customs_declaration_view.xml',
        'views/insurance_type_view.xml',
+       'views/insurance_items.xml',
        'views/truck_type_view.xml',
        'views/weight_type_view.xml',
        'views/vessel_views.xml',

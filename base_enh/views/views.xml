@@ -142,32 +142,36 @@
 							<group>
 								<field name="type" required="True" />
 								<field name="terminal_code"
-									attrs="{'invisible':['|',('type','=','bonded'),('type','=','others')]}" />
+									attrs="{'invisible':['|',('type','=','bonded'),('type','=','others')],
+									       'required':[('type','=','terminal')]}" />
 								<field name='address'
-									attrs="{'invisible':['|',('type','=','bonded'),('type','=','terminal')]}" />
+									attrs="{'invisible':['|',('type','=','bonded'),('type','=','terminal')],
+									'required':[('type','=','others')]}" />
 								<field name="active" />
 							</group>
 						</group>
 						<group string="Location Details">
 						  <group>
 						      <field name="country_id"
-						              options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+						              options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+						              required="True"/>
 						      <field name="state_id"
 						              options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
-						              domain="[('country_id','=',country_id)]"/>
+						              domain="[('country_id','=',country_id)]" />
 						      <field name="city_id"
 						              options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
-						               domain="[('country_id','=',country_id),'|',('state_id','=',state_id),('state_id','=',False)]"/>
+						               domain="[('country_id','=',country_id),'|',('state_id','=',state_id),('state_id','=',False)]"
+						               required="True"/>
 						      <field name="place_id"
-						             attrs="{'invisible':[('type','not in',['others'])]}"
+						             attrs="{'invisible':[('type','not in',['others'])],'required':[('type','=','others')]}"
 						             options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
-						             domain="[('country_id','=',country_id),('city_id','=',city_id)]"/>
+						             domain="[('country_id','=',country_id),('city_id','=',city_id),('is_port','=',False)]"/>
 						      <field name="port_id"
-						             attrs="{'invisible':[('type','not in',['terminal'])]}"
+						             attrs="{'invisible':[('type','not in',['terminal'])],'required':[('type','=','terminal')]}"
 						             options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
 						             domain="[('country_id','=',country_id),('city_id','=',city_id)]"/>
 						      <field name="terminal_id"
-						             attrs="{'invisible':[('type','not in',['terminal'])]}"
+						             attrs="{'invisible':[('type','not in',['terminal'])],'required':[('type','=','terminal')]}"
 						             options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
 						             domain="[('port_id','=',port_id),('port_id','!=',False)]"/>
 						  </group>

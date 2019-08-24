@@ -66,6 +66,7 @@ air_line_cost,air_line_cost,model_air_line_cost,base.group_user,1,1,1,1
 air_line_cost_line,air_line_cost_line,model_air_line_cost_line,base.group_user,1,1,1,1
 air_line_addit_cost,air_line_addit_cost,model_air_line_addit_cost,base.group_user,1,1,1,1
 air_line_note,air_line_note,model_air_line_note,base.group_user,1,1,1,1
+insurance_items,insurance_items,model_insurance_items,base.group_user,1,1,1,1
 
 
 

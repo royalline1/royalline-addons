@@ -84,9 +84,6 @@
                   parent="menu_logistic_manag" 
                   name="Configurations" 
                   sequence="5"/>
-        <menuitem  id="insurance_type_menu"
-            parent="menu_config" action="insurance_type_action" 
-            sequence="1"/>
         <menuitem  id="truck_type_menu"
             parent="menu_config" action="truck_type_action" sequence="2"/>
         <menuitem  id="weight_type_menu"
@@ -109,9 +106,18 @@
             parent="menu_config" action="agreement_method_action" sequence="11"/>
         <menuitem  id="transport_type_menu"
             parent="menu_config" action="transport_type_action" sequence="12"/>
+        <!-- insurance config -->
+        <menuitem  id="insurance_menu"
+            parent="menu_config" name="Insurance" sequence="13"/>
+        <menuitem  id="insurance_type_menu"
+            parent="insurance_menu" action="insurance_type_action" 
+            sequence="1"/>
+        <menuitem  id="insurance_items_menu"
+            parent="insurance_menu" name="Insurance Items" 
+            action="insurance_items_action" sequence="2"/>
         <!-- <menuitem  id="truck_type_selections_menu"
             parent="menu_config" name="Truck Type Selections" 
-            action="truck_type_selections_action" sequence="13"/> -->
+            action="truck_type_selections_action" sequence="14"/> -->
         
                   
 
