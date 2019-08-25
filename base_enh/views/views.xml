@@ -142,11 +142,39 @@
 							<group>
 								<field name="type" required="True" />
 								<field name="terminal_code"
-									attrs="{'invisible':['|',('type','=','bonded'),('type','=','others')]}" />
+									attrs="{'invisible':['|',('type','=','bonded'),('type','=','others')],
+									       'required':[('type','=','terminal')]}" />
 								<field name='address'
-									attrs="{'invisible':['|',('type','=','bonded'),('type','=','terminal')]}" />
+									attrs="{'invisible':['|',('type','=','bonded'),('type','=','terminal')],
+									'required':[('type','=','others')]}" />
 								<field name="active" />
 							</group>
+						</group>
+						<group string="Location Details">
+						  <group>
+						      <field name="country_id"
+						              options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+						              required="True"/>
+						      <field name="state_id"
+						              options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+						              domain="[('country_id','=',country_id)]" />
+						      <field name="city_id"
+						              options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+						               domain="[('country_id','=',country_id),'|',('state_id','=',state_id),('state_id','=',False)]"
+						               required="True"/>
+						      <field name="place_id"
+						             attrs="{'invisible':[('type','not in',['others'])],'required':[('type','=','others')]}"
+						             options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+						             domain="[('country_id','=',country_id),('city_id','=',city_id),('is_port','=',False)]"/>
+						      <field name="port_id"
+						             attrs="{'invisible':[('type','not in',['terminal'])],'required':[('type','=','terminal')]}"
+						             options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+						             domain="[('country_id','=',country_id),('city_id','=',city_id)]"/>
+						      <field name="terminal_id"
+						             attrs="{'invisible':[('type','not in',['terminal'])],'required':[('type','=','terminal')]}"
+						             options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+						             domain="[('port_id','=',port_id),('port_id','!=',False)]"/>
+						  </group>
 						</group>
 						<group>
 							<field name="note" />
@@ -478,9 +506,6 @@
 				<attribute name="placeholder">ZIP/Postal Code</attribute>
 				</xpath>
 				
-				
-				
-
 				<xpath expr="//field[@name='city']" position="after">
 					<field name="country_enforce_cities" invisible="1" />
 					<field name='city_id' placeholder="City"
@@ -490,9 +515,22 @@
                               'default_zipcode': zip,
                               'default_state_id': state_id}"
 						domain="[('country_id', '=', country_id),'|',('state_id','=',state_id),('state_id','=',False)]"
-						attrs="{'invisible': [('country_enforce_cities', '=', False)]}" />
+						attrs="{'invisible': [('country_enforce_cities', '=', False)]}" 
+                        options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
 				</xpath>
-
+                
+                <xpath
+                    expr="//field[@name='category_id']"
+                    position="attributes">
+                    <attribute name="options">{'no_create_edit': True, 'no_create': True, 'no_open': True}
+                    </attribute>
+                </xpath>
+                <xpath
+                    expr="//field[@name='state_id']"
+                    position="attributes">
+                    <attribute name="options">{'no_create_edit': True, 'no_create': True, 'no_open': True}
+                    </attribute>
+                </xpath>
 				<xpath expr="//field[@name='vat']" position="before">
 					<field name="local_name" />
 				</xpath>
@@ -548,6 +586,8 @@
                 
 				<xpath expr="//notebook//page[3]//group[@name='purchase']"
 					position="inside">
+					
+					<field name="is_courier"/>
 					<field name="is_shipper"
 						 attrs="{'invisible':['|','|',
                                                        ('is_diver','=',True),
@@ -703,6 +743,17 @@
 					</page>
 				</xpath>
 				<xpath expr="//notebook" position="inside">
+				    <page string="Airline" attrs="{'invisible':[('is_air_line','=',False)]}">
+    				    <group>
+        				    <group>
+        				        <field name="iata_code"/>
+        				        <field name="cass_code"/>
+        				        <field name="icao_code"/>
+        				    </group>
+    				    </group>
+				    </page>
+				</xpath>
+				<xpath expr="//notebook" position="inside">
 
 					<!-- <page string="Products"> <field name="product_ids"> <tree> <field 
 						name="display_name" /> </tree> </field> </page> -->
@@ -741,16 +792,21 @@
 								<field name="type" />
 								<field name="free_days" />
 								<field name="first_demurrage_from" />
-								<field name="first_demurrage_to" />
-								<field name="first_rate" />
+								<field name="first_demurrage_to" 
+								       attrs="{'required': [('type', 'in', ['import','export'])]}"/>
+								<field name="first_rate" 
+								       attrs="{'required': [('type', 'in', ['import','export'])]}"/>
 								<field name="second_demurrage_from" />
-								<field name="second_demurrage_to" />
-								<field name="second_rate" />
+								<field name="second_demurrage_to" 
+								       attrs="{'required': [('type', 'in', ['import','export'])]}"/>
+								<field name="second_rate" 
+								       attrs="{'required': [('type', 'in', ['import','export'])]}"/>
 								<field name="third_demurrage_from" />
 								<field name="third_demurrage_to" />
-								<field name="third_rate" />
+								<field name="third_rate" attrs="{'required': [('type', 'in', ['import','export'])]}"/>
 								<field name="delivery_order" />
 								<field name="agency" />
+								<field name="currency_id" />
 							</tree>
 						</field>
 
@@ -978,7 +1034,7 @@
 
 
 
-		<!-- <record model="ir.ui.view"
+		<record model="ir.ui.view"
 			id="helpdesk_ticket_view_form">
 			<field name="name">helpdesk.ticket</field>
 			<field name="model">helpdesk.ticket</field>
@@ -986,12 +1042,12 @@
 				ref="helpdesk.helpdesk_ticket_view_form" />
 			<field name="arch" type="xml">
 				<xpath
-					expr="//field[@name='deadline']"
+					expr="//field[@name='priority']"
 					position="after">
 					<field name="job_id" options="{'no_create':True,'no_create_edit':True,'no_open':True}"/>
 				</xpath>
 			</field>
-		</record> -->
+		</record>
 
 
 

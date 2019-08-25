@@ -3,6 +3,7 @@ from odoo import models, fields, api
 import datetime
 from odoo.exceptions import UserError
 from odoo.osv.expression import AND , OR
+from pydoc import doc
 
 
 class InquiryAdditionalCost(models.Model):
@@ -22,6 +23,7 @@ class SaleInquiryCondition(models.Model):
     name = fields.Char(required=True)
     inquiry_id = fields.Many2one('sale.inquiry', ondelete='cascade')
     job_id = fields.Many2one('job', ondelete='cascade')
+    job_one_id = fields.Many2one('job', ondelete='cascade')
 
     
 class SaleInquiryContainer(models.Model):
@@ -111,14 +113,14 @@ class SaleInquiry(models.Model):
     shipment_method = fields.Selection([('clearance', 'Clearance'), 
                                         ('sea_freight', 'Sea freight'), 
                                         ('land_freight', 'Land Freight'), 
-                                        ('air_freight', 'Air Freight')],string="Shipment Method")
+                                        ('air_freight', 'Air Freight')],string="Shipment Method", store=True)
     shipment_type = fields.Selection([('import', 'Import'), 
                                         ('export', 'Export'), 
                                         ('cross', 'Cross'), 
-                                        ('internal', 'internal')],string="Shipment Type")  
+                                        ('internal', 'internal')],string="Shipment Type",store=True)  
     shipment_logic = fields.Selection([('fcl', 'FCL'), 
                                         ('lcl', 'LCL'), 
-                                        ('roro', 'RORO')],string="Shipment logic")
+                                        ('roro', 'RORO')],string="Shipment logic",store=True)
     customer_ref = fields.Char('Customer Reference')
     shipper_ref = fields.Char('Shipper Reference')
     consignee_ref = fields.Char('Consignee Reference') 
@@ -213,8 +215,23 @@ class SaleInquiry(models.Model):
     transporter_total = fields.Monetary(related='transporter_cost_id.total', string='Transport Total')
     currency_id = fields.Many2one('res.currency', related="transporter_cost_id.currency_id" ,string="Currency")
 #   Commodity key
-    commodity_ids = fields.Many2many('commodity')  
+    commodity_ids = fields.Many2many('commodity') 
+    commodity_domain_ids = fields.Many2many('commodity', related='partner_id.commodity_ids') 
     issue_bill_lading_to = fields.Many2one ('res.partner', string='Issue Bill of lading To')
+    payment_term_id = fields.Many2one('account.payment.term', string="Payment Terms",
+                                      related='partner_id.property_payment_term_id')
+    air_line_id = fields.Many2one('air.line.cost', string='AirLine', domain=[('is_expired','!=',True)])
+    payment_term_id = fields.Many2one('account.payment.term', string="Payment Terms", 
+                                      related='air_line_id.payment_term_id')
+    air_line_cost_line_ds =fields.One2many('air.line.cost.line','air_line_cost_id' ,related='air_line_id.air_line_cost_line_ds')
+    
+#     @api.multi
+#     def action_send_email(self):
+#         for rec in self:
+#             rec.ensure_one()
+#             template = rec.env.ref('base_enh.send_email_sale_inquiry')
+#             rec.env['mail.template'].browse(template.id).send_mail(self.id,force_send=True)
+    
 #   loaded country related
     @api.onchange('country_loading_id')
     def erase_related_addr(self):
@@ -264,7 +281,10 @@ class SaleInquiry(models.Model):
     @api.onchange('partner_id')
     def partner_onchange(self):
         """ erase customer reference if customer 'Partner' field is empty"""
-        self.customer_ref=u''
+        for rec in self:
+            rec.customer_ref=u''
+            rec.commodity_ids=u''
+        
     
     @api.onchange('shipper_id')
     def shipper_onchange(self):
@@ -324,7 +344,7 @@ class SaleInquiry(models.Model):
        for rec in self:
             domain = [  ('country_loading_id', '=', rec.country_loading_id.id),
                         ('country_dest_id', '=', rec.country_dest_id.id),
-                        ('is_next','=',False),('is_expired','=',False)
+                        ('is_expired','!=',True)
                         ]
             domain = AND([domain, OR([[('city_loading_id', '=', rec.city_loading_id.id),
                                       ('city_dest_id', '=', rec.city_dest_id.id)],
@@ -357,7 +377,7 @@ class SaleInquiry(models.Model):
                         ('is_expired', '=', False)]
             domain = AND([domain, OR([[('customer_id', '=', rec.partner_id.id)],[('customer_id', '=', False)]])])
            
-            domain = AND([domain, OR([[('commodity_id', 'in', commodity_ids.ids)],[('fak', '=', False)]])])         
+            domain = AND([domain, OR([[('commodity_id', 'in', commodity_ids.ids)],[('fak', '=', True)]])])         
                         
             if rec.is_loading:
                 domain = AND([domain,
@@ -485,14 +505,15 @@ class SaleInquiry(models.Model):
     @api.multi
     def approve_gm(self):
         """general manager approval and create job button  """
-        if not self.user_operation_id:
-            raise UserError("Please select operation to handle the job")
-        else:
-            self.write({'state': 'Job','stage': 'Job'})
-            job_obj = self.env['job']
-            self.ensure_one()
-            job_obj.create({'sale_inquiry_id':self.id})
-
+        for rec in self:
+            if not rec.user_operation_id:
+                raise UserError("Please select operation to handle the job")
+            else:
+                rec.write({'state': 'Job','stage': 'Job'})
+                job_obj = self.env['job']
+                rec.ensure_one()
+                job_obj.create({'sale_inquiry_id':self.id})
+            
         
     
     @api.multi

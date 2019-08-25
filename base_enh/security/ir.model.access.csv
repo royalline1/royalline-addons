@@ -41,6 +41,7 @@ inquiry_clearance_cost,inquiry_clearance_cost,model_inquiry_clearance_cost,base.
 sale_person,sale_person,model_sale_person,base.group_user,1,1,1,1
 sale_clearance_cost_line,sale_clearance_cost_line,model_sale_clearance_cost_line,base.group_user,1,1,1,1
 transport_price_line,transport_price_line,model_transport_price_line,base.group_user,1,1,1,1
+transport_cost_discount,transport_cost_discount,model_transport_cost_discount,base.group_user,1,1,1,1
 sale_inquiry,sale_inquiry,model_sale_inquiry,base.group_user,1,1,1,1
 job_access,job_access,model_job,base.group_user,1,1,1,1
 commodity_access,commodity_access,model_commodity,base.group_user,1,1,1,1
@@ -57,6 +58,17 @@ diseases_medications,diseases_medications,model_diseases_medications,base.group_
 route,route,model_route,base.group_user,1,1,1,1
 dhl_logistic,dhl_logistic,model_dhl_logistic,base.group_user,1,1,1,1
 document_type,document_type,model_document_type,base.group_user,1,1,1,1
+truck_type_selections,truck_type_selections,model_truck_type_selections,base.group_user,1,1,1,1
+transport_cost_note,transport_cost_note,model_transport_cost_note,base.group_user,1,1,1,1
+line_cost_note,line_cost_note,model_line_cost_note,base.group_user,1,1,1,1
+insurance_cost_note,insurance_cost_note,model_insurance_cost_note,base.group_user,1,1,1,1
+air_line_cost,air_line_cost,model_air_line_cost,base.group_user,1,1,1,1
+air_line_cost_line,air_line_cost_line,model_air_line_cost_line,base.group_user,1,1,1,1
+air_line_addit_cost,air_line_addit_cost,model_air_line_addit_cost,base.group_user,1,1,1,1
+air_line_note,air_line_note,model_air_line_note,base.group_user,1,1,1,1
+insurance_items,insurance_items,model_insurance_items,base.group_user,1,1,1,1
+
+
 
 
 

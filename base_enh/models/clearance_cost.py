@@ -43,6 +43,62 @@ class ClearanceCost(models.Model):
     to_date = fields.Date('To Date')
     currency_id = fields.Many2one('res.currency', string="Currency")
     active=fields.Boolean(default=True)
+    payment_term_id = fields.Many2one('account.payment.term', string="Payment Terms",
+                                      related='partner_id.property_supplier_payment_term_id')
+    #Smart buttons
+    @api.multi  
+    def call_job(self):  
+        mod_obj = self.env['ir.model.data']
+        try:
+            tree_res = mod_obj.get_object_reference('job', 'view_job__tree')[1]
+            form_res = mod_obj.get_object_reference('job', 'view_job_form')[1]
+        except ValueError:
+            form_res = tree_res = search_res = False
+        return {  
+            'name': ('job'),  
+            'type': 'ir.actions.act_window',  
+            'view_type': 'form',  
+            'view_mode': "[tree,form]",  
+            'res_model': 'job',  
+            'view_id': False,  
+            'views': [(tree_res, 'tree'),(form_res, 'form')], 
+            'domain': [('customs_dec_id.id', '=', self.customs_declaration_id.id)], 
+            'target': 'current',  
+               }      
+    @api.multi  
+    def call_sale_inquiry(self):  
+        mod_obj = self.env['ir.model.data']
+        try:
+            tree_res = mod_obj.get_object_reference('sale.inquiry', 'view_inquiry_tree')[1]
+            form_res = mod_obj.get_object_reference('sale.inquiry', 'view_inquiry_form')[1]
+        except ValueError:
+            form_res = tree_res = search_res = False
+        return {  
+            'name': ('sale.inquiry'),  
+            'type': 'ir.actions.act_window',  
+            'view_type': 'form',  
+            'view_mode': "[tree,form]",  
+            'res_model': 'sale.inquiry',  
+            'view_id': False,  
+            'views': [(tree_res, 'tree'),(form_res, 'form')], 
+            'domain': [('customs_dec_id.id', '=', self.customs_declaration_id.id)], 
+            'target': 'current',  
+               }
+    
+    @api.onchange('partner_id')
+    def clear_company_related_data(self):
+        """
+        Clear custom_declaration_id, from_date, to_date, 
+        shipment_type,qut_number once partner_id changed 
+        or erased.
+        """
+        for rec in self:
+            rec.qut_number=u''
+            rec.shipment_type=u''
+            rec.from_date=u''
+            rec.to_date=u''
+            rec.customs_declaration_id=u''
+    
     
     @api.constrains('from_date','to_date')
     def date_from_to(self):

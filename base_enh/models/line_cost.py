@@ -11,7 +11,7 @@ class AdditionalCost(models.Model):
     product_id = fields.Many2one('product.product', string='Additional Name', required=True ,domain=[('is_add_cost', '=', True)])
     cost = fields.Monetary(required=True)
     line_cost_id = fields.Many2one('line.cost' ,required=True)
-    currency_id = fields.Many2one('res.currency', string="Currency")
+    currency_id = fields.Many2one('res.currency', string="Currency",required=True)
     
     @api.constrains('cost')
     def check_cost_value(self):
@@ -31,13 +31,13 @@ class LineCostLine(models.Model):
     sea_lines_id = fields.Many2one('sea.lines', 'Container', required=True)
     partner_id = fields.Many2one('res.partner',related="line_cost_id.line_id")
     min_qty = fields.Integer('Minimum Quantity', required=True)
-    agency = fields.Monetary('Agency', related="sea_lines_id.agency",store=True)
+    agency = fields.Monetary('Agency', compute="_compute_agency",store=True)
     transport_loading_price = fields.Monetary()
     transport_discharge_price = fields.Monetary()
-    insurance_price = fields.Float()
-    clearance_price = fields.Float()
-    is_loading = fields.Boolean()
-    is_discharge = fields.Boolean()
+    insurance_price = fields.Monetary()
+    clearance_price = fields.Monetary()
+    is_loading = fields.Boolean(compute='_compute_is_loading',store=True)
+    is_discharge = fields.Boolean(compute='_compute_is_discharge',store=True)
     is_clearance_cost = fields.Boolean()
     is_insurance_cost = fields.Boolean()
     type = fields.Selection([('loading','Loading'),('discharg','Discharg')])
@@ -46,12 +46,44 @@ class LineCostLine(models.Model):
     rate = fields.Monetary('Rate')
     line_cost_id = fields.Many2one('line.cost', required=True)
     total = fields.Monetary('Total',compute='_compute_total')
-    currency_id = fields.Many2one('res.currency', string="Currency")
+    currency_id = fields.Many2one('res.currency', string="Currency",required=True)
+    line_type = fields.Selection(related="line_cost_id.type", string='Line Cost Type')
+    transport_loading_id = fields.Many2one('transport.type',related="line_cost_id.transport_loading_id")
+    transport_dest_id = fields.Many2one('transport.type',related="line_cost_id.transport_dest_id")
     
-    @api.depends('agency','transport_loading_price','value','rate','transport_discharge_price','clearance_price','insurance_price')
+    @api.depends('sea_lines_id','currency_id')
+    def _compute_agency(self):
+        for rec in self:
+            if rec.sea_lines_id:
+                rec.agency = self.env.user.company_id.currency_id._convert(rec.sea_lines_id.agency,rec.currency_id,self.env.user.company_id,fields.Date.today())
+            else:
+                rec.agency = 0
+    @api.multi
+    @api.depends('transport_loading_id')
+    def _compute_is_loading(self):
+        for rec in self:
+            print(rec.line_cost_id.transport_loading_id)
+            rec.is_loading = bool(rec.transport_loading_id)
+            
+    
+    @api.multi
+    @api.depends('transport_dest_id')
+    def _compute_is_discharge(self):
+        for rec in self:
+            rec.is_loading = bool(rec.transport_dest_id)  
+        
+    @api.depends()
     def _compute_total(self):
         for rec in self:
-            rec.total = rec.clearance_price + rec.insurance_price + rec.agency + rec.rate+ rec.transport_discharge_price + rec.transport_loading_price - rec.value
+            if rec.line_cost_id.currency_id:
+                value = rec.clearance_price + rec.insurance_price + rec.agency + rec.rate+ rec.transport_discharge_price + rec.transport_loading_price - rec.value
+                
+                value  = rec.line_cost_id.currency_id._convert(value,rec.line_cost_id.currency_id,self.env.user.company_id,fields.Date.today())
+                total_add = 0.0
+                for i in rec.line_cost_id.additional_cost_ids:
+                    total_add += i.currency_id._convert(i.cost,rec.line_cost_id.currency_id,self.env.user.company_id,fields.Date.today())
+                    
+                rec.total = total_add + value + rec.line_cost_id.bill_fees - rec.line_cost_id.discount
             
     @api.model
     def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
@@ -62,7 +94,13 @@ class LineCostLine(models.Model):
         """Erase discount value if product name changed"""
         for rec in self:
             rec.value=False
-        
+
+class LineCostNote(models.Model):
+    _name='line.cost.note' 
+    _description='line cost note table'
+    
+    note=fields.Text()
+    cost_id=fields.Many2one('line.cost')
 
 class LineCost(models.Model):
     _name = 'line.cost'
@@ -76,36 +114,35 @@ class LineCost(models.Model):
     country_loading_id = fields.Many2one('res.country', string="Country Of Loading", required=True)
     state_loading_id = fields.Many2one('res.country.state', string="State Of Loading")
     city_loading_id = fields.Many2one('res.city', string="City Of Loading")
-    place_loading_id = fields.Many2one('res.place', string="Place Of Loading")
+    place_loading_id = fields.Many2one('res.place', string="Place Of Loading", required=False)
     transport_loading_id = fields.Many2one('transport.type', string="Transport Type Of Loading")
-    port_loading_id = fields.Many2one('port', string="POL")
-    terminal_loading_id = fields.Many2one('res.place', string="Terminal of Loading")
+    port_loading_id = fields.Many2one('port', string="POL", required=True)
+    terminal_loading_id = fields.Many2one('res.place', string="Terminal of Loading", required=True)
+    place_dest_id = fields.Many2one('res.place', string="Place Of Destination")
     
     is_same_country = fields.Boolean('Is Same Country', default=True)
-    country_dest_id = fields.Many2one('res.country', string="Country Of Destination")
-    state_dest_id = fields.Many2one('res.country.state', string="State Of Destination")
-    city_dest_id = fields.Many2one('res.city', string="City Of Destination")
+    country_dest_id = fields.Many2one('res.country', string="Country Of Discharge", required=True)
+    state_dest_id = fields.Many2one('res.country.state', string="State Of Discharge")
+    city_dest_id = fields.Many2one('res.city', string="City Of Discharge")
     terminal_des_same_id = fields.Many2one('res.place', string="Terminal of Discharge")
     
     country_diff_dest_id = fields.Many2one('res.country', string="Country Of Last Destination")
     state_diff_dest_id = fields.Many2one('res.country.state', string="State Of Last Destination")
     city_diff_dest_id = fields.Many2one('res.city', string="City Of Last Destination")
     place_diff_dest_id = fields.Many2one('res.place', string="Place Of Last Destination")
-    port_diff_id = fields.Many2one('port', string="POD Last Country")
     delivery_diff_place_id = fields.Many2one('res.place', 'Place Of Last Delivery')
-    terminal_des_diff_id = fields.Many2one('res.place', string="Terminal of delivery")
     
-    place_dest_id = fields.Many2one('res.place', string="Place Of Destination")
-    port_dest_id = fields.Many2one('port', string="POD")
-    transport_dest_id = fields.Many2one('transport.type', string="Transport Type Of Destination")
+    port_dest_id = fields.Many2one('port', string="POD", required=True)
+    transport_dest_id = fields.Many2one('transport.type', string="Transport Type Of Discharge")
     delivery_place_id = fields.Many2one('res.place', 'Place Of Delivery')
     bill_fees = fields.Monetary('Bill fees',compute='_compute_bill_fees',store=True)
     free_demurrage_and_detention = fields.Integer()
-    transt_time = fields.Integer()
+    transt_time = fields.Integer(required=True)
     customer_id = fields.Many2one('res.partner',stirng='Named Account')
     fak = fields.Boolean('FAK',default=True)
     product_id = fields.Many2one('product.product')
-    commodity_id = fields.Many2one('commodity')
+    commodity_id = fields.Many2many('commodity')
+    commodity_domain_ids = fields.Many2many('commodity', related='customer_id.commodity_ids')
     start_date = fields.Date('Start Date')
     expiry_date = fields.Date('Expiry Date')
     note = fields.Text('Notes')
@@ -116,24 +153,113 @@ class LineCost(models.Model):
     product_discount_id = fields.Many2one('product.product', string='Additional Discount' ,domain=[('is_discount', '=', True)])
     discount = fields.Monetary(default=0.0)
     active=fields.Boolean(default=True)
-    currency_id = fields.Many2one('res.currency', string="Currency")
+    currency_id = fields.Many2one('res.currency', string="Currency", required=True)
+    type = fields.Selection([('import','Import'),('export','Export'),('cross','Cross')],compute="_compute_type")
+    payment_term_id = fields.Many2one('account.payment.term', string="Payment Terms", 
+                                      related='line_id.property_supplier_payment_term_id')
+    line_cost_note_ids=fields.One2many('line.cost.note','cost_id')
     
-    
-    is_loading = fields.Boolean(compute="_compute_is_loading")
-    is_discharge = fields.Boolean(compute="_compute_is_discharge")
-    
-    @api.multi    
-    @api.depends('line_cost_ids','line_cost_ids.is_discharge')
-    def _compute_is_discharge(self):
+    @api.onchange('customer_id')
+    def erase_customer_related(self):
         for rec in self:
-            rec.is_discharge = any(rec.line_cost_ids.mapped('is_discharge'))
+            rec.commodity_id=u''
             
-            
-    @api.multi    
-    @api.depends('line_cost_ids','line_cost_ids.is_loading')
-    def _compute_is_loading(self):
+    
+    #Smart buttons
+    @api.multi  
+    def call_job(self):  
+        mod_obj = self.env['ir.model.data']
+        try:
+            tree_res = mod_obj.get_object_reference('job', 'view_job__tree')[1]
+            form_res = mod_obj.get_object_reference('job', 'view_job_form')[1]
+        except ValueError:
+            form_res = tree_res = search_res = False
+        return {  
+            'name': ('job'),  
+            'type': 'ir.actions.act_window',  
+            'view_type': 'form',  
+            'view_mode': "[tree,form]",  
+            'res_model': 'job',  
+            'view_id': False,  
+            'views': [(tree_res, 'tree'),(form_res, 'form')], 
+            'domain': [('shipping_line_id.id', '=', self.id)], 
+            'target': 'current',  
+               }      
+    @api.multi  
+    def call_sale_inquiry(self):  
+        mod_obj = self.env['ir.model.data']
+        try:
+            tree_res = mod_obj.get_object_reference('sale.inquiry', 'view_inquiry_tree')[1]
+            form_res = mod_obj.get_object_reference('sale.inquiry', 'view_inquiry_form')[1]
+        except ValueError:
+            form_res = tree_res = search_res = False
+        return {  
+            'name': ('sale.inquiry'),  
+            'type': 'ir.actions.act_window',  
+            'view_type': 'form',  
+            'view_mode': "[tree,form]",  
+            'res_model': 'sale.inquiry',  
+            'view_id': False,  
+            'views': [(tree_res, 'tree'),(form_res, 'form')], 
+            'domain': [('shipping_line_id.id', '=', self.id)], 
+            'target': 'current',  
+               }
+     
+    @api.onchange('place_des_id')
+    def erase_related_data_loading(self):
+        """erase data of Transport type, country related, and fees"""
         for rec in self:
-            rec.is_loading = any(rec.line_cost_ids.mapped('is_loading'))
+            rec.transport_des_id=u''
+            rec.delivery_place_id=u''
+            rec.bill_fees=u''
+            rec.currency_id=u''
+            rec.transt_time=u''
+            rec.start_date=u''
+            rec.expiry_date=u''
+            rec.country_diff_dest_id=u''
+            
+    @api.multi
+    @api.onchange('transport_loading_id')
+    def clear_trans_load_pri(self):
+        """clear data of transport loading price once transport type of loading changed"""
+        for rec in self:
+            n = rec.line_cost_ids
+            for l in n:
+                l.transport_loading_price =u''
+            
+    
+    @api.multi
+    @api.onchange('transport_dest_id')
+    def clear_trans_discharge_pri(self):
+        """clear data of transport discharge price once transport type of delivery changed"""
+        for rec in self:
+            n = rec.line_cost_ids
+            for k in n:
+                k.transport_discharge_price=u''
+    
+    @api.multi
+    @api.onchange('is_same_country')
+    def erase_last_des_related(self):
+        for rec in self:
+            if rec.is_same_country == True:
+                rec.country_diff_dest_id = u''
+                rec.state_diff_dest_id = u''
+                rec.city_diff_dest_id = u''
+                rec.place_diff_dest_id = u''
+                rec.delivery_diff_place_id = u''
+    @api.multi
+    @api.depends('country_diff_dest_id','country_dest_id','country_loading_id')
+    def _compute_type(self):
+        my_country = self.env.user.company_id.country_id.id
+        for rec in self:
+            if my_country in rec.country_diff_dest_id.ids or my_country in rec.country_dest_id.ids:
+                rec.type = "import"
+            elif my_country in rec.country_loading_id.ids:
+                rec.type = "export"
+            else:
+                rec.type = "cross"
+        
+
         
     
     
@@ -186,7 +312,15 @@ select id from line_cost where start_date > '%s'
     def _onchange_fak(self):
         self.commodity_id = False
         
-        
+    @api.onchange('place_loading_id')
+    def place_loading_id_related(self):
+        for rec in self:
+            rec.transt_time=u''
+            rec.start_date=u''
+            rec.expiry_date=u''
+            rec.transport_loading_id=u''
+            rec.country_diff_dest_id=u''
+         
     #   loaded country related
     @api.onchange('country_loading_id')
     def erase_related_addr(self):
@@ -218,6 +352,15 @@ select id from line_cost where start_date > '%s'
         self.port_dest_id = False
         self.terminal_des_same_id = False
         self.delivery_place_id = False
+    
+    @api.onchange('place_dest_id')
+    def place_dest_id_related(self):
+        for rec in self:
+            rec.transport_dest_id=u''
+            rec.customer_id=u''
+            rec.start_date=u''
+            rec.expiry_date=u''
+            rec.country_diff_dest_id=u''
     
     @api.onchange('state_dest_id')
     def erase_related_addr_three_des(self):
@@ -303,15 +446,28 @@ select id from line_cost where start_date > '%s'
             if not rec.place_loading_id:
                 rec.line_cost_ids.write({'is_loading':False,'transport_loading_price':0.0})
         return res
-    @api.depends('line_id')
+    @api.depends('line_id','currency_id')
     def _compute_bill_fees(self):
         for rec in self:
             if rec.line_id:
-                rec.bill_fees = rec.line_id.bill_fees
+                rec.bill_fees  = self.env.user.company_id.currency_id._convert(rec.line_id.bill_fees,rec.currency_id,self.env.user.company_id,fields.Date.today())
             else:
                 rec.bill_fees = 0.0
-                
-                
+#     @api.multi            
+#     @api.onchange('additional_cost_ids','additional_cost_ids.cost','discount')
+#     def _compute_total_line_cost(self):
+#         """Discount all totals + line cost total - discount"""
+#         for rec in self:
+#             f=rec.line_cost_ids
+#             for i in f:
+#                 f.total = f.total + sum(rec.additional_cost_ids.mapped('cost')+[0]) - rec.discount
+    
+#     @api.depends('price','cost_line_ids','cost_line_ids.cost')
+#     def _compute_total(self):
+#         for rec in self:
+#             rec.total = rec.price + sum(rec.cost_line_ids.mapped('cost')+[0])
+            
+                   
             
     @api.onchange('line_id')     
     def onchange_line_id(self):
