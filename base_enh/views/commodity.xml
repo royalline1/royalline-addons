@@ -37,13 +37,21 @@
                         <group>
                             <group>
                                 <field name="name" />
+                                <field name="package_ids" widget="many2many_tags" 
+                                        options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+                                        attrs="{'invisible':[('is_category','=',True)],'required':[('is_category','=',False)]}"/>
                             </group>
                             <group>
-                                <field name="commodity_category" />
+                                <field name="is_category"
+                                       />
+                                <field name="commodity_category" 
+                                    attrs="{'invisible':[('is_category','=',True)],'required':[('is_category','=',False)]}"
+                                    options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
                                 <field name="active" />
+                                <field name="is_document" />
                             </group>
                         </group>
-                        <group string="Conditions" style="font-weight: bold">
+                        <group attrs="{'invisible':[('is_document','=',True)]}" string="Conditions" style="font-weight: bold">
 
                             <group>
                                 <field name="temperature" />
@@ -59,13 +67,16 @@
                                 <field name="other_condition_att" />
                             </group>
                         </group>
-                        <group string="Setup Codes" style="font-weight: bold">
+                        <group attrs="{'invisible':[('is_document','=',True)]}" string="Setup Codes" style="font-weight: bold">
                             <group>
                                 <field name="IMCO_Class" />
                                 <field name="UN_No" />
                                 <field name="HS_Code" />
                             </group>
                         </group>
+                        
+                      <label for="note"/> 
+                      <field name="note" />
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>

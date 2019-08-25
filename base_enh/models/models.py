@@ -54,6 +54,7 @@ class ResPlace(models.Model):
     is_delivery_place = fields.Boolean('Is Delivery Place') 
     zip_code = fields.Integer('ZIP Code')
     active=fields.Boolean(default=True)
+    
     @api.onchange('country_id')
     def place_erase(self):
         """Erase data from City, state, address, zipcode and Port"""
@@ -63,6 +64,11 @@ class ResPlace(models.Model):
         self.zip_code=u''
         self.port_id=u''
     
+    @api.onchange('is_port')
+    def port_erase(self):
+        for rec in self:
+            self.port_id=u''
+        
     @api.onchange('state_id')
     def erase_state_related(self):
         for rec in self:
@@ -95,7 +101,13 @@ class Port(models.Model):
         """erase related fields to state once empty or changed"""
         for rec in self:
             rec.city_id=u''
-        
+
+class HelpdeskTicket(models.Model):
+    _inherit="helpdesk.ticket"
+    _description="helpdesk.ticket"
+     
+    job_id=fields.Many2one('job')  
+    partner_id=fields.Many2one('res.partner', related='job_id.partner_id', store=True)     
     
 class PortType(models.Model):
     _name = 'port.type'
@@ -120,6 +132,7 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
     _description = "ResPartner"
 
+    is_courier = fields.Boolean('Is Courier')
     is_shipper = fields.Boolean('Is Shipper')
     is_consignee = fields.Boolean('Is Consignee')
     is_notify = fields.Boolean('Is notify Party')
@@ -128,7 +141,13 @@ class ResPartner(models.Model):
     is_customs_point = fields.Boolean('Is Customs point')
     is_competitor = fields.Boolean('Is Competitor')
     is_sea_line = fields.Boolean('Is Sea Line')
+#   airline details  
     is_air_line = fields.Boolean('Is Air Line')
+    iata_code=fields.Char('IATA Code')
+    cass_code=fields.Char('CASS Code')
+    icao_code=fields.Char('ICAO Code')
+#   airline details end here
+  
     is_clearance_company= fields.Boolean('Is Clearance Company')
     is_transporter_company= fields.Boolean('Is Transporter Company')
     is_insurance_company= fields.Boolean('Is Insurance Company')
@@ -137,10 +156,10 @@ class ResPartner(models.Model):
     phone_ids = fields.One2many('res.phone','partner_id', string='Phones Number')
     
     sea_ids = fields.One2many('sea.lines','partner_id')
-    bill_fees = fields.Float('Bill Fees')
-    release_to_bill = fields.Float('Release To Bill')
-    amendment_fees = fields.Float('Amendment Fees')
-    late_payment = fields.Float('Late Payment')
+    bill_fees = fields.Monetary('Bill Fees')
+    release_to_bill = fields.Monetary('Bill of Lading To Release')
+    amendment_fees = fields.Monetary('Amendment Fees')
+    late_payment = fields.Monetary('Late Payment')
     
     customs_id = fields.Many2one('res.partner',string="Customs point",domain=[('is_customs_point','=',True)])
     customer_class_id = fields.Many2one('customer.class')
@@ -174,6 +193,9 @@ class ResPartner(models.Model):
                                help="Check this box if this contact is a customer. It can be selected in sales orders.")
     street_number2 = fields.Char('P.O. Box', compute='_split_street', help="Door Number",
                                  inverse='_set_street', store=True)
+    street_number = fields.Char(string='Building No.')
+    street_name = fields.Char()
+    street2 = fields.Char(required=True)
 #   DHL Logistic id  
     dhl_log_id = fields.Many2one('dhl.logistic')
     dhl_log_to_id = fields.Many2one('dhl.logistic')
@@ -255,20 +277,55 @@ class SeaLines(models.Model):
    
     type = fields.Selection([('import','Import'),('export','Export'),('cross','Cross')])
     free_days = fields.Integer('Free Days')
-    first_demurrage_from = fields.Integer('First Way Demurrage From')
-    first_demurrage_to = fields.Integer('First Way Demurrage To')
-    first_rate =  fields.Float('First Way Demurrage Rate') 
-    second_demurrage_from = fields.Integer('Second Way Demurrage From')
+    first_demurrage_from = fields.Integer('First Way Demurrage From', default='1', readonly=True)
+    first_demurrage_to = fields.Integer('First Way Demurrage To', default='2')
+    first_rate =  fields.Monetary('First Way Demurrage Rate') 
+    second_demurrage_from = fields.Integer('Second Way Demurrage From', 
+                                           readonly=True, 
+                                           compute='_value_second_way')
     second_demurrage_to = fields.Integer('Second Way Demurrage To')
-    second_rate =  fields.Float('Second Way Demurrage Rate')
-    third_demurrage_from = fields.Integer('Third Way Demurrage From')
-    third_demurrage_to = fields.Integer('Third Way Demurrage To')
-    third_rate =  fields.Float('Third Way Demurrage Rate')
-    delivery_order = fields.Float('Delivery Order')
+    second_rate =  fields.Monetary('Second Way Demurrage Rate')
+    third_demurrage_from = fields.Integer('Third Way Demurrage From',
+                                           readonly=True, 
+                                           compute='_value_second_way')
+    third_demurrage_to = fields.Integer('Third Way Demurrage To',
+                                         default='1095')
+    third_rate =  fields.Monetary('Third Way Demurrage Rate')
+    delivery_order = fields.Monetary('Delivery Order')
     agency = fields.Monetary('Agency')
     partner_id = fields.Many2one('res.partner')
-    currency_id = fields.Many2one('res.currency', string="Currency")
+    currency_id = fields.Many2one('res.currency', string="Currency", related='partner_id.currency_id', readonly=True)
     
+    @api.constrains('first_demurrage_from','first_rate',
+                    'second_demurrage_from','second_rate')
+    def check_first_dem_from(self):
+        for rec in self:
+            if rec.first_demurrage_to <= rec.first_demurrage_from:
+                raise UserError("'First Way Demurrage To' should be greater than 'First Way Demurrage From'!")
+            if rec.type in ['export', 'import']:
+                if rec.first_rate <= 0:
+                    raise UserError("'First Way Demurrage Rate' should be not '0'!")
+            if rec.second_demurrage_to <= rec.second_demurrage_from:
+                raise UserError("'Second Way Demurrage To' should be greater than 'Second Way Demurrage From'!")
+            if rec.type in ['export', 'import']:
+                if rec.second_demurrage_to <= 0:
+                    raise UserError("'Second Way Demurrage To' should be not '0'!")
+            if rec.type in ['export', 'import']:
+                if rec.second_rate <= 0:
+                    raise UserError("'Second Way Demurrage Rate' should be not '0'!")
+            if rec.third_demurrage_to <= rec.third_demurrage_from:
+                raise UserError("'Third Way Demurrage To' should be greater than 'Third Way Demurrage From'!")
+            if rec.type in ['export', 'import']:
+                if rec.third_rate <=0:
+                    raise UserError("'Third Way Demurrage Rate' should be greater than '0'")
+    
+    @api.depends('first_demurrage_to','second_demurrage_to')
+    def _value_second_way(self):
+        for rec in self:
+            rec.second_demurrage_from = rec.first_demurrage_to + 1
+        for rec in self:
+            rec.third_demurrage_from = rec.second_demurrage_to + 1
+
     @api.multi
     def name_get(self):
         lines = []
@@ -311,7 +368,7 @@ class WareHouse (models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = "WareHouse"
     
-    name = fields.Char('Name')
+    name = fields.Char('Name', required=True)
     code = fields.Char('Code')
     note = fields.Text('Note')
     type = fields.Selection([('terminal','Terminal'),('bonded','Bonded'),('others','Others')],  default='terminal', string='Type')
@@ -320,6 +377,37 @@ class WareHouse (models.Model):
     image = fields.Binary(attachment=True)
     active = fields.Boolean('Active',default=True)
     image_attachment = fields.Binary(attachment=True,string="Image Attachment")
+    country_id = fields.Many2one('res.country', string="Country")
+    state_id = fields.Many2one('res.country.state', string="State")
+    city_id = fields.Many2one('res.city', 'City')
+    place_id = fields.Many2one('res.place','Place')
+    port_id = fields.Many2one('port', 'Port')
+    terminal_id = fields.Many2one('res.place', 'Terminal', domain=[('is_port','=',True)])
+    
+    @api.onchange('country_id')
+    def erase_country_re(self):
+        for rec in self:
+            rec.state_id=u''
+            rec.city_id=u''
+            rec.place_id=u''
+            rec.port_id=u''
+            rec.terminal_id=u''
+    
+    @api.onchange('state_id')
+    def erase_state_re(self):
+        for rec in self:
+            rec.city_id=u''
+    
+    @api.onchange('city_id')
+    def erase_city_re(self):
+        for rec in self:
+            rec.place_id=u''
+            rec.terminal_id=u''
+    
+    @api.onchange('port_id')
+    def erase_port_re(self):
+        for rec in self:
+            rec.terminal_id=u''
     
 class MITCompanies (models.Model):
     _name = 'mit.companies'

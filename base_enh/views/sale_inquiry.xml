@@ -35,31 +35,32 @@
                                    confirm="Are you sure you want to 'Cancel' this Sale Inquiry?"/>
                            <button name="set_new_gm" type="object" string="Set to New" class="oe_highlight" states="Cancelled" 
                                    confirm="Are you sure you want to ' Set To New ' this Sale Inquiry?"/>
+                           <!-- <button name="action_send_email" type="object" string="Send E-mail" class="oe_highlight" /> -->
                            <field name="stage" widget="statusbar" statusbar_visible="New,Progress,Confirmed,Cancelled,Job" />
                     </header>
 					<sheet>
 
                        <div class="oe_button_box" name="button_box">  
                             <button name="call_job" type="object"  
-                            class="oe_stat_button" icon="fa-pencil-square-o" string="Job">  
+                            class="oe_stat_button" icon="fa-list-alt" string="Job">  
                                  <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
                             string="You String Name" />   -->
                            </button> 
-                           <button name="call_sale" type="object"  
+                           <!-- <button name="call_sale" type="object"  
                             class="oe_stat_button" icon="fa-pencil-square-o" string="Sale Order">  
-                                 <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
-                            string="You String Name" />   -->
+                                 (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
+                            string="You String Name" />  
                            </button> 
                            <button name="call_purchase" type="object"  
                             class="oe_stat_button" icon="fa-pencil-square-o" string="Purchase Order">  
-                                 <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
-                            string="You String Name" />   -->
+                                 (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
+                            string="You String Name" />  
                            </button> 
                            <button name="call_invoice" type="object"  
                             class="oe_stat_button" icon="fa-pencil-square-o" string="Invoices">  
-                                 <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
-                            string="You String Name" />   -->
-                           </button> 
+                                 (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
+                            string="You String Name" />  
+                           </button>  -->
                            <!-- <button name="create_job" type="object"  
                             class="oe_stat_button" icon="fa-pencil-square-o" string="Create Job">  
                            </button>  -->
@@ -67,8 +68,8 @@
                         <group>
                               <table style='width:100%;'>
                                 <tr>
-                                  <th style='width:7%;'><label for="shipment_method" string='Shipment Method' style="font-weight:bold;"/></th>
-                                  <td style='width:15%;'><field name="shipment_method" widget="radio" /></td>
+                                  <th style='width:7%;' ><label for="shipment_method" string='Shipment Method' style="font-weight:bold;"/></th>
+                                  <td style='width:15%;' ><field name="shipment_method" widget="radio" /></td>
                                   <th style='width:3%;' attrs="{'invisible': [('shipment_method', 'not in',['clearance','sea_freight','land_freight','air_freight'])]}"><label for="shipment_type" string='Shipment Type' style="font-weight:bold;"/></th>
                                   <td style='width:20%;'  attrs="{'invisible': [('shipment_method', 'not in',['clearance','sea_freight','land_freight','air_freight'])]}" ><field name="shipment_type"  widget="radio" /></td>
                                   <th style='width:7%;' attrs="{'invisible': [('shipment_type', 'not in',['import','export','cross','internal'])]}"><label for="shipment_logic" string='Shipment logic' style="font-weight:bold;"/></th>
@@ -96,7 +97,7 @@
                                                     options="{'no_create_edit': True, 'no_create': True}" 
                                                     string="Partner / Customer"
                                                     domain="[('customer','=',True)]"/>
-
+                                            <field name="commodity_domain_ids" widget="many2many_tags" invisible="True"/>
                                             <field name="customer_class_id"
                                                     options="{'no_create_edit': True, 'no_create': True}" 
                                                     attrs="{'readonly': [('partner_id', '=',False)]}"/>
@@ -229,6 +230,7 @@
                                                 options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                              <field name="etd_date" />
                                              <field name="eta_date" />
+                                             <field name="payment_term_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
     							         </group>
 							         </group>
                                           <field name="container_size_ids">
@@ -262,7 +264,6 @@
                                                     domain="[('container_size_id','=',container_id),
                                                         ('cost_id.place_dest_id','=',place_of_port_id),
                                                         ('cost_id.place_loading_id','=',place_loading_id),
-                                                        ('cost_id.is_next','=',False),
                                                         ('cost_id.is_expired','=',False)]"
                                                     options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                                 <field name="weight_type_id"
@@ -292,7 +293,7 @@
     							         </group>
 							         </group>
 							         <label for="commodity_ids" style="font-weight: bold" />
-							         <field name="commodity_ids">
+							         <field name="commodity_ids" domain="[('id','in',commodity_domain_ids)]">
                                       <tree >
                                             <field name="name" />
                                         </tree>
@@ -309,7 +310,7 @@
                                         <!-- <field name="transport_rate" /> -->
                                     </group>
                                     <group string="Transporter Details">
-                                            <field name="transporter_cost_id" domain="[('is_next','=',False),('is_expired','=',False)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+                                            <field name="transporter_cost_id" domain="[('is_expired','!=',True)]" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
                                             <field name="transporter_free_days"/>
                                             <field name="transporter_total"/>
                                             <field name="currency_id"/>
@@ -326,6 +327,26 @@
                                             <tree>
                                                 <field name="container_id" />
                                                 <field name="cost" />
+                                            </tree>
+                                            <form></form>
+                                        </field>
+                                    </group>
+                                    <group string="Airline">
+                                        <field name='air_line_id' options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                                        <field name='payment_term_id'/>
+                                         <label for="air_line_cost_line_ds" string="Airline Cost" style="font-weight: bold" />
+                                        <field name="air_line_cost_line_ds" force_save="1" nolabel="1">
+                                            <tree>
+                                                <field name="commodity_id" />
+                                                <field name="package_id"/>
+                                                <field name="product_id"/>
+                                                <field name="quantity"/>
+                                                <field name="operation"/>
+                                                <field name="volume"/>
+                                                <field name="chargeable_weight"/>
+                                                <field name="currency_id" />
+                                                <field name="cost"/>
+                                                <field name="total" />
                                             </tree>
                                             <form></form>
                                         </field>

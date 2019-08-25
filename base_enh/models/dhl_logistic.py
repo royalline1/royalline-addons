@@ -10,6 +10,7 @@ class DHLLogistic(models.Model):
     
 #   Shipment from fields  
     name = fields.Char(readonly=True)
+    courier_id= fields.Many2one('res.partner', string='Courier')
     company_from_id = fields.Many2one('res.partner', string='Contact Name From')
     date_from = fields.Datetime('Date Time Pick-Up')
     country_from_id = fields.Many2one('res.country', string="Country From", related='company_from_id.country_id')
@@ -32,7 +33,26 @@ class DHLLogistic(models.Model):
     contact_person_to_ids = fields.One2many(comodel_name='res.partner',inverse_name='dhl_log_to_id', 
                                               related='company_to_id.child_ids')
     document_type_ids = fields.One2many(comodel_name='document.type', inverse_name='dhl_doc_id')
+    job_ids = fields.Many2many('job',string="Related Job(s)")
+    pick_up_with_us = fields.Boolean()
+    employee_id = fields.Many2one('hr.employee','Employee')
+    courier_employee_id = fields.Many2one('res.partner')
+    tracking_number = fields.Char()
+    bill_number = fields.Char()
+    currency_id = fields.Many2one('res.currency')
+    rate = fields.Monetary(required=True)
+    cost = fields.Monetary(required=True)
     
+    
+    @api.onchange('pick_up_with_us')
+    def onchange_employee_id(self):
+        self.employee_id =False
+        self.courier_employee_id =False
+#         ids =[]
+#         if self.employee_id:
+#             ids = self.employee_id.mapped('user_id.partner_id.id')
+#         
+#         return {'domain':{'courier_employee_id':[('parent_id','in',ids)]}}
 #     @api.multi
 #     def name_get(self):
 #         result = []

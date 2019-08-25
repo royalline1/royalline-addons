@@ -11,13 +11,11 @@ class ContainerSize(models.Model):
     _description = "ContainerSize"
     
     size = fields.Char('Size',required=True)
-    container_no = fields.Char('No')
-    container_status = fields.Selection([('None', 'None'), 
-                                         ('Truck', 'Truck'), 
-                                         ('Yard', 'Yard'),
-                                         ('Vessel', 'Vessel'),
-                                         ('Other', 'Other')], 
-                                         string="Container Status")
+    type = fields.Selection([ 
+                             ('dry', 'Dry'), 
+                             ('refrigerant', 'Refrigerant'),
+                             ('special_equipment', 'Special Equipment')], 
+                             string="Type")
     note = fields.Char('Note')
     TEU = fields.Char('TEU')
     image = fields.Binary(attachment=True)

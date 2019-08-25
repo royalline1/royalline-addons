@@ -17,8 +17,18 @@ class Commodity(models.Model):
     port_condition_att = fields.Binary(attachment=True,string="Attachment Port")
     other_condition = fields.Char('Other condition')
     other_condition_att = fields.Binary(attachment=True,string="Attachment Other")
-    commodity_category = fields.Many2one('commodity', string='Commodity Category')
+    commodity_category = fields.Many2one('commodity', string='Commodity Category', domain=[('is_category','=',True)])
     UN_No = fields.Char("UN No")
     IMCO_Class = fields.Char("IMCO Class")
     HS_Code = fields.Char("HS Code")
+    is_document = fields.Boolean("Is Document")
     active=fields.Boolean(default=True)
+    note = fields.Text('Note')
+    is_category = fields.Boolean("Is Category")
+    package_ids=fields.Many2many('packaging',string='Package')
+
+    @api.onchange('is_category')
+    def erase_commodity_category(self):
+        for rec in self:
+            rec.commodity_category=u''
+            rec.package_ids=u''

@@ -55,6 +55,7 @@
                             <group>
                                 <field name="place_of_port_id" 
                                         options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+                                        domain="[('port_id','=',sea_port_id)]"
                                         attrs="{'invisible': [('shipment_method', 'not in', ['sea_freight','land_freight','air_freight'])]}"/>
                                 <field name="custom_point_id" 
                                        attrs="{'invisible': [('shipment_method', 'not in', ['clearance','land_freight'])]}" 

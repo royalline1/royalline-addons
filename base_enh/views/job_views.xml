@@ -31,37 +31,45 @@
                                     string="Add Route" class="oe_highlight"
                                     attrs="{'invisible': [('added_route', '=', True)]}"
                                     confirm="Are you sure you want to add 'route'?" />
-                           <!-- <button name="approve_acct_mgr" type="object" 
-                                   string="Account Manger Approval" class="oe_highlight" states="Progress"/>
-                           <button name="approve_gm" type="object" 
-                                   string="General Manger Approval" class="oe_highlight" states="Confirmed"/>
-                           <button name="cancel_gm" type="object" string="Cancel" class="oe_highlight" states="Confirmed"/>
+                            <button name="add_job_folder" type="object"
+                                    string="Add Document Folder" class="oe_highlight"
+                                    attrs="{'invisible': [('added_doc', '=', True)]}"
+                                    confirm="Are you sure you want to add 'Jobs/JobName'?" />
+                           <button name="add_analytic_acct" type="object" 
+                                   string="Add Analytic Account" 
+                                   attrs="{'invisible': [('added_ana_acct', '=', True)]}"
+                                   class="oe_highlight"
+                                   confirm="Are you sure you want to add 'Analatic Account'?"/>
+                           <!-- <button name="add_po" type="object" 
+                                   string="Add PO" class="oe_highlight"
+                                   confirm="Are you sure you want to add 'Purchase Order'?"/> -->
+                           <!-- <button name="cancel_gm" type="object" string="Cancel" class="oe_highlight" states="Confirmed"/>
                            <button name="set_new_gm" type="object" string="Set to New" class="oe_highlight" states="Cancelled"/>
                            <field name="stage" widget="statusbar" statusbar_visible="New,Progress,Confirmed,Cancelled,Job" /> -->
                     </header>
 					<sheet>
-					    <!-- <div class="oe_button_box" name="button_box">  
-                        <button name="get_trade_name" type="object"  
-                        class="oe_stat_button" icon="fa-pencil" string="Job">  
-                       (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
-                        string="You String Name" />   
-                       </button> 
-                       <button name="get_trade_name" type="object"  
-                        class="oe_stat_button" icon="fa-pencil" string="Sale Order">  
-                      (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
-                        string="You String Name" />   
-                       </button> 
-                       <button name="get_trade_name" type="object"  
-                        class="oe_stat_button" icon="fa-pencil" string="Purchase Order">  
-                            (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
-                        string="You String Name" />   
-                       </button> 
-                       <button name="get_trade_name" type="object"  
-                        class="oe_stat_button" icon="fa-pencil" string="Invoices">  
-                             (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
-                        string="You String Name" />   
-                       </button> 
-                       </div> -->
+					    <div class="oe_button_box" name="button_box">  
+                            <button name="call_doc" type="object"  
+                            class="oe_stat_button" icon="fa-paperclip" string="Call Document">  
+                           <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
+                            string="You String Name" />    -->
+                           </button> 
+                           <button name="call_tickets" type="object"  
+                            class="oe_stat_button" icon="fa-life-ring" string="Call Tickets">  
+                          <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
+                            string="You String Name" />    -->
+                           </button> 
+                           <button name="call_purchase" type="object"  
+                            class="oe_stat_button" icon="fa-globe" string="Clearance PO">  
+                                <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
+                            string="You String Name" />    -->
+                           </button> 
+                           <button name="call_insurance_smart" type="object"  
+                            class="oe_stat_button" icon="fa-shield" string="Insurance PO">  
+                                 <!-- (If you want to display the count)<field name="field_name_for_count" widget="statinfo"   
+                            string="You String Name" />    -->
+                           </button> 
+                       </div>
                         <group>
                               <table style='width:100%;'>
                                 <tr>
@@ -84,6 +92,8 @@
 							<group>
 								<field name="from_validity_date" readonly="1"/>
 								<field name="to_validity_date" readonly="1"/>
+								<field name="added_doc" invisible="1"/>
+								<field name="added_ana_acct" invisible="1"/>
 							</group>
 						</group>
 							<notebook>
@@ -117,6 +127,14 @@
                                     <field name="condition_ids">
                                         <tree create="false" delete="false" edit="false" editable="false">
                                             <field name="name" />
+                                        </tree>
+                                        <form></form>
+                                    </field>
+                                    <label for="condition_one_ids" style="font-weight: bold" />
+                                    <field name="condition_one_ids">
+                                        <tree editable="bottom">
+                                            <field name="name" />
+                                            <field name="write_date" readony="1" />
                                         </tree>
                                         <form></form>
                                     </field>
@@ -392,14 +410,23 @@
                                 </page> -->
                                 <page string="Vendors">
                                     <group string="Insurance Details">
-                                        <field name="insurance_cost_ids" invisible="1" />
-                                        <field name="insurance_cost_id"
-                                            domain="[('id','in',insurance_cost_ids)]"
-                                            options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
-                                            string="Insurance ID" readonly="1"/>
-                                        <field name="insurance_rate" readonly="1"/>
-                                        <field name="container_ids" invisible="1" />
-                                        <!-- <field name="transport_rate" /> -->
+                                            <group>
+                                                <field name="insurance_cost_ids" invisible="1" />
+                                                <field name="insurance_cost_id"
+                                                    domain="[('id','in',insurance_cost_ids)]"
+                                                    options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" 
+                                                    string="Insurance ID" readonly="1"/>
+                                                <field name="insurance_rate" readonly="1"/>
+                                                <field name="container_ids" invisible="1" />
+                                            </group>
+                                            <group>
+                                                <button name="add_po_insurance" type="object" 
+                                                               string="Add Insurance Policy PO" class="oe_highlight"
+                                                               confirm="Are you sure you want to add 'Insurance Policy Purchase Order'?"
+                                                               attrs="{'invisible': [('added_po_ins', '=', True)]}"/>
+                                                <field name="added_po_ins" invisible="1"/>
+                                                <!-- <field name="transport_rate" /> -->
+                                            </group>
                                     </group>
                                     <group string="Transporter Details">
                                             <field name="transporter_cost_id" 
@@ -409,21 +436,32 @@
                                             <field name="currency_id" readonly="1"/>
                                     </group>
                                     <group string="Clearance Details">
-                                        <field name="customs_dec_id"
-                                                options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" readonly="1"/>
-                                        <field name="clearance_id"
-                                            domain="[('shipment_type','=',shipment_type),
-                                        ('customs_declaration_id','=',customs_dec_id)]"
-                                            options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
-                                            string="Clearance ID" readonly="1"/>
-                                        <!-- <label for="clearance_cost_ids" style="font-weight: bold" /> -->
-                                        <field name="clearance_cost_ids" force_save="1" readonly="1">
-                                            <tree create="false" delete="false" edit="false" editable="false">
-                                                <field name="container_id" />
-                                                <field name="cost" />
-                                            </tree>
-                                            <form></form>
-                                        </field>
+                                        <group>
+                                            <group>
+                                                <field name="customs_dec_id"
+                                                        options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" readonly="1"/>
+                                                <field name="clearance_id"
+                                                    domain="[('shipment_type','=',shipment_type),
+                                                ('customs_declaration_id','=',customs_dec_id)]"
+                                                    options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
+                                                    string="Clearance ID" readonly="1"/>
+                                            </group>
+                                            <group>
+                                                <button name="add_po" type="object" 
+                                                       string="Add Clearance PO" class="oe_highlight"
+                                                       confirm="Are you sure you want to add 'Purchase Order'?"
+                                                       attrs="{'invisible': [('added_po', '=', True)]}"/>
+                                                <field name="added_po" invisible="1"/>
+                                            </group>
+                                        </group>
+                                            <label for="clearance_cost_ids" style="font-weight: bold" />
+                                            <field name="clearance_cost_ids" force_save="1" readonly="1">
+                                                <tree create="false" delete="false" edit="false" editable="false">
+                                                    <field name="container_id" />
+                                                    <field name="cost" />
+                                                </tree>
+                                                <form></form>
+                                            </field>
                                     </group>
                                 </page>
                                 <page string="Additional Cost">
@@ -453,7 +491,8 @@
                                                   domain="[('is_depot','=',True)]"
                                                   options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
                                            <field name="analytic_account" 
-                                                  options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                                                  options="{'no_create_edit': True, 'no_create': True}"
+                                                  readonly="1"/>
                                            <field name="Bill_Lading_No" />
                                        </group>
         					       </group>
@@ -512,6 +551,21 @@
         					           		<field name="package_name"/>
         					           		<field name="quantity"/>
         					           		<field name="operation"/>
+        					           		<field name="volume"/>
+        					           		<field name="gross_weight"/>
+        					           		</tree>
+        					           		<form></form>
+        					           		
+        					           
+        					           </field>
+        					       </group>
+        					       
+        					       <group>
+        					           <field name="commodity_line_one_ids">
+        					           		<tree editable="bottom">
+        					           		<field name="commodity_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+        					           		<field name="package_name"/>
+        					           		<field name="quantity"/>
         					           		<field name="volume"/>
         					           		<field name="gross_weight"/>
         					           		</tree>
