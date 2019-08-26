@@ -21,6 +21,7 @@
        'security/ir.model.access.csv',
        'views/views.xml',
 #        'data/email_templates.xml',
+       'report/sale_inquiry_report.xml',
        'views/container_size_view.xml',
        'views/agreement_method_view.xml',
        'views/custoemr_class_view.xml',

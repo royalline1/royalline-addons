@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <report
+        id="sale_inquiry_report"
+        model="sale.inquiry"
+        string="Sale Inquiry Report"
+        report_type="qweb-pdf"
+        name="base_enh.sale_inquiry_report_template"
+        file="base_enh.sale_inquiry_report_template"
+        attachment="(object.state in ('new')) and ('INV'+(object.name or '').replace('/','')+'.pdf')"/>
+    
+    
+    <template id="sale_inquiry_report_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center">
+                            <h2>
+                                <strong><p>Sale Inquiry <span t-field="o.name"/> - <span t-field="o.state"/></p></strong>
+                            </h2>
+                        </div>
+                        <table class="table table-bordered col-md-12">
+                            <tr>
+                                <td><strong>Shipment Method</strong></td><td><span t-field="o.shipment_method"/></td>
+                                <td><strong>Shipment Type</strong></td><td><span t-field="o.shipment_type"/></td>
+                                <td><strong>Shipment logic</strong></td><td><span t-field="o.shipment_logic"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>From Date</strong></td><td><span t-field="o.from_validity_date"/></td>
+                                <td><strong>To Date</strong></td><td><span t-field="o.to_validity_date"/></td>
+                                <td><strong>Code</strong></td><td><span t-field="o.name"/></td>
+                            </tr>
+                        </table> 
+                        <strong><h3>Other information</h3></strong>
+                        <table class="table table-bordered col-md-12">
+                            <tr>
+                                <td><strong>Partner / Customer</strong></td><td><span t-field="o.partner_id"/></td>
+                                <td><strong>Shipper</strong></td><td><span t-field="o.shipper_id"/></td>
+                                <td><strong>Consignee</strong></td><td><span t-field="o.consignee_id"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>First Notify Party</strong></td><td><span t-field="o.first_notify_id"/></td>
+                                <td><strong>Additional Notify</strong></td><td><span t-field="o.add_notify_id"/></td>
+                                <td><strong>Customer Class</strong></td><td><span t-field="o.customer_class_id"/></td>
+                            </tr>
+                        </table>  
+                        <strong><h3>Sea Lines</h3></strong>
+                        <table class="table table-bordered col-md-12">
+                               <tr>
+                                    <td><strong>Container</strong></td>
+                                    <td><strong>Container QTY</strong></td>
+                                    <td><strong>Transport line</strong></td>
+                                    <td><strong>Cost</strong></td>
+                               </tr>
+                               <t t-foreach ="o.container_size_ids" t-as="line">
+                                   <tr>
+                                    <td><span t-field="line.line_cost_line_id"/></td>
+                                    <td class="text-right"><span t-esc="line.container_qty"/></td>
+                                    <td><span t-field="line.transport_line_id"/></td>
+                                    <td class="text-right"><span t-esc="line.cost"/></td>
+                               </tr>
+                               </t>
+                         </table>                  
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+    </data>
+</odoo>
