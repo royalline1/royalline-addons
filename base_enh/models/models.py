@@ -403,6 +403,7 @@ class WareHouse (models.Model):
         for rec in self:
             rec.place_id=u''
             rec.terminal_id=u''
+            rec.port_id=u''
     
     @api.onchange('port_id')
     def erase_port_re(self):
