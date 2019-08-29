@@ -15,7 +15,8 @@
                 - Salary Increase Deduction.
                 - Social security deduction.
                 - Social security contribution.
-                - Income tax.""",
+                - Income tax.
+                - Salay rull absent""",
     'data': [
             'view/hr_contract.xml',
             'view/salary_rule.xml',

@@ -53,6 +53,23 @@ else:
 result = result*-1
             ]]></field>
 	    </record>
+	    
+	    <record id="hr_rule_absent" model="hr.salary.rule">
+            <field name="name">absent</field>
+            <field name="sequence" eval="108"/>
+            <field name="code">ABS</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute"><![CDATA[
+            per_day=contract.wage/30
+            result=0
+            if worked_days.absense >=1:
+                result=per_day * worked_days.absense
+            else:
+                result=0
+            ]]></field>
+        </record>
         
 	</data>
 </openerp>
