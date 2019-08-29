@@ -15,7 +15,7 @@
 
     'category': 'Uncategorized',
     'version': '12.0.1.0',
-    'depends': ['base','mail','contacts','sale','base_address_city','product','hr','documents','account','base_address_city','hr_attendance','helpdesk','base_address_extended'],
+    'depends': ['base','mail','hr_attendance','contacts','sale','base_address_city','product','hr','documents','account','base_address_city','hr_attendance','helpdesk','base_address_extended'],
 
     'data': [
        'security/ir.model.access.csv',

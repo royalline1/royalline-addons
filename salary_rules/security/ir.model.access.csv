@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+medicine_shape_access,medicine_shape_access,model_medicine_shape,base.group_user,1,1,1,1
+scientific_name_access,scientific_name_access,model_scientific_name,base.group_user,1,1,1,1
+medicine_class_access,medicine_class_access,model_medicine_class,base.group_user,1,1,1,1
+active_ingredient_access,active_ingredient_access,model_active_ingredient,base.group_user,1,1,1,1
+
+
+

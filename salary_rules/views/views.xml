@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="product_template_flix_form_view">
+            <field name="name">product.template</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Medicine Details">
+                        <group>
+                            <group>
+                                <field name="scientific_name_id"/>
+                                <field name="medicine_class_ids" widget="many2many_tags"/>
+                                <field name="medicine_shape_ids" widget="many2many_tags"/>
+                                <field name="active_ingredient_ids" widget="many2many_tags"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="medicine_shape_list_view">
+            <field name="name">medicine shape</field>
+            <field name="model">medicine.shape</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="medicine_shape_form_view">
+            <field name="name">medicine shape</field>
+            <field name="model">medicine.shape</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="medicine_shape_action">
+            <field name="name">Medicine Shape</field>
+            <field name="res_model">medicine.shape</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem id="menu_medicine_shape" 
+                  parent="stock.menu_product_in_config_stock" 
+                  action="medicine_shape_action"/>
+                  
+        <!-- scientific name -->
+        <record model="ir.ui.view" id="scientific_name_list_view">
+            <field name="name">Scientific Name</field>
+            <field name="model">scientific.name</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="scientific_name_form_view">
+            <field name="name">Scientific Name</field>
+            <field name="model">scientific.name</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="scientific_name_action">
+            <field name="name">Scientific Name</field>
+            <field name="res_model">scientific.name</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem id="menu_scientific_name" 
+                  parent="stock.menu_product_in_config_stock" 
+                  action="scientific_name_action"/>
+        
+        <!-- Medicine Class -->
+        <record model="ir.ui.view" id="medicine_class_list_view">
+            <field name="name">Medicine Class</field>
+            <field name="model">medicine.class</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="medicine_class_form_view">
+            <field name="name">Medicine Class</field>
+            <field name="model">medicine.class</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="medicine_class_action">
+            <field name="name">Medicine Class</field>
+            <field name="res_model">medicine.class</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem id="menu_medicine_class" 
+                  parent="stock.menu_product_in_config_stock" 
+                  action="medicine_class_action"/>
+        
+         <!-- Active Ingredient -->
+        <record model="ir.ui.view" id="active_ingredient_list_view">
+            <field name="name">Active Ingredient</field>
+            <field name="model">active.ingredient</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="active_ingredient_form_view">
+            <field name="name">Active Ingredient</field>
+            <field name="model">active.ingredient</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="active_ingredient_ingredient">
+            <field name="name">Active Ingredient</field>
+            <field name="res_model">active.ingredient</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem id="menu_active_ingredient" 
+                  parent="stock.menu_product_in_config_stock" 
+                  action="active_ingredient_ingredient"/>
+        
+    </data>
+</odoo>
