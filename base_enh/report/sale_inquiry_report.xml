@@ -28,10 +28,6 @@
                 view_mode="form"
                 target="new"/>
     
-    <menuitem id="menu_reporting" parent="menu_logistic_manag" name="Reporting" sequence="7"/>
-    <menuitem action="action_attendance_recap_report_wizard"
-              id="menu_attendance_report_wizard"
-              parent="menu_reporting"/>
               
     <record model="report.paperformat" id="paperformat_attendance_recap_report">
         <field name="name">paperformat.attendance.recap.report</field>
