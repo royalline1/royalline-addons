@@ -22,7 +22,7 @@
         </field>
     </record>
 
-    <act_window id="action_attendance_recap_report_wizard"
+    <act_window id="action_sale_inquiry_report_wizard"
                 name="Attendance Recap Report"
                 res_model="attendance.recap.report.wizard"
                 view_mode="form"
