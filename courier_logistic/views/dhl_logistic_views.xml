@@ -121,7 +121,8 @@
             <field name="view_mode">kanban,tree,form</field>
         </record>
 
-        <menuitem id="menu_dhl_logistic" name="Courier" action="dhl_logistic_action" web_icon="courier_logistic,static/src/img/icon2.jpg"/>
+        <menuitem id="menu_dhl_logistic" name="Courier"
+            action="dhl_logistic_action" web_icon="courier_logistic,static/src/img/courier.jpg"/>
 
 
     </data>

@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<!-- MIT Company views start here -->
+		<record model="ir.ui.view" id="mit_companies_list_view">
+			<field name="name">MIT Companies list</field>
+			<field name="model">mit.companies</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="company_No" />
+					<field name="name" />
+					<field name="type" />
+					<field name="capital" />
+					<field name="registration_date" />
+					<field name="city_id" />
+					<field name="phone" />
+					<field name="mobile" />
+					<field name="HQ" />
+					<field name="po_box" />
+					<field name="postal_code" />
+					<field name="Email" />
+					<field name="org_national_no" />
+					<!-- <field name="active" /> -->
+				</tree>
+			</field>
+		</record>
+
+
+		<record model="ir.ui.view" id="mit_companies_form_view">
+			<field name="name">MIT Companies list</field>
+			<field name="model">mit.companies</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<div class="oe_button_box" name="button_box">
+							<button name="get_trade_name" type="object"
+								class="oe_stat_button" icon="fa-pencil" string="Trade Name">
+								<!-- (If you want to display the count)<field name="field_name_for_count" 
+									widget="statinfo" string="You String Name" /> -->
+							</button>
+						</div>
+						<group>
+							<group>
+								<field name="company_No" />
+								<field name="name" />
+								<field name="type" />
+								<field name="capital" />
+							</group>
+							<group>
+								<field name="registration_date" />
+								<field name="city_id" domain="[('country_id','=',112)]" />
+								<field name="phone" />
+								<field name="mobile" />
+							</group>
+							<group>
+								<field name="HQ" />
+								<field name="po_box" />
+								<field name="postal_code" />
+								<!-- <field name="type_flag" /> -->
+							</group>
+							<group>
+								<field name="Email" />
+								<field name="org_national_no" />
+								<field name="active" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="mit_companies_action">
+			<field name="name">MIT Companies Action</field>
+			<field name="res_model">mit.companies</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<!-- MIT views end here -->
+
+		<!-- Trade name views start here -->
+		<record model="ir.ui.view" id="trade_name_list_view">
+			<field name="name">Trade Name list</field>
+			<field name="model">trade.name</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="trade_No" />
+					<field name="city_id" />
+					<field name="type" />
+					<field name="registration_No" />
+					<field name="trade_name" />
+					<field name="registration_date" />
+					<field name="state" />
+					<field name="owner" />
+					<field name="active" />
+				</tree>
+			</field>
+		</record>
+
+
+		<record model="ir.ui.view" id="trade_name_form_view">
+			<field name="name">Trade Name list</field>
+			<field name="model">trade.name</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<group>
+							<group>
+								<field name="trade_No" />
+								<field name="city_id" domain="[('country_id','=',112)]" />
+								<field name="type" />
+								<field name="registration_No" />
+							</group>
+							<group>
+							    <field name="active" />
+								<field name="trade_name" />
+								<field name="registration_date" />
+								<field name="state" />
+								<field name="owner" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="trade_name_action">
+			<field name="name">Trade Name Action</field>
+			<field name="res_model">trade.name</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<!-- Trade name views end here -->
+
+		<!-- Importer card views start here -->
+		<record model="ir.ui.view" id="importer_card_list_view">
+			<field name="name">Importer Card list</field>
+			<field name="model">importer.card</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="card_No" />
+					<field name="name" />
+					<field name="issue_date" />
+					<field name="expiry_date" />
+				</tree>
+			</field>
+		</record>
+
+
+		<record model="ir.ui.view" id="importer_card_form_view">
+			<field name="name">Importer Card list</field>
+			<field name="model">importer.card</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<group>
+							<group>
+								<field name="card_No" />
+								<field name="name" />
+							</group>
+							<group>
+								<field name="issue_date" />
+								<field name="expiry_date" />
+								<field name="active" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="importer_card_action">
+			<field name="name">Importer Card Action</field>
+			<field name="res_model">importer.card</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<!-- importer card name views end here -->
+
+		<!-- individual estableshment views start here -->
+		<record model="ir.ui.view"
+			id="individual_establishment_list_view">
+			<field name="name">Individual Establishment list</field>
+			<field name="model">individual.establishment</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="ind_No" />
+					<field name="city_id" />
+					<field name="registeration_date" />
+					<field name="capital" />
+					<field name="owner_nationality" />
+					<field name="state" />
+					<field name="status_date" />
+					<field name="National_ID" />
+					<field name="establishment_name" />
+					<field name="trade_name" />
+					<field name="place_id" />
+					<field name="street" />
+					<field name="active" />
+				</tree>
+			</field>
+		</record>
+
+
+		<record model="ir.ui.view"
+			id="individual_establishment_form_view">
+			<field name="name">Individual Establishment list</field>
+			<field name="model">individual.establishment</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<group>
+							<group>
+								<field name="ind_No" />
+								<field name="city_id" domain="[('country_id','=',112)]" />
+								<field name="registeration_date" />
+								<field name="capital" />
+							</group>
+							<group>
+							    <field name="active" />
+								<field name="owner_nationality" />
+								<field name="state" />
+								<field name="status_date" />
+								<field name="National_ID" />
+							</group>
+							<group>
+								<field name="establishment_name" />
+								<field name="trade_name" />
+							</group>
+							<group>
+								<field name="place_id" />
+								<field name="street" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window"
+			id="individual_establishment_action">
+			<field name="name">Individual Establishment Action</field>
+			<field name="res_model">individual.establishment</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+
+		<!-- MIT Companies Menu Top Menu -->
+        <menuitem id="menu_MIT_management" name="MIT Management" 
+             web_icon="MIT_management,static/src/img/mit.jpg"/>
+
+
+		<menuitem name="MIT Companies" id="mit_companies_menu"
+			parent="menu_MIT_management" action="mit_companies_action"/>
+
+		<menuitem name="Trade Name" id="trade_name_menu"
+			parent="menu_MIT_management" action="trade_name_action" />
+
+		<menuitem name="Importer Card" id="importer_card_menu"
+			parent="menu_MIT_management" action="importer_card_action" />
+
+		<menuitem name="Individual Establishment"
+			id="individual_establishment_menu" parent="menu_MIT_management"
+			action="individual_establishment_action" />
+        
+	</data>
+</odoo>

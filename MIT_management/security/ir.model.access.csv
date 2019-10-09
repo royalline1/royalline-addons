@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+mit_companies_access,mit_companies_access,model_mit_companies,base.group_user,1,1,1,1
+trade_name_access,trade_name_access,model_trade_name,base.group_user,1,1,1,1
+importer_card_access,importer_card_access,model_importer_card,base.group_user,1,1,1,1
+individual_establishment_access,individual_establishment_access,model_individual_establishment,base.group_user,1,1,1,1
