@@ -20,7 +20,6 @@
     'data': [
        'security/ir.model.access.csv',
        'views/views.xml',
-#        'report/sale_inquiry_report.xml',
        'views/container_size_view.xml',
        'views/agreement_method_view.xml',
        'views/custoemr_class_view.xml',
@@ -50,7 +49,6 @@
        'views/external_bill_of_lading.xml',
        'views/route.xml',
        'views/job_position.xml',
-       'views/dhl_logistic_views.xml',
        'views/menus_views.xml',  
        'security/security.xml'    
     ],

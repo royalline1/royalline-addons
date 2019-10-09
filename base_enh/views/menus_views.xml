@@ -2,17 +2,13 @@
 <odoo>
     <data>
         
-        <menuitem id="menu_dhl_logistic" name="Courier" action="dhl_logistic_action" web_icon="base_enh,static/src/img/icon2.jpg"/>
         <menuitem id="menu_logistic_manag" name="Logistic" web_icon="base_enh,static/src/img/icon.jpg"/> 
         <menuitem id="menu_bill_of_lading_manag" name="Bill of Lading" parent="menu_logistic_manag" sequence="3"/> 
         <menuitem id="menu_sale_inquiry" action="sale_inquiry_action" parent="menu_logistic_manag" sequence="1"/>
         <menuitem id="menu_job" action="view_job_action" parent="menu_logistic_manag" name="Job" sequence="2"/>
         <menuitem id="menu_bill_of_lading" action="bill_of_lading_action" parent="menu_bill_of_lading_manag"  sequence="1"/>
         <menuitem id="menu_external_bill_of_lading" action="external_bill_of_lading_action" parent="menu_bill_of_lading_manag"  sequence="2"/>
-        <!-- <menuitem id="menu_reporting" parent="menu_logistic_manag" name="Reporting" sequence="7"/>
-        <menuitem action="action_attendance_recap_report_wizard"
-              id="menu_attendance_report_wizard"
-              parent="menu_reporting"/> -->
+       
         <!-- <menuitem id="menu_reporting" parent="menu_logistic_manag" name="Reporting" sequence="7"/>
         <menuitem name="Sale Inquiry report" id="menu_sale_inquiry_wizard" 
                   parent="menu_reporting"
