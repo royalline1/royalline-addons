@@ -77,7 +77,12 @@ class DocumentType(models.Model):
     weight = fields.Float(default='0.5')
     dimensions_cm = fields.Char(default='47.50 x 38.00 x 1.00')
     dhl_doc_id = fields.Many2one('dhl.logistic')
-    
+
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
+    _description = "ResPartner"
+
+    street2 = fields.Char(required=True)
     
     
     
